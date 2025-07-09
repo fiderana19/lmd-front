@@ -5,10 +5,11 @@ import axios from 'axios';
 import AddEtudiant from './AddEtudiant';
 import dayjs from 'dayjs';
 import Bg from '../../assets/pic/home-bg.jpg'
+import { useGetAllEtudiant } from '@/hooks/useGetAllEtudiant';
 
 
 const Etudiant: FunctionComponent = () => {
-  let [etudiant, setEtudiant] = useState([]);
+  const { data: etudiant, isLoading, refetch } = useGetAllEtudiant();
   const [searchEtudiant, setSearchEtudiant] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
@@ -25,23 +26,6 @@ const Etudiant: FunctionComponent = () => {
     lieu_naiss: '',
   });
 
-  useEffect(() => {      
-    //getting all etudiant
-    try {
-      axios({
-        method: 'get',
-        url: 'http://localhost:3002/etudiant/',
-      })
-      .then((rep) => {
-        {
-          setEtudiant(rep.data)
-          setLoading(false);
-        }
-      })
-    } catch (error) {
-      console.error("Etudiant : Erreur de recuperation : " + error);
-    }  
-  }, [])
   //show delete confirmation
   const showDeleteConfirmation = (item) => {
     setItemToDelete(item);
@@ -54,7 +38,6 @@ const Etudiant: FunctionComponent = () => {
       url: `http://localhost:3002/etudiant/delete/${itemId}`,
     })
     .then(() => {
-      setEtudiant(etudiant.filter((item) => item.id_etudiant !== itemId));
       deleteMessage()
     })
     .catch(error => {
@@ -86,7 +69,6 @@ const Etudiant: FunctionComponent = () => {
         data: editedItem,
       })
       .then(() => {
-        setEditedItem({id_etudiant: '',matricule: '',nom: '',prenom: '',date_naiss: '',lieu_naiss: '', });
       })
       .catch((error) => {
         console.error('EditEtudiant : Erreur lors du modification:', error);
@@ -173,13 +155,13 @@ const Etudiant: FunctionComponent = () => {
                 </thead> 
                 <tbody className='bg-white divide-y divide-gray-200'>
                   {
-                loading ? (
+                isLoading ? (
                 <div className='text-center my-10'>
                   <LoadingOutlined className='text-3xl' />
                   <div>Chargement...</div>
                 </div>
                   ) : (
-                etudiant.map((et, index) =>{
+                etudiant && etudiant.map((et, index) =>{
                   if (searchEtudiant && !et.matricule.includes(searchEtudiant)) {
                     return null;
                   }
@@ -205,13 +187,13 @@ const Etudiant: FunctionComponent = () => {
           </div>
           <div className='sm:hidden grid gap-2 justify-center grid-cols-customized'>
             {
-              loading ? (
+              isLoading ? (
               <div className='text-center my-10'>
                 <LoadingOutlined className='text-3xl' />
                 <div>Chargement...</div>
               </div>
                 ) : (
-              etudiant.map((et, index) =>{
+              etudiant && etudiant.map((et, index) =>{
                 if (searchEtudiant && !et.matricule.includes(searchEtudiant)) {
                   return null;
                 }

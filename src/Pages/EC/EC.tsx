@@ -5,9 +5,10 @@ import axios from 'axios';
 import AddEC from './AddEC';
 import { Option } from 'antd/es/mentions';
 import Bg from '../../assets/pic/home-bg.jpg'
+import { useGetAllEC } from '@/hooks/useGetAllEC';
 
 const EC: FunctionComponent = () => {
-  let [ec, setEC] = useState([]);
+  const { data: ec, isLoading, refetch } = useGetAllEC();
   const [searchEC, setSearchEC] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
@@ -15,7 +16,6 @@ const EC: FunctionComponent = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [loading , setLoading] = useState(true);
   let [unite, setUnite] = useState([]);
   const [creditError, setCreditError] = useState('');
   const [poidsError, setPoidsError] = useState('');
@@ -33,21 +33,6 @@ const EC: FunctionComponent = () => {
   });
 
   useEffect(() => {      
-    //getting all ec
-    try {
-      axios({
-        method: 'get',
-        url: 'http://localhost:3002/ec/',
-      })
-      .then((rep) => {
-        {
-          setEC(rep.data)
-          setLoading(false);
-        }
-      })
-    } catch (error) {
-      console.error("EC : Erreur de recuperation des elements : " + error);
-    }  
     //fetching all ue
     async function fetchUE() {
       try {
@@ -74,7 +59,6 @@ const EC: FunctionComponent = () => {
       url: `http://localhost:3002/ec/delete/${itemId}`,
     })
     .then(() => {
-      setEC(ec.filter((item) => item.id_ec !== itemId));
       deleteMessage()
     })
     .catch(error => {
@@ -230,13 +214,13 @@ const EC: FunctionComponent = () => {
                 </thead> 
                 <tbody className='bg-white divide-y divide-gray-200'>
                 {
-                loading ? (
+                isLoading ? (
                 <div className='text-center my-10'>
                   <LoadingOutlined className='text-3xl' />
                   <div>Chargement...</div>
                 </div>
                   ) : (
-                ec.map((element, index) =>{
+                ec && ec.map((element: any, index: any) =>{
                   if (searchEC && !element.nom_ec.includes(searchEC)) {
                     return null;
                   }
@@ -266,13 +250,13 @@ const EC: FunctionComponent = () => {
           </div>
           <div className='sm:hidden grid gap-2 justify-center grid-cols-customized'>
               {
-                loading ? (
+                isLoading ? (
                 <div className='text-center my-10'>
                   <LoadingOutlined className='text-3xl' />
                   <div>Chargement...</div>
                 </div>
                   ) : (
-                ec.map((element, index) =>{
+                ec && ec.map((element, index) =>{
                   if (searchEC && !element.nom_ec.includes(searchEC)) {
                     return null;
                   }
