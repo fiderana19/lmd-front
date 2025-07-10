@@ -3,13 +3,18 @@ import { Option } from 'antd/es/mentions';
 import React, {  useState, useEffect, FunctionComponent } from 'react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { handleFloatKeyPress } from '@/utils/handleKeyPress';
+import { useGetAllEtudiant } from '@/hooks/useGetAllEtudiant';
+import { useGetAllNiveau } from '@/hooks/useGetAllNiveau';
+import { useGetAllEC } from '@/hooks/useGetAllEC';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const AddNote: FunctionComponent = () => {
-  let [etudiant, setEtudiant] = useState([]);
+  const { data: etudiants, isLoading: etudiantLoading } = useGetAllEtudiant();
   const [selectedEtudiantId, setSelectedEtudiantId] = useState('');  
-  let [niveau, setNiveau] = useState([]);
-  const [selectedNiveauId, setSelectedNiveauId] = useState('');  
-  let [ec, setEC] = useState([]);
+  const { data: niveaux, isLoading: niveauLoading } = useGetAllNiveau();
+  const [selectedNiveauId, setSelectedNiveauId] = useState(''); 
+  const { data: ecs, isLoading: ecLoading } = useGetAllEC(); 
   const [selectedECId, setSelectedECId] = useState('');
   let [annee, setAnnee] = useState([]);
   const [selectedAnneeId, setSelectedAnneeId] = useState('');
@@ -21,45 +26,6 @@ const AddNote: FunctionComponent = () => {
   const [anneeError, setAnneeError] = useState('');
 
   useEffect(() => {
-    //fethcing all etudiant item
-    async function fetchEtudiant() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/etudiant/',
-        }); 
-        setEtudiant(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-      }
-    }
-    fetchEtudiant();
-    //fethcing all niveau item
-    async function fetchNiveau() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/niveau/',
-        }); 
-        setNiveau(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des niveaux :', error);
-      }
-    }
-    fetchNiveau();    
-    //fethcing all ec item
-    async function fetchEC() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/ec/',
-         }); 
-        setEC(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des elements :', error);
-      }
-    }
-    fetchEC();    
     //fethcing all annee item
     async function fetchAnnee() {
       try {
@@ -123,14 +89,7 @@ const AddNote: FunctionComponent = () => {
     const {name, value} = e.target;
     setFormData((prevFormData) => ({...prevFormData, [name]: value}));
   }
- //handling the key press
- const handleFloatKeyPress =async (e) => {
-  const charCode = e.which || e.keyCode;
 
-  if ((charCode < 48 || charCode > 57) && charCode != 46 && charCode > 31) {
-    e.preventDefault();
-  }
-}
   //handling the select etudiant change
   const handleSelectEtudiantChange = (value) => {
     setSelectedEtudiantId(value);
@@ -185,13 +144,16 @@ const AddNote: FunctionComponent = () => {
           className={etudiantError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
           showSearch
           optionFilterProp="children"
-          filterOption={(input, option) =>
+          filterOption={(input: any, option: any) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
           <Option value="">Sélectionnez un etudiant</Option>
             {
-              etudiant.map((et, index) => {
+              etudiantLoading && <LoadingOutlined />
+            }
+            {
+              etudiants && etudiants.map((et: any, index: any) => {
                 return(
                   <Option key={index} value={et.id_etudiant}>
                     { `${et.matricule} -  ${et.nom} ${et.prenom}` }
@@ -208,13 +170,16 @@ const AddNote: FunctionComponent = () => {
           className={niveauError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
           showSearch
           optionFilterProp="children"
-          filterOption={(input, option) =>
+          filterOption={(input, option: any) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
           <Option value="">Sélectionnez un niveau</Option>
             {
-              niveau.map((niv, index) => {
+              niveauLoading && <LoadingOutlined />
+            }
+            {
+              niveaux && niveaux.map((niv: any, index: any) => {
                 return(
                   <Option key={index} value={niv.id_niveau}>
                     { `${niv.titre_niveau} -  ${niv.parcours}` }
@@ -231,13 +196,16 @@ const AddNote: FunctionComponent = () => {
           className={ecError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
           showSearch
           optionFilterProp="children"
-          filterOption={(input, option) =>
+          filterOption={(input, option: any) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
           <Option value="">Sélectionnez un element</Option>
             {
-              ec.map((element, index) => {
+              ecLoading && <LoadingOutlined />
+            }
+            {
+              ecs && ecs.map((element: any, index: any) => {
                 return(
                   <Option key={index} value={element.id_ec}>
                     { `${element.nom_ec} -  ${element.id_ue}` }
@@ -254,13 +222,13 @@ const AddNote: FunctionComponent = () => {
           className={anneeError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
           showSearch
           optionFilterProp="children"
-          filterOption={(input, option) =>
+          filterOption={(input, option: any) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
           <Option value="">Sélectionnez une année</Option>
             {
-              annee.map((ann, index) => {
+              annee.map((ann: any, index: any) => {
                 return(
                   <Option key={index} value={ann.id_annee}>
                     { `${ann.id_annee}` }

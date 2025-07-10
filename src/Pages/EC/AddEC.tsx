@@ -2,32 +2,17 @@ import { Input, Select , message  } from 'antd'
 import React, {  useState, useEffect, FunctionComponent } from 'react'
 import axios from 'axios';
 import { Option } from 'antd/es/mentions';
+import { handleFloatKeyPress, handleNumberKeyPress } from '@/utils/handleKeyPress';
+import { useGetAllUE } from '@/hooks/useGetAllUE';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const AddEC: FunctionComponent = () => {
-  let [unite, setUnite] = useState([]);
+  const { data: ues, isLoading: ueLoading, refetch } = useGetAllUE();
   const [selectedUEId, setSelectedUEId] = useState('');
   const [creditError, setCreditError] = useState('');
   const [poidsError, setPoidsError] = useState('');
   const [uniteError, setUniteError] = useState('');
   const [formData, setFormData] = useState({ nom_ec: "", semestre: "", et: 0, ed: 0, ep: 0, credit_ec: 0, poids_ec: 0 , id_ue: ""});
-
-    //fethcing all ue item
-    useEffect(() => {
-      async function fetchUE() {
-        try {
-          const response = await axios({
-            method: 'get',
-            url: 'http://localhost:3002/ue/',
-          }); 
-          setUnite(response.data);
-        } catch (error) {
-          console.error('AddEC : Erreur lors de la récupération des elements :', error);
-        }
-      }
-      fetchUE();
-      return () => {
-      };
-    }, []);
 
   //handling the form submit
   const handleSubmit = async (e) => {
@@ -72,22 +57,7 @@ const AddEC: FunctionComponent = () => {
     const {name, value} = e.target;
     setFormData((prevFormData) => ({...prevFormData, [name]: value}));
   }
-  //handling the key press
-  const handleKeyPress =async (e) => {
-    const charCode = e.which || e.keyCode;
 
-    if (charCode < 48 || charCode > 57) {
-      e.preventDefault();
-    }
-  }
-  //handling the key press
-  const handleFloatKeyPress =async (e) => {
-    const charCode = e.which || e.keyCode;
-  
-    if ((charCode < 48 || charCode > 57) && charCode != 46 && charCode > 31) {
-      e.preventDefault();
-    }
-  }
   //handle select change
   const handleSelectChange = (value) => {
     setSelectedUEId(value);
@@ -113,11 +83,11 @@ const AddEC: FunctionComponent = () => {
         <label htmlFor='semestre' >Semestre : </label> <br />
         <Input name='semestre' value={formData.semestre} onChange={handleChange} required/>
         <label htmlFor='et' >ET : </label> <br />
-        <Input name='et' value={formData.et} onChange={handleChange} onKeyPress={handleKeyPress} required />
+        <Input name='et' value={formData.et} onChange={handleChange} onKeyPress={handleNumberKeyPress} required />
         <label htmlFor='ed' >ED : </label> <br />
-        <Input name='ed' value={formData.ed} onChange={handleChange} onKeyPress={handleKeyPress} required />
+        <Input name='ed' value={formData.ed} onChange={handleChange} onKeyPress={handleNumberKeyPress} required />
         <label htmlFor='ep' >EP : </label> <br />
-        <Input name='ep' value={formData.ep} onChange={handleChange} onKeyPress={handleKeyPress} required />
+        <Input name='ep' value={formData.ep} onChange={handleChange} onKeyPress={handleNumberKeyPress} required />
         <label htmlFor='credit_ec' >Credit de l'element : </label> <br />
         <Input name='credit_ec' value={formData.credit_ec} onChange={handleChange} onKeyPress={handleFloatKeyPress} required className={creditError ? 'border border-red-500' : '' } />
         {creditError && <div className="text-red-500 text-xs">{creditError}</div>}
@@ -131,13 +101,16 @@ const AddEC: FunctionComponent = () => {
           className={uniteError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
           showSearch
           optionFilterProp="children"
-          filterOption={(input, option) =>
+          filterOption={(input: any, option: any) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
           <Option value="">Sélectionnez une unité</Option>
             {
-              unite.map((ue, index) => {
+              ueLoading && <LoadingOutlined />
+            }
+            {
+              ues && ues.map((ue: any, index: any) => {
                 return(
                   <Option key={index} value={ue.id_ue}>
                     { `${ue.nom_ue} - ${ue.credit_ue}` }

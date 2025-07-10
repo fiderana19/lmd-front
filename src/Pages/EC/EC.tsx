@@ -6,9 +6,12 @@ import AddEC from './AddEC';
 import { Option } from 'antd/es/mentions';
 import Bg from '../../assets/pic/home-bg.jpg'
 import { useGetAllEC } from '@/hooks/useGetAllEC';
+import { useGetAllUE } from '@/hooks/useGetAllUE';
+import { handleFloatKeyPress, handleNumberKeyPress } from '@/utils/handleKeyPress';
 
 const EC: FunctionComponent = () => {
   const { data: ec, isLoading, refetch } = useGetAllEC();
+  const { data: ues, isLoading: ueLoading } = useGetAllUE();
   const [searchEC, setSearchEC] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
@@ -16,7 +19,6 @@ const EC: FunctionComponent = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  let [unite, setUnite] = useState([]);
   const [creditError, setCreditError] = useState('');
   const [poidsError, setPoidsError] = useState('');
   const [selectedUEId, setSelectedUEId] = useState('');
@@ -32,21 +34,6 @@ const EC: FunctionComponent = () => {
     poids_ec: 0,
   });
 
-  useEffect(() => {      
-    //fetching all ue
-    async function fetchUE() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/ue/',
-        }); 
-        setUnite(response.data);
-      } catch (error) {
-        console.error('EC : Erreur lors de la récupération des elements :', error);
-      }
-    }
-    fetchUE();
-  }, [])
   //show delete confirmation
   const showDeleteConfirmation = (item) => {
     setItemToDelete(item);
@@ -132,10 +119,6 @@ const EC: FunctionComponent = () => {
   const handleDeleteCancel = () => {
     setIsDeleteModalVisible(false);
   };
-  //show modal of detail
-  const showDetail = () => {
-    setIsModalDetailOpen(true);
-  };
   const handleCloseModalDetail = () => {
     setIsModalDetailOpen(false);
   };
@@ -162,22 +145,7 @@ const EC: FunctionComponent = () => {
   const okDeleteStyle = {
     background: 'red'
   }
-  //handling the keypress
-  const handleKeyPress =async (e) => {
-    const charCode = e.which || e.keyCode;
 
-    if (charCode < 48 || charCode > 57) {
-      e.preventDefault();
-    }
-  }
-  //handling the key press
-  const handleFloatKeyPress =async (e) => {
-    const charCode = e.which || e.keyCode;
-    
-    if ((charCode < 48 || charCode > 57) && charCode != 46 && charCode > 31) {
-      e.preventDefault();
-    }
-  }
   //handle select change
   const handleSelectChange = (value) => {
     setSelectedUEId(value);
@@ -326,11 +294,11 @@ const EC: FunctionComponent = () => {
                 <label htmlFor='semestre' >Semestre : </label> <br />
                 <Input name='semestre' value={editedItem.semestre} onChange={handleInputChange}/>
                 <label htmlFor='et' >ET : </label> <br />
-                <Input name='et' value={editedItem.et} onChange={handleInputChange} onKeyPress={handleKeyPress} />
+                <Input name='et' value={editedItem.et} onChange={handleInputChange} onKeyPress={handleNumberKeyPress} />
                 <label htmlFor='ed' >ED : </label> <br />
-                <Input name='ed' value={editedItem.ed} onChange={handleInputChange} onKeyPress={handleKeyPress} />
+                <Input name='ed' value={editedItem.ed} onChange={handleInputChange} onKeyPress={handleNumberKeyPress} />
                 <label htmlFor='ep' >EP : </label> <br />
-                <Input name='ep' value={editedItem.ep} onChange={handleInputChange} onKeyPress={handleKeyPress} />
+                <Input name='ep' value={editedItem.ep} onChange={handleInputChange} onKeyPress={handleNumberKeyPress} />
                 <label htmlFor='credit_ec' >Credit de l'EC : </label> <br />
                 <Input name='credit_ec' value={editedItem.credit_ec} onChange={handleInputChange} onKeyPress={handleFloatKeyPress} className={creditError ? 'border border-red-500' : '' }/>
                 {creditError && <div className="text-red-500 text-xs">{creditError}</div>}
@@ -344,13 +312,16 @@ const EC: FunctionComponent = () => {
                   className='w-full my-1'
                   showSearch
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
+                  filterOption={(input, option: any) =>
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
                 >
                   <Option value="">Sélectionnez une unité</Option>
                     {
-                      unite.map((ue, index) => {
+                      ueLoading && <LoadingOutlined />
+                    }
+                    {
+                      ues && ues.map((ue: any, index: any) => {
                         return(
                           <Option key={index} value={ue.id_ue}>
                             { `${ue.nom_ue} ${ue.credit_ue}` }

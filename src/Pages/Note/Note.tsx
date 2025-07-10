@@ -6,6 +6,7 @@ import { useLocation } from "react-router";
 import { Link } from 'react-router-dom';
 import AddNote from './AddNote';
 import Bg from '../../assets/pic/home-bg.jpg'
+import { handleFloatKeyPress } from '@/utils/handleKeyPress';
 
 const Note: FunctionComponent = () => {
   let [note, setNote] = useState([]);
@@ -171,14 +172,6 @@ const Note: FunctionComponent = () => {
   };
   const okDeleteStyle = {
     background: 'red'
-  }
-  //handling the key press
-  const handleFloatKeyPress =async (e) => {
-    const charCode = e.which || e.keyCode;
-  
-    if ((charCode < 48 || charCode > 57) && charCode != 46 && charCode > 31) {
-      e.preventDefault();
-    }
   }
 
   return (

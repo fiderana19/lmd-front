@@ -3,9 +3,10 @@ import { Button, message, Modal, Input } from 'antd'
 import { EditOutlined, DeleteOutlined, WarningOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import AddUE from './AddUE';
+import { useGetAllUE } from '@/hooks/useGetAllUE';
 
 const UE: FunctionComponent = () => {
-  let [ue, setUE] = useState([]);
+  const { data: ue, isLoading, refetch } = useGetAllUE();
   const [searchUE, setSearchUE] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
@@ -20,24 +21,6 @@ const UE: FunctionComponent = () => {
     credit_ue: 0,
   });
 
-  useEffect(() => {      
-    //getting all ue
-    try {
-      axios({
-        method: 'get',
-        url: 'http://localhost:3002/ue/',
-      })
-      .then((rep) => {
-        {
-          setUE(rep.data)
-          setLoading(false);
-        }
-      })
-    } catch (error) {
-      console.error("UE : Erreur de recuperation : " + error);
-    }  
-  }, [])
-
   //show delete confirmation
   const showDeleteConfirmation = (item) => {
     setItemToDelete(item);
@@ -50,7 +33,6 @@ const UE: FunctionComponent = () => {
       url: `http://localhost:3002/ue/delete/${itemId}`,
     })
     .then(() => {
-      setUE(ue.filter((item) => item.id_ue !== itemId));
       deleteMessage()
     })
     .catch(error => {
@@ -169,13 +151,13 @@ const UE: FunctionComponent = () => {
               </thead> 
               <tbody className='bg-white divide-y divide-gray-200'>
               {
-            loading ? (
+            isLoading ? (
               <div className='text-center my-10'>
                 <LoadingOutlined className='text-3xl' />
                 <div>Chargement...</div>
               </div>
                 ) : (
-              ue.map((uee, index) =>{
+              ue && ue.map((uee, index) =>{
                 if (searchUE && !uee.nom_ue.includes(searchUE)) {
                   return null;
                 }

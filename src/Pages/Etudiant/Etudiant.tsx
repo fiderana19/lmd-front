@@ -7,16 +7,14 @@ import dayjs from 'dayjs';
 import Bg from '../../assets/pic/home-bg.jpg'
 import { useGetAllEtudiant } from '@/hooks/useGetAllEtudiant';
 
-
 const Etudiant: FunctionComponent = () => {
-  const { data: etudiant, isLoading, refetch } = useGetAllEtudiant();
+  const { data: etudiants, isLoading, refetch } = useGetAllEtudiant();
   const [searchEtudiant, setSearchEtudiant] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [loading , setLoading] = useState(true);
   const [editedItem, setEditedItem] = useState({   
     id_etudiant: 0,
     matricule: '',
@@ -161,7 +159,7 @@ const Etudiant: FunctionComponent = () => {
                   <div>Chargement...</div>
                 </div>
                   ) : (
-                etudiant && etudiant.map((et, index) =>{
+                etudiants && etudiants.map((et: any, index: any) =>{
                   if (searchEtudiant && !et.matricule.includes(searchEtudiant)) {
                     return null;
                   }
@@ -193,7 +191,7 @@ const Etudiant: FunctionComponent = () => {
                 <div>Chargement...</div>
               </div>
                 ) : (
-              etudiant && etudiant.map((et, index) =>{
+              etudiants && etudiants.map((et: any, index: any) =>{
                 if (searchEtudiant && !et.matricule.includes(searchEtudiant)) {
                   return null;
                 }

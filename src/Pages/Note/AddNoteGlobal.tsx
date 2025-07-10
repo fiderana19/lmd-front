@@ -4,6 +4,7 @@ import React, {  useState, useEffect, FunctionComponent } from 'react'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CloseCircleFilled, CheckCircleFilled, WarningFilled, UserOutlined, ShoppingCartOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { handleFloatKeyPress } from '@/utils/handleKeyPress';
 
 const AddNoteGlobal: FunctionComponent = () => {
   let params = useParams()
@@ -131,14 +132,7 @@ const AddNoteGlobal: FunctionComponent = () => {
     const {name, value} = e.target;
     setFormData((prevFormData) => ({...prevFormData, [name]: value}));
   }
-  //handling the key press
-  const handleFloatKeyPress =async (e) => {
-    const charCode = e.which || e.keyCode;
-  
-    if ((charCode < 48 || charCode > 57) && charCode != 46 && charCode > 31) {
-      e.preventDefault();
-    }
-  }
+
   //handling the select etudiant change
   const handleSelectEtudiantChange = (value) => {
     setSelectedEtudiantId(value);

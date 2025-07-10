@@ -4,16 +4,16 @@ import { EditOutlined, DeleteOutlined, WarningOutlined, UserOutlined, LoadingOut
 import axios from 'axios';
 import AddNiveau from './AddNiveau';
 import Bg from '../../assets/pic/home-bg.jpg'
+import { useGetAllNiveau } from '@/hooks/useGetAllNiveau';
 
 const Niveau: FunctionComponent = () => {
-  let [niveau, setNiveau] = useState([]);
+  const { data: niveau, isLoading, refetch } = useGetAllNiveau();
   const [searchNiveau, setSearchNiveau] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [loading , setLoading] = useState(true);
   const [editedItem, setEditedItem] = useState({   
     id_niveau: 0,
     titre_niveau: '',
@@ -23,24 +23,6 @@ const Niveau: FunctionComponent = () => {
     parcours: '',
   });
   
-  useEffect(() => {      
-    //getting all niveau
-    try {
-      axios({
-        method: 'get',
-        url: 'http://localhost:3002/niveau/',
-      })
-      .then((rep) => {
-        {
-          setNiveau(rep.data)
-          setLoading(false);
-        }
-      })
-    } catch (error) {
-      console.error("Niveau : Erreur de recuperation : " + error);
-    }  
-  }, [])
-
   //show delete confirmation
   const showDeleteConfirmation = (item: any) => {
     setItemToDelete(item);
@@ -53,7 +35,6 @@ const Niveau: FunctionComponent = () => {
       url: `http://localhost:3002/niveau/delete/${itemId}`,
     })
     .then(() => {
-      setNiveau(niveau.filter((item: any) => item.id_niveau !== itemId));
       deleteMessage()
     })
     .catch(error => {
@@ -132,14 +113,6 @@ const Niveau: FunctionComponent = () => {
   const okDeleteStyle = {
     background: 'red'
   }
-  //handling the keypress
-  const handleKeyPress =async (e: any) => {
-    const charCode = e.which || e.keyCode;
-
-    if (charCode < 48 || charCode > 57) {
-      e.preventDefault();
-    }
-  }
 
   return (
     <div className='pb-5 pt-24'>
@@ -169,13 +142,13 @@ const Niveau: FunctionComponent = () => {
                 </thead> 
                 <tbody className='bg-white divide-y divide-gray-200'>
                 {
-                loading ? (
+                isLoading ? (
                 <div className='text-center my-10'>
                   <LoadingOutlined className='text-3xl' />
                   <div>Chargement...</div>
                 </div>
                   ) : (
-                niveau.map((niv, index) =>{
+                niveau && niveau.map((niv, index) =>{
                   if (searchNiveau && !niv.titre_niveau.includes(searchNiveau)) {
                     return null;
                   }
@@ -202,13 +175,15 @@ const Niveau: FunctionComponent = () => {
           </div> 
           <div className='sm:hidden grid gap-2 justify-center grid-cols-customized'>
             {
-                loading ? (
+                isLoading && (
                 <div className='text-center my-10'>
                   <LoadingOutlined className='text-3xl' />
                   <div>Chargement...</div>
                 </div>
-                  ) : (
-                niveau.map((niv, index) =>{
+                  )
+                }
+                {
+                niveau && niveau.map((niv, index) =>{
                 if (searchNiveau && !niv.titre_niveau.includes(searchNiveau)) {
                   return null;
                 }
@@ -250,8 +225,7 @@ const Niveau: FunctionComponent = () => {
                       </div>
                     </div>
                 </Card>
-                )
-                })
+                )}
               )
             }
           </div>
