@@ -18,6 +18,7 @@ import NotFound from "./Pages/NotFound";
 import AddEC from "./Pages/EC/AddEC";
 import EditEC from "./Pages/EC/EditEC";
 import ViewEC from "./Pages/EC/ViewEC";
+import AddEtudiant from "./Pages/Etudiant/AddEtudiant";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                 <Route path='addglobal/note/:ec/:niveau/:annee' element={<AddNoteGlobal />}/>
                 <Route path='addnote' element={<AddNotePerso />}/>
                 <Route index element={<Home/>}/>
+                <Route path='etudiant/create' element={<AddEtudiant/>}/>
                 <Route path='etudiant' element={<Etudiant/>}/>
                 <Route path='niveau' element={<Niveau/>}/>
                 <Route path='note' element={<Note/>}/>

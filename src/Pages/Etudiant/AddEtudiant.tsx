@@ -1,74 +1,129 @@
-import { Input, DatePicker , message  } from 'antd'
-import React, {  FunctionComponent, useState } from 'react'
-import axios from 'axios';
+import { DatePicker  } from 'antd'
+import {  FunctionComponent } from 'react'
 import dayjs from 'dayjs';
+import { Input } from '@/components/ui/input';
+import { Controller, useForm } from 'react-hook-form';
+import { CreateEtudiantType } from '@/types/Etudiant';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateEtudiantValidation } from '@/validation/etudiant.validation';
+import { usePostEtudiant } from '@/hooks/usePostEtudiant';
+import { useGetAllEtudiant } from '@/hooks/useGetAllEtudiant';
+import { useNavigate } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const AddEtudiant: FunctionComponent = () => {
-  const [formData, setFormData] = useState({ matricule: "", nom: "", prenom: "", date_naiss: "", lieu_naiss: ""});
-  const [dateError, setDateError] = useState('');
+  const { handleSubmit: submit, formState: { errors }, control } = useForm<CreateEtudiantType>({
+    resolver: yupResolver(CreateEtudiantValidation)
+  });
+  const { refetch: refetchEtudiant } = useGetAllEtudiant();
+  const { mutateAsync: createEtudiant, isPending: createLoading } = usePostEtudiant({action() {
+    refetchEtudiant();
+  },})
+  const navigate = useNavigate();
 
-  //handling the form submit
-  const handleSubmit = async (e: any) => {
-    setDateError('')
+  const submitCreateEtudiant = (data: CreateEtudiantType) => {
+    createEtudiant(data);
+    navigate('/etudiant');
+  }
 
-    if(formData.date_naiss == '' ) {
-      setDateError("Vous devez entrer une date de naissance ! ")
-      e.preventDefault()
-    }
-    if(formData.date_naiss != ''){
-      try {
-        const response  = await  axios({
-          method: 'post',
-          url: 'http://localhost:3002/etudiant/create',
-          data: formData,
-        });
-        successMessage()
-      } catch (error) {
-        errorMessage()
-        console.error("AddEtudiant : Erreur d'ajout de l'etudiant : " + error);
-      }
-    }
+  const formatDate = (dateString: string) => {
+    return dayjs(dateString).format('YYYY-MM-DD')
   }
-  //handling the input change
-  const handleChange = async (e: any) => {
-    const {name, value} = e.target;
-    setFormData((prevFormData) => ({...prevFormData, [name]: value}));
-  }
-  //handling the date change
-  const handleDateChange = (date: any, dateString: any) => {
-    if (date) {
-      const formatedDate = dayjs(dateString).format('YYYY-MM-DD')
-      setFormData({
-        ...formData,
-        date_naiss: formatedDate,
-      });
-    }
-  };
-  //success message 
-  const successMessage = () => {
-    message.success('Etudiant ajouté avec succés !');
-  };
-  //error message 
-  const errorMessage = () => {
-    message.error("Echec de l'ajout de l'etudiant !");
-  };
   
   return (
-    <div>
-      <form className='sm:w-2/3 w-full my-7 mx-auto' onSubmit={handleSubmit} >
-        <label htmlFor='matricule' >Matricule : </label> <br />
-        <Input name='matricule' value={formData.matricule} onChange={handleChange} required/>
-        <label htmlFor='nom' >Nom : </label> <br />
-        <Input name='nom' value={formData.nom} onChange={handleChange} required/>
-        <label htmlFor='prenom' >Prenom : </label> <br />
-        <Input name='prenom' value={formData.prenom} onChange={handleChange}/>
-        <label htmlFor='date_naiss' >Date de naissance : </label> <br />
-        <DatePicker onChange={handleDateChange}  className={dateError ? 'border border-red-500 w-full' : 'w-full' } showTime format="YYYY-MM-DD" required />
-        {dateError && <div className="text-red-500 text-xs">{dateError}</div>}
-        <label htmlFor='lieu_naiss' >Lieu de naissance : </label> <br />
-        <Input name='lieu_naiss' value={formData.lieu_naiss} onChange={handleChange} required />
-        <div className='flex justify-center my-3'>
-          <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>AJOUTER</button>
+    <div className='pb-5 pt-24 bg-gray-100 min-h-screen'>
+      <div className='text-3xl mx-auto w-max font-bold'>NOUVEAU ETUDIANT</div>
+      <form className='p-7 mx-auto w-80 bg-white rounded mt-4' onSubmit={submit(submitCreateEtudiant)} >
+        <Label htmlFor='matricule' className='mb-1'>Matricule : </Label>
+        <Controller 
+          control={control}
+          name='matricule'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input
+              value={value} 
+              onChange={onChange} 
+              className={`${errors.matricule && 'border border-red-500 text-red-500 rounded'}`}
+            />
+          )}
+        />
+        {errors.matricule && <div className="text-red-500 text-xs w-full">{ errors.matricule.message }</div>}
+        <Label htmlFor='nom' className='mb-1 mt-4'>Nom : </Label>
+        <Controller 
+          control={control}
+          name='nom'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input 
+              value={value} 
+              onChange={onChange} 
+              className={`${errors.nom && 'border border-red-500 text-red-500 rounded'}`}
+            />
+          )}
+        />
+        {errors.nom && <div className="text-red-500 text-xs w-full">{ errors.nom.message }</div>}
+        <Label htmlFor='prenom' className='mt-4 mb-1'>Prenom : </Label>
+        <Controller 
+          control={control}
+          name='prenom'
+          defaultValue=" "
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input 
+              value={value ? value : " "} 
+              onChange={onChange} 
+              className={`${errors.prenom && 'border border-red-500 text-red-500 rounded'}`}
+            />
+          )}
+        />
+        {errors.prenom && <div className="text-red-500 text-xs w-full">{ errors.prenom.message }</div>}
+        <Label htmlFor='date_naiss' className='mt-4 mb-1'>Date de naissance : </Label>
+        <Controller 
+          control={control}
+          name='date_naiss'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <DatePicker 
+              className={`w-full ${errors.date_naiss && 'border border-red-500 text-red-500 rounded'}`}
+              placeholder=''
+              onChange={() => onChange(formatDate(value))} 
+              value={value ? dayjs(value) : null}
+              format="YYYY-MM-DD"
+            />
+          )}
+        />
+        {errors.date_naiss && <div className="text-red-500 text-xs w-full">{ errors.date_naiss.message }</div>}
+        <Label htmlFor='lieu_naiss' className='mt-4 mb-1'>Lieu de naissance : </Label>
+        <Controller 
+          control={control}
+          name='lieu_naiss'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input 
+              value={value} 
+              onChange={onChange} 
+              className={`${errors.lieu_naiss && 'border border-red-500 text-red-500 rounded'}`}
+            />
+          )}
+        />
+        {errors.lieu_naiss && <div className="text-red-500 text-xs w-full">{ errors.lieu_naiss.message }</div>}
+        <div className='flex justify-center mt-4'>
+          <Button 
+            variant={'success'} 
+            type='submit'
+            disabled={createLoading}
+            className={`${createLoading && 'cursor-not-allowed'}`}
+          >
+            { createLoading && <LoadingOutlined /> }
+            AJOUTER
+          </Button>
         </div>
       </form>
     </div>

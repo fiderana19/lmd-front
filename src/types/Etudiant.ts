@@ -1,4 +1,4 @@
-export type CreateEtudiant = {
+export type CreateEtudiantType = {
     matricule: string, 
     nom: string, 
     prenom: string, 
@@ -6,7 +6,7 @@ export type CreateEtudiant = {
     lieu_naiss: string
 }
 
-export type EditEtudiant = {
+export type EditEtudiantType = {
     id_etudiant: number, 
     matricule: string, 
     nom: string, 
