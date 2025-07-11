@@ -15,6 +15,7 @@ import EC from "./Pages/EC/EC";
 import NoteEtudiant from "./Pages/NoteEtudiant/NoteEtudiant";
 import ResultatParNiveau from "./Pages/NoteEtudiant/ResultatParNiveau";
 import NotFound from "./Pages/NotFound";
+import AddEC from "./Pages/EC/AddEC";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path='niveau' element={<Niveau/>}/>
                 <Route path='note' element={<Note/>}/>
                 <Route path='ue' element={<UE/>}/>
+                <Route path='ec/create' element={<AddEC/>}/>
                 <Route path='ec' element={<EC/>}/>
                 <Route path='note/etudiant' element={<NoteEtudiant/>}/>
                 <Route path='note/result' element={<ResultatParNiveau/>}/>

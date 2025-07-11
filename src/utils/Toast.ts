@@ -15,7 +15,7 @@ export const showToast = ({ message, type } : ToastProps) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: "dark",
         transition:  Bounce 
     })
 }

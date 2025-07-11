@@ -4,7 +4,7 @@ import { axiosInstance } from "./Config"
 const EC_BASE_URL = `${import.meta.env.VITE_BASE_URL}/ec`;
 
 export const getAllEC = async () => {
-    return await axiosInstance.get(`${EC_BASE_URL}`);
+    return await axiosInstance.get(`${EC_BASE_URL}/`);
 }
 
 export const postEC = async (data: CreateEC) => {

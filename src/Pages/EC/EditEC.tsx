@@ -12,7 +12,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CreateECValidation } from '../../validation/ec.validation';
 import { usePostEC } from '@/hooks/usePostEC';
 import { useGetAllEC } from '@/hooks/useGetAllEC';
-import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -25,17 +24,14 @@ const AddEC: FunctionComponent = () => {
   const { mutateAsync: createEC, isPending: ecLoading } = usePostEC({action() {
     refetchEC();
   },})
-  const navigate = useNavigate();
 
   const ECSubmit = async (data: CreateEC) => {
+    console.log(data)
     createEC(data);
-    navigate('/ec')
   }
 
   return (
-    <div className='pb-5 pt-24 bg-gray-100 min-h-screen'>
-      <div className='text-3xl mx-auto w-max font-bold'>NOUVEAU ELEMENT CONSTITUTIF</div>
-      <form className='p-7 mx-auto w-80 bg-white rounded mt-4' onSubmit={submit(ECSubmit)}>
+      <form className='sm:w-2/3 w-full my-4 mx-auto' onSubmit={submit(ECSubmit)}>
         <Label htmlFor='nom_ec' className='mb-1' >Nom de l'element : </Label>
         <Controller 
           name='nom_ec'
@@ -54,20 +50,7 @@ const AddEC: FunctionComponent = () => {
           render={({
             field : { value, onChange }
           }) => (
-            <Select   
-              value={value}
-              onChange={onChange}
-              showSearch
-              placeholder="Veuillez selectionner le semestre"
-               className={`w-full`}
-              optionFilterProp="children"
-              filterOption={(input: any, option: any) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              <Option value="Paire">Paire</Option>
-              <Option value="Impaire">Impaire</Option>
-            </Select>
+            <Input value={value} onChange={onChange}  className={`w-full`}/>
           )}
         />
         {errors?.semestre && <div className="text-red-500 text-xs text-left w-full">{errors?.semestre.message}</div>}
@@ -151,7 +134,6 @@ const AddEC: FunctionComponent = () => {
               value={value}
               onChange={onChange}
               showSearch
-              placeholder="Veuillez selectionner l'unité"
                className={`w-full`}
               optionFilterProp="children"
               filterOption={(input: any, option: any) =>
@@ -179,14 +161,13 @@ const AddEC: FunctionComponent = () => {
             variant={'success'} 
             type='submit'
             disabled={ecLoading}
-            className={`w-full ${ecLoading && 'cursor-not-allowed'}`}
+            className={`${ecLoading && 'cursor-not-allowed'}`}
           >
             { ecLoading && <LoadingOutlined /> }
             AJOUTER
           </Button>
         </div>
       </form>
-    </div>
   );
 }
 
