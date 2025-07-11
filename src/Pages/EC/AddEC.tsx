@@ -4,7 +4,6 @@ import { handleFloatKeyPress, handleNumberKeyPress } from '@/utils/handleKeyPres
 import { useGetAllUE } from '@/hooks/useGetAllUE';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Controller, useForm } from 'react-hook-form'
-import { CreateEC } from '@/types/EC';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -13,13 +12,14 @@ import { CreateECValidation } from '../../validation/ec.validation';
 import { usePostEC } from '@/hooks/usePostEC';
 import { useGetAllEC } from '@/hooks/useGetAllEC';
 import { useNavigate } from 'react-router-dom';
+import { CreateECType } from '@/types/EC';
 
 const { Option } = Select;
 
 const AddEC: FunctionComponent = () => {
   const { data: ues, isLoading: ueLoading } = useGetAllUE();
   const { refetch: refetchEC } = useGetAllEC();
-  const { handleSubmit: submit, formState: { errors }, control } = useForm<CreateEC>({
+  const { handleSubmit: submit, formState: { errors }, control } = useForm<CreateECType>({
     resolver: yupResolver(CreateECValidation),
   });
   const { mutateAsync: createEC, isPending: ecLoading } = usePostEC({action() {
@@ -27,7 +27,7 @@ const AddEC: FunctionComponent = () => {
   },})
   const navigate = useNavigate();
 
-  const ECSubmit = async (data: CreateEC) => {
+  const ECSubmit = async (data: CreateECType) => {
     createEC(data);
     navigate('/ec')
   }

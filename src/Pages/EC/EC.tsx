@@ -1,7 +1,6 @@
 import { useState, FunctionComponent, useEffect } from 'react'
-import { Card, Modal } from 'antd'
-import { EditOutlined, DeleteOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import AddEC from './AddEC';
+import { Card } from 'antd'
+import { EditOutlined, DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
 import Bg from '../../assets/pic/home-bg.jpg'
 import { useGetAllEC } from '@/hooks/useGetAllEC';
 import { useDeleteEC } from '@/hooks/useDeleteEC';
@@ -70,7 +69,13 @@ const EC: FunctionComponent = () => {
                       <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900 text-center'> { element.poids_ec } </td>
                       <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap text-sm leading-5 text-gray-900'> { element.id_ue } </td>
                       <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
-                        <div className='flex justify-center'>
+                        <div className='flex justify-center gap-1'>
+                          <Button 
+                            size={'icon'}
+                            onClick={() => navigate(`/ec/edit/${element.id_ec}`)} 
+                          >
+                            <EditOutlined />
+                          </Button>
                           <AlertDialog>
                               <AlertDialogTrigger><Button variant={'destructive'} size={'icon'}><DeleteOutlined/></Button></AlertDialogTrigger>
                               <AlertDialogContent>
@@ -96,7 +101,6 @@ const EC: FunctionComponent = () => {
                               </AlertDialogFooter>
                               </AlertDialogContent>
                           </AlertDialog>
-                          <div className='mx-1 border border-black w-min px-2 py-1 rounded-full hover:bg-gray-300 hover:scale-105 hover:transition-all'> <EditOutlined/></div>
                         </div>
                       </td>
                     </tr>
@@ -195,7 +199,11 @@ const EC: FunctionComponent = () => {
                               </AlertDialogFooter>
                               </AlertDialogContent>
                           </AlertDialog>
-                        <div  className='mx-1 border border-black w-min px-2 py-1 rounded-full hover:bg-gray-300 hover:scale-105 hover:transition-all'> <EditOutlined/></div>
+                          <Button 
+                            onClick={() => navigate(`/ec/edit/${element.id_ec}`)} 
+                          >
+                            <EditOutlined />
+                          </Button>
                       </div>
                     </div>
                 </Card>

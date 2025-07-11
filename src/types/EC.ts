@@ -1,4 +1,4 @@
-export type CreateEC = {
+export type CreateECType = {
     nom_ec: string, 
     semestre: string, 
     et: number, 
@@ -9,8 +9,9 @@ export type CreateEC = {
     id_ue: string,
 }
 
-export type EditEC = {
+export type EditECType = {
     id_ec: string, 
+    nom_ec: string, 
     semestre: string, 
     et: number, 
     ed: number, 
