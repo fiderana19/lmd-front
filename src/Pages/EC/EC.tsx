@@ -1,6 +1,6 @@
 import { useState, FunctionComponent, useEffect } from 'react'
 import { Card } from 'antd'
-import { EditOutlined, DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, LoadingOutlined, EyeFilled } from '@ant-design/icons';
 import Bg from '../../assets/pic/home-bg.jpg'
 import { useGetAllEC } from '@/hooks/useGetAllEC';
 import { useDeleteEC } from '@/hooks/useDeleteEC';
@@ -43,9 +43,6 @@ const EC: FunctionComponent = () => {
                 <tr>
                   <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Element</th>
                   <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Semestre</th>
-                  <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>ET</th>
-                  <th className='lg:px-6 px-2 py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>ED</th>
-                  <th className='lg:px-6 px-2 py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>EP</th>
                   <th className='lg:px-6 px-2 py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Credit</th>
                   <th className='lg:px-6 px-2 py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Poids</th>
                   <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Unité</th>
@@ -62,14 +59,18 @@ const EC: FunctionComponent = () => {
                     <tr key={index}>
                       <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { element.nom_ec } </td>
                       <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { element.semestre } </td>
-                      <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900 text-center'> { element.et } </td>
-                      <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900  text-center'> { element.ed } </td>
-                      <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900 text-center'> { element.ep } </td>
                       <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900 text-center'> { element.credit_ec } </td>
                       <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900 text-center'> { element.poids_ec } </td>
                       <td className='lg:px-6 px-2 py-4 xl:whitespace-nowrap text-sm leading-5 text-gray-900'> { element.id_ue } </td>
                       <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
-                        <div className='flex justify-center gap-1'>
+                        <div className='flex justify-center gap-1.5'>
+                          <Button 
+                            size={'icon'}
+                            variant={'secondary'}
+                            onClick={() => navigate(`/ec/view/${element.id_ec}`)} 
+                          >
+                            <EyeFilled />
+                          </Button>
                           <Button 
                             size={'icon'}
                             onClick={() => navigate(`/ec/edit/${element.id_ec}`)} 
