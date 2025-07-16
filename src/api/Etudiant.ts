@@ -18,3 +18,7 @@ export const patchEtudiant = async (data: EditEtudiantType) => {
 export const deleteEtudiant = async (id: number) => {
     return await axiosInstance.delete(`${ETUDIANT_BASE_URL}/delete/${id}`);
 }
+
+export const getEtudiantById = async (id: number) => {
+    return await axiosInstance.get(`${ETUDIANT_BASE_URL}/get/${id}`);
+}

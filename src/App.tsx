@@ -19,6 +19,8 @@ import AddEC from "./Pages/EC/AddEC";
 import EditEC from "./Pages/EC/EditEC";
 import ViewEC from "./Pages/EC/ViewEC";
 import AddEtudiant from "./Pages/Etudiant/AddEtudiant";
+import EditEtudiant from "./Pages/Etudiant/EditEtudiant";
+import ViewEtudiant from "./Pages/Etudiant/ViewEtudiant";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
                 <Route path='addnote' element={<AddNotePerso />}/>
                 <Route index element={<Home/>}/>
                 <Route path='etudiant/create' element={<AddEtudiant/>}/>
+                <Route path='etudiant/edit/:id' element={<EditEtudiant/>}/>
+                <Route path='etudiant/view/:id' element={<ViewEtudiant/>}/>
                 <Route path='etudiant' element={<Etudiant/>}/>
                 <Route path='niveau' element={<Niveau/>}/>
                 <Route path='note' element={<Note/>}/>

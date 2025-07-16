@@ -7,7 +7,7 @@ export type CreateEtudiantType = {
 }
 
 export type EditEtudiantType = {
-    id_etudiant: number, 
+    id_etudiant: string, 
     matricule: string, 
     nom: string, 
     prenom: string, 
