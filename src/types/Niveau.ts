@@ -1,4 +1,4 @@
-export type CreateNiveau = {
+export type CreateNiveauType = {
     titre_niveau: string, 
     descri_niveau: string, 
     domaine: string, 
@@ -6,7 +6,7 @@ export type CreateNiveau = {
     parcours: string
 }
 
-export type EditNiveau = {
+export type EditNiveauType = {
     id_niveau: number, 
     titre_niveau: string, 
     descri_niveau: string, 

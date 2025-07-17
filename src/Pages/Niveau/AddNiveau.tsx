@@ -1,52 +1,120 @@
-import { Input , message  } from 'antd'
 import React, {  FunctionComponent, useState } from 'react'
-import axios from 'axios';
+import { useGetAllNiveau } from '@/hooks/useGetAllNiveau';
+import { usePostNiveau } from '@/hooks/usePostNiveau';
+import { Controller, useForm } from 'react-hook-form';
+import { CreateNiveauType } from '@/types/Niveau';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateNiveauValidation } from '@/validation/niveau.validation';
+import { useNavigate } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const AddNiveau: FunctionComponent = () => {
-  const [formData, setFormData] = useState({ titre_niveau: "", descri_niveau: "", domaine: "", mention: "", parcours: ""});
-  //handling the form submit
-  const handleSubmit = async (e: any) => {
-    try {
-      const response  = await  axios({
-        method: 'post',
-        url: 'http://localhost:3002/niveau/create',
-        data: formData,
-      });
-      successMessage()
-    } catch (error) {
-      errorMessage()
-      console.error("AddNiveau : Erreur d'ajout du niveau : " + error);
-    }
+  const { refetch: refetchNiveau } = useGetAllNiveau();
+  const { mutateAsync: createNiveau, isPending: createLoading } = usePostNiveau({action() {
+    refetchNiveau()
+  },})
+  const { handleSubmit: submit, formState: { errors }, control } = useForm<CreateNiveauType>({
+    resolver: yupResolver(CreateNiveauValidation)
+  })
+  const navigate = useNavigate();
+
+  const createNiveauSubmit = (data: CreateNiveauType) => {
+    createNiveau(data);
+    navigate('/niveau')
   }
-  //handling the input change
-  const handleChange = async (e: any) => {
-    const {name, value} = e.target;
-    setFormData((prevFormData) => ({...prevFormData, [name]: value}));
-  }
-  //success message 
-  const successMessage = () => {
-    message.success('Niveau ajouté avec succés !');
-  };
-  //error message 
-  const errorMessage = () => {
-    message.error("Echec de l'ajout du niveau !");
-  };
 
   return (
-    <div>
-      <form className='sm:w-2/3 w-full my-7 mx-auto' onSubmit={handleSubmit}>
-        <label htmlFor='titre_niveau' >Titre : </label> <br />
-        <Input name='titre_niveau' value={formData.titre_niveau} onChange={handleChange} required />
-        <label htmlFor='descri_niveau' >Description : </label> <br />
-        <Input name='descri_niveau' value={formData.domaine} onChange={handleChange} required />
-        <label htmlFor='domaine' >Domaine : </label> <br />
-        <Input name='domaine' value={formData.domaine} onChange={handleChange} required/>
-        <label htmlFor='mention' >Mention : </label> <br />
-        <Input name='mention' value={formData.mention} onChange={handleChange} required/>
-        <label htmlFor='parcours' >Parcours : </label> <br />
-        <Input name='parcours' value={formData.parcours} onChange={handleChange} required/>
-        <div className='flex justify-center my-3'>
-          <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>AJOUTER</button>
+  <div className='pb-5 pt-24 bg-gray-100 min-h-screen'>
+      <div className='text-3xl mx-auto w-max font-bold'>NOUVEAU NIVEAU</div>
+      <form className='p-7 mx-auto w-80 bg-white rounded mt-4' onSubmit={submit(createNiveauSubmit)}>
+        <Label htmlFor='titre_niveau' className='mb-1'>Titre : </Label>
+        <Controller 
+          control={control}
+          name='titre_niveau'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input 
+              value={value} 
+              onChange={onChange} 
+              className={`${errors.titre_niveau && 'border border-red-500 text-red-500 rounded'}`}
+              />
+          )}
+        />
+        {errors.titre_niveau && <div className="text-red-500 text-xs w-full">{ errors.titre_niveau.message }</div>}
+        <Label htmlFor='descri_niveau' className='mt-4 mb-1'>Description : </Label>
+        <Controller 
+          control={control}
+          name='descri_niveau'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input 
+              value={value} 
+              onChange={onChange} 
+              className={`${errors.descri_niveau && 'border border-red-500 text-red-500 rounded'}`}
+              />
+          )}
+        />
+        {errors.descri_niveau && <div className="text-red-500 text-xs w-full">{ errors.descri_niveau.message }</div>}
+        <Label htmlFor='domaine' className='mt-4 mb-1'>Domaine : </Label>
+        <Controller 
+          control={control}
+          name='domaine'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input 
+              value={value} 
+              onChange={onChange} 
+              className={`${errors.domaine && 'border border-red-500 text-red-500 rounded'}`}
+              />
+          )}
+        />
+        {errors.domaine && <div className="text-red-500 text-xs w-full">{ errors.domaine.message }</div>}
+        <Label htmlFor='mention' className='mt-4 mb-1'>Mention : </Label>
+        <Controller 
+          control={control}
+          name='mention'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input 
+              value={value} 
+              onChange={onChange} 
+              className={`${errors.mention && 'border border-red-500 text-red-500 rounded'}`}
+              />
+          )}
+        />
+        {errors.mention && <div className="text-red-500 text-xs w-full">{ errors.mention.message }</div>}
+        <Label htmlFor='parcours' className='mt-4 mb-1'>Parcours : </Label>
+        <Controller 
+          control={control}
+          name='parcours'
+          render={({
+            field: { value, onChange }
+          }) => (
+            <Input 
+              value={value} 
+              onChange={onChange} 
+              className={`${errors.parcours && 'border border-red-500 text-red-500 rounded'}`}
+              />
+          )}
+        />
+        {errors.parcours && <div className="text-red-500 text-xs w-full">{ errors.parcours.message }</div>}
+        <div className='flex justify-center mt-4'>
+          <Button
+            variant={'success'}
+            type='submit'
+            disabled={createLoading}
+            className={`${createLoading && 'cursor-not-allowed'}`}
+          >
+            { createLoading && <LoadingOutlined /> }
+            AJOUTER
+          </Button>
         </div>
       </form>
     </div>
