@@ -18,3 +18,7 @@ export const patchNiveau = async (data: EditNiveauType) => {
 export const deleteNiveau = async (id: number) => {
     return await axiosInstance.delete(`${NIVEAU_BASE_URL}/delete/${id}`);
 }
+
+export const getNiveauById = async (id: number) => {
+    return await axiosInstance.get(`${NIVEAU_BASE_URL}/get/${id}`);
+}
