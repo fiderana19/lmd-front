@@ -1,5 +1,5 @@
+import { CreateUEType, EditUEType } from "@/types/UE";
 import { axiosInstance } from "./Config"
-import { CreateUE, EditUE } from "@/types/UE";
 
 const UE_BASE_URL = `${import.meta.env.VITE_BASE_URL}/ue`;
 
@@ -7,11 +7,11 @@ export const getAllUE = async () => {
     return await axiosInstance.get(`${UE_BASE_URL}`);
 }
 
-export const postUE = async (data: CreateUE) => {
+export const postUE = async (data: CreateUEType) => {
     return await axiosInstance.post(`${UE_BASE_URL}/create` , data);
 }
 
-export const patchUE = async (data: EditUE) => {
+export const patchUE = async (data: EditUEType) => {
     return await axiosInstance.patch(`${UE_BASE_URL}/edit/${data.id_ue}` , data);
 }
 
