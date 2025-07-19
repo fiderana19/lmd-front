@@ -7,7 +7,7 @@ export type CreateNiveauType = {
 }
 
 export type EditNiveauType = {
-    id_niveau: number, 
+    id_niveau: string, 
     titre_niveau: string, 
     descri_niveau: string, 
     domaine: string, 

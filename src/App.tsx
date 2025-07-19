@@ -23,6 +23,7 @@ import EditEtudiant from "./Pages/Etudiant/EditEtudiant";
 import ViewEtudiant from "./Pages/Etudiant/ViewEtudiant";
 import AddNiveau from "./Pages/Niveau/AddNiveau";
 import ViewNiveau from "./Pages/Niveau/ViewNiveau";
+import EditNiveau from "./Pages/Niveau/EditNiveau";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
                 <Route path='etudiant' element={<Etudiant/>}/>
                 <Route path='niveau/create' element={<AddNiveau/>}/>
                 <Route path='niveau/view/:id' element={<ViewNiveau/>}/>
+                <Route path='niveau/edit/:id' element={<EditNiveau/>}/>
                 <Route path='niveau' element={<Niveau/>}/>
                 <Route path='note' element={<Note/>}/>
                 <Route path='ue' element={<UE/>}/>
