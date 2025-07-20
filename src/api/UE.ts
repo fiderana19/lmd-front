@@ -18,3 +18,7 @@ export const patchUE = async (data: EditUEType) => {
 export const deleteUE = async (id: number) => {
     return await axiosInstance.delete(`${UE_BASE_URL}/delete/${id}`);
 }
+
+export const getUEById = async (id: number) => {
+    return await axiosInstance.get(`${UE_BASE_URL}/get/${id}`);
+}

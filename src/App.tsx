@@ -25,6 +25,7 @@ import AddNiveau from "./Pages/Niveau/AddNiveau";
 import ViewNiveau from "./Pages/Niveau/ViewNiveau";
 import EditNiveau from "./Pages/Niveau/EditNiveau";
 import AddUE from "./Pages/UE/AddUE";
+import EditUE from "./Pages/UE/EditUE";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
                 <Route path='niveau' element={<Niveau/>}/>
                 <Route path='note' element={<Note/>}/>
                 <Route path='ue/create' element={<AddUE/>}/>
+                <Route path='ue/edit/:id' element={<EditUE/>}/>
                 <Route path='ue' element={<UE/>}/>
                 <Route path='ec/create' element={<AddEC/>}/>
                 <Route path='ec/edit/:id' element={<EditEC/>}/>
