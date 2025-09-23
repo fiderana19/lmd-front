@@ -26,17 +26,18 @@ import ViewNiveau from "./Pages/Niveau/ViewNiveau";
 import EditNiveau from "./Pages/Niveau/EditNiveau";
 import AddUE from "./Pages/UE/AddUE";
 import EditUE from "./Pages/UE/EditUE";
+import Login from "./Pages/Login";
 
 function App() {
   return (
         <Routes>
-            <Route path="/edit" element={<Home/>}/>
+            <Route path="/" index element={<Login/>}/>
             <Route path='/releve/pdf/:id/:niveau/:annee' element={<NoteEtudiantPdf />}/>
             <Route path='/resultat/pdf/:obs/:niveau/:annee' element={<ResultatParNiveauPdf />}/>
             <Route path="/" element={<AppLayout/>}>
                 <Route path='addglobal/note/:ec/:niveau/:annee' element={<AddNoteGlobal />}/>
                 <Route path='addnote' element={<AddNotePerso />}/>
-                <Route index element={<Home/>}/>
+                <Route path="home" element={<Home/>}/>
                 <Route path='etudiant/create' element={<AddEtudiant/>}/>
                 <Route path='etudiant/edit/:id' element={<EditEtudiant/>}/>
                 <Route path='etudiant/view/:id' element={<ViewEtudiant/>}/>

@@ -1,7 +1,7 @@
 import { Dropdown, Space } from "antd";
 import { Outlet, useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { ShoppingCartOutlined , HomeOutlined, MoneyCollectOutlined, MenuOutlined , ReadOutlined , FileTextOutlined , GroupOutlined, UnorderedListOutlined , UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, MenuOutlined , ReadOutlined , FileTextOutlined , GroupOutlined, UnorderedListOutlined , UserOutlined } from '@ant-design/icons';
 
 const AppLayout = () => {
     const location = useLocation()
