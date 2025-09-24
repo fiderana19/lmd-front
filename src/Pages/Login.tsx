@@ -31,7 +31,7 @@ const Login: FunctionComponent = () => {
                     <Typewriter text={text} />
                 </div>
             </div>
-            <div className='bg-gray-200 w-1/3 flex flex-col justify-center'>
+            <div className='bg-gray-400 w-1/3 flex flex-col justify-center'>
                 <form onSubmit={submit(submitLogin)} className='w-60 mx-auto'>
                     <div className='text-3xl font-bold text-center mb-10'>Connexion</div>
                     <Label htmlFor='username' className='mb-1'>Utilisateur :</Label>
