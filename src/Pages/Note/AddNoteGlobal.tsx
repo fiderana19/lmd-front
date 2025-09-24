@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CloseCircleFilled, CheckCircleFilled, WarningFilled, UserOutlined, ShoppingCartOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { handleFloatKeyPress } from '@/utils/handleKeyPress';
+import Navigation from '@/components/navigation/Navigation';
 
 const AddNoteGlobal: FunctionComponent = () => {
   let params = useParams()
@@ -152,93 +153,96 @@ const AddNoteGlobal: FunctionComponent = () => {
   };
     
   return (
-    <div className='mx-auto pb-5 pt-24 sm:px-10 px-5'>
-      <div className='lg:whitespace-nowrap whitespace-normal uppercase flex justify-center text-2xl font-bold font-lato'>
-        NOTE  { element.nom_ec }  DES ETUDIANTS  { niv.titre_niveau } EN ANNEE { annee }  
-      </div>
-      <div className='md:flex block justify-between lg:mx-32 mx-5 my-4'>
-      <Card>
-          <form className='my-7 mx-auto' onSubmit={handleSubmit}>
-          <label htmlFor='valeur' >Note : </label> <br />
-          <Input name='valeur' value={formData.valeur} onChange={handleChange} onKeyPress={handleFloatKeyPress}  className={valeurError ? 'border border-red-500' : '' }/>
-          {valeurError && <div className="text-red-500 text-xs">{valeurError}</div>}
-          <label htmlFor='id_etudiant' >Etudiant : </label> <br />
-          <Select
-            value={selectedEtudiantId}
-            onChange={handleSelectEtudiantChange}
-            className={etudiantError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            <Option value="">Sélectionnez un etudiant</Option>
-              {
-                etudiant.map((et, index) => {
-                  return(
-                    <Option key={index} value={et.id_etudiant}>
-                      { `${et.nom} ${et.matricule}` }
-                    </Option>
-                  )
-                })
+    <div>
+      <Navigation />
+      <div className='mx-auto pb-5 pt-24 sm:px-10 px-5'>
+        <div className='lg:whitespace-nowrap whitespace-normal uppercase flex justify-center text-2xl font-bold font-lato'>
+          NOTE  { element.nom_ec }  DES ETUDIANTS  { niv.titre_niveau } EN ANNEE { annee }  
+        </div>
+        <div className='md:flex block justify-between lg:mx-32 mx-5 my-4'>
+        <Card>
+            <form className='my-7 mx-auto' onSubmit={handleSubmit}>
+            <label htmlFor='valeur' >Note : </label> <br />
+            <Input name='valeur' value={formData.valeur} onChange={handleChange} onKeyPress={handleFloatKeyPress}  className={valeurError ? 'border border-red-500' : '' }/>
+            {valeurError && <div className="text-red-500 text-xs">{valeurError}</div>}
+            <label htmlFor='id_etudiant' >Etudiant : </label> <br />
+            <Select
+              value={selectedEtudiantId}
+              onChange={handleSelectEtudiantChange}
+              className={etudiantError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-          </Select>
-          {etudiantError && <div className="text-red-500 text-xs">{etudiantError}</div>}
-          <div className='flex justify-center my-3'>
-            <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>AJOUTER</button>
-          </div>
-        </form>
-        </Card>
-        <div className='md:w-1/2 w-full md:py-0 py-4'>
-          <div className='flex justify-end'>
-            <Input className='my-1 mx-1 w-52' placeholder='Saisir la matricule...' value={searchNote} onChange={(e) => setSearchNote(e.target.value)}  />
-          </div>
-            <div>
-              <table className=' min-w-full divide-y divide-gray-200'>
-                  <thead>
-                    <tr>
-                      <th className='px-6 py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Matricule</th>
-                      <th className='px-6 py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Note</th>
-                    </tr>
-                  </thead> 
-                  <tbody className='bg-white divide-y divide-gray-200'>
-                    {
-                  loading ? (
-                  <div className='text-center my-10'>
-                    <LoadingOutlined className='text-3xl' />
-                    <div>Chargement...</div>
-                  </div>
-                    ) : (
-                  notes.map((note, index) =>{
-                    if (searchNote && !note.matricule.includes(searchNote)) {
-                      return null;
-                    }
-                    return( 
-                    <tr key={index}>
-                      <td className='px-6 py-4 text-center whitespace-nowrap text-sm leading-5 text-gray-900'> { note.matricule } </td>
-                      <td className='flex justify-center px-6 py-4 text-center whitespace-nowrap text-sm leading-5 text-gray-900'> 
-                        { note.valeur }
-                        { note.valeur >= 10 ?
-                            <div className='text-green-700 mx-1'><CheckCircleFilled /></div>
-                          :
-                          (note.valeur >= 5 ? 
-                            <div className='text-yellow-300 mx-1'><WarningFilled /></div>
-                            :
-                            <div className='text-red-600 mx-1'><CloseCircleFilled /></div>
-                            )
-                        }
-                      </td>
-                    </tr>
+            >
+              <Option value="">Sélectionnez un etudiant</Option>
+                {
+                  etudiant.map((et, index) => {
+                    return(
+                      <Option key={index} value={et.id_etudiant}>
+                        { `${et.nom} ${et.matricule}` }
+                      </Option>
                     )
                   })
-                )
-              }
-              </tbody>
-              </table>
+                }
+            </Select>
+            {etudiantError && <div className="text-red-500 text-xs">{etudiantError}</div>}
+            <div className='flex justify-center my-3'>
+              <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>AJOUTER</button>
             </div>
+          </form>
+          </Card>
+          <div className='md:w-1/2 w-full md:py-0 py-4'>
+            <div className='flex justify-end'>
+              <Input className='my-1 mx-1 w-52' placeholder='Saisir la matricule...' value={searchNote} onChange={(e) => setSearchNote(e.target.value)}  />
+            </div>
+              <div>
+                <table className=' min-w-full divide-y divide-gray-200'>
+                    <thead>
+                      <tr>
+                        <th className='px-6 py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Matricule</th>
+                        <th className='px-6 py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Note</th>
+                      </tr>
+                    </thead> 
+                    <tbody className='bg-white divide-y divide-gray-200'>
+                      {
+                    loading ? (
+                    <div className='text-center my-10'>
+                      <LoadingOutlined className='text-3xl' />
+                      <div>Chargement...</div>
+                    </div>
+                      ) : (
+                    notes.map((note, index) =>{
+                      if (searchNote && !note.matricule.includes(searchNote)) {
+                        return null;
+                      }
+                      return( 
+                      <tr key={index}>
+                        <td className='px-6 py-4 text-center whitespace-nowrap text-sm leading-5 text-gray-900'> { note.matricule } </td>
+                        <td className='flex justify-center px-6 py-4 text-center whitespace-nowrap text-sm leading-5 text-gray-900'> 
+                          { note.valeur }
+                          { note.valeur >= 10 ?
+                              <div className='text-green-700 mx-1'><CheckCircleFilled /></div>
+                            :
+                            (note.valeur >= 5 ? 
+                              <div className='text-yellow-300 mx-1'><WarningFilled /></div>
+                              :
+                              <div className='text-red-600 mx-1'><CloseCircleFilled /></div>
+                              )
+                          }
+                        </td>
+                      </tr>
+                      )
+                    })
+                  )
+                }
+                </tbody>
+                </table>
+              </div>
+          </div>
+          
         </div>
-        
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { Button, Select } from 'antd'
 import { FileOutlined } from '@ant-design/icons';
 import { Option } from 'antd/es/mentions';
 import axios from 'axios';
+import Navigation from '@/components/navigation/Navigation';
 
 const ResultatParNiveau: FunctionComponent = () => {
   const [anneeError, setAnneeError] = useState('');
@@ -133,144 +134,147 @@ const ResultatParNiveau: FunctionComponent = () => {
   };
 
   return (
-    <div className='pb-5 pt-24'>
-      <div className='lg:px-5 px-1'>
-        <div className='mb-10'>
-          <div className='text-xl text-center font-bold font-lato'>RECHERCHER RESULTAT D'UN NIVEAU</div>
-            <div className='lg:flex block lg:justify-end text-center'>
-              <div className='mx-1'>
-                <Select
-                  value={selectedNiveauId}
-                  onChange={handleSelectNiveauChange}
-                  className={niveauError ? 'border  md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  <Option value="">Sélectionnez un niveau</Option>
-                  {
-                    niveau.map((niv, index) => {
-                      return(
-                        <Option key={index} value={niv.id_niveau}>
-                          { `${niv.titre_niveau} ${niv.parcours}` }
-                        </Option>
-                      )
-                    })
-                  }
-                </Select>
-                {niveauError && <div className="text-red-500 text-xs">{niveauError}</div>}
-              </div>
-              <div className='mx-1'>
-                <Select
-                  value={selectedAnneeId}
-                  onChange={handleSelectAnneeChange}
-                  className={anneeError ? 'border md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  <Option value="">Sélectionnez une année</Option>
-                  {
-                    annee.map((ann, index) => {
-                      return(
-                        <Option key={index} value={ann.id_annee}>
-                          { `${ann.id_annee}` }
-                        </Option>
-                      )
-                    })
-                  }
-                </Select>
-                {anneeError && <div className="text-red-500 text-xs">{anneeError}</div>}
-              </div>
-              <div className='mx-1'>
-                <Select
-                  value={selectedCritere}
-                  onChange={handleSelectCritereChange}
-                  className={obsError ? 'border md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  <Option value="">Sélectionnez une critere</Option>
-                  {
-                    critere.map((ann, index) => {
-                      return(
-                        <Option key={index} value={ann}>
-                          { `${ann}` }
-                        </Option>
-                      )
-                    })
-                  }
-                </Select>
-                {obsError && <div className="text-red-500 text-xs">{obsError}</div>}
-              </div>
-              <div className='md:block flex justify-center mx-1'>
-                <button onClick={handleSubmit} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500'>RECHERCHER</button>
-              </div>
-            </div>
-          </div>
-          {isView && 
-            <div>
-              <div className='text-xl text-center font-bold font-lato my-6'>RESULTAT</div>
-              {
-                resultInfo &&
-                <div className='font-lato'>
-                  <div className='flex'>
-                    <div className='font-bold underline mr-2'> Domaine:</div> <div> { resultInfo.domaine } </div>
-                    </div>
-                  <div className='flex'>
-                    <div className='font-bold underline mr-2'> Mention: </div>
-                    <div> { resultInfo.mention } </div>
-                  </div>
-                  <div className='flex'>
-                    <div className='font-bold underline mr-2'> Parcours:</div>
-                    <div> { resultInfo.parcours }</div>
-                  </div>
-                  <div className='flex'>
-                    <div className='font-bold underline mr-2'> Niveau:</div>
-                    <div> { resultInfo.titre_niveau }</div>
-                  </div>
-                  <div className='text-right'>Année universitaire: { resultInfo.id_annee }</div>
-                </div>
-              }
-              <div className=''>
-                <table className=' min-w-full divide-y divide-gray-200'>
-                  <thead>
-                    <tr>
-                      <th className='sm:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Matricule</th>
-                      <th className='sm:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Nom et prenom</th>
-                      <th className='sm:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Resultat</th>
-                    </tr>
-                  </thead> 
-                  <tbody className='bg-white divide-y divide-gray-200'>
+    <div>
+      <Navigation />
+      <div className='pb-5 pt-24'>
+        <div className='lg:px-5 px-1'>
+          <div className='mb-10'>
+            <div className='text-xl text-center font-bold font-lato'>RECHERCHER RESULTAT D'UN NIVEAU</div>
+              <div className='lg:flex block lg:justify-end text-center'>
+                <div className='mx-1'>
+                  <Select
+                    value={selectedNiveauId}
+                    onChange={handleSelectNiveauChange}
+                    className={niveauError ? 'border  md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    <Option value="">Sélectionnez un niveau</Option>
                     {
-                      resultFinal &&
-                      resultFinal.map((final, index) => {
+                      niveau.map((niv, index) => {
                         return(
-                        <tr key={index} >
-                          <td className='sm:px-6 px-2 py-4 sm:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { final.matricule } </td>
-                          <td className='sm:px-6 px-2 py-4 sm:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { final.nom } { final.prenom }  </td>
-                          <td className='sm:px-6 px-2 py-4 sm:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { final.final }</td>
-                        </tr>)
+                          <Option key={index} value={niv.id_niveau}>
+                            { `${niv.titre_niveau} ${niv.parcours}` }
+                          </Option>
+                        )
                       })
                     }
-                  </tbody>
-                </table>
-              </div>
-              <div className='flex justify-end my-10'>
-                <a href={`/resultat/pdf/${selectedCritere}/${selectedNiveauId}/${transformLetter(selectedAnneeId)}`} target='_blank'>
-                  <button className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'> <FileOutlined /> GENERER LE RESULTAT </button>
-                </a>
+                  </Select>
+                  {niveauError && <div className="text-red-500 text-xs">{niveauError}</div>}
+                </div>
+                <div className='mx-1'>
+                  <Select
+                    value={selectedAnneeId}
+                    onChange={handleSelectAnneeChange}
+                    className={anneeError ? 'border md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    <Option value="">Sélectionnez une année</Option>
+                    {
+                      annee.map((ann, index) => {
+                        return(
+                          <Option key={index} value={ann.id_annee}>
+                            { `${ann.id_annee}` }
+                          </Option>
+                        )
+                      })
+                    }
+                  </Select>
+                  {anneeError && <div className="text-red-500 text-xs">{anneeError}</div>}
+                </div>
+                <div className='mx-1'>
+                  <Select
+                    value={selectedCritere}
+                    onChange={handleSelectCritereChange}
+                    className={obsError ? 'border md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    <Option value="">Sélectionnez une critere</Option>
+                    {
+                      critere.map((ann, index) => {
+                        return(
+                          <Option key={index} value={ann}>
+                            { `${ann}` }
+                          </Option>
+                        )
+                      })
+                    }
+                  </Select>
+                  {obsError && <div className="text-red-500 text-xs">{obsError}</div>}
+                </div>
+                <div className='md:block flex justify-center mx-1'>
+                  <button onClick={handleSubmit} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500'>RECHERCHER</button>
+                </div>
               </div>
             </div>
-          }
-        </div>
+            {isView && 
+              <div>
+                <div className='text-xl text-center font-bold font-lato my-6'>RESULTAT</div>
+                {
+                  resultInfo &&
+                  <div className='font-lato'>
+                    <div className='flex'>
+                      <div className='font-bold underline mr-2'> Domaine:</div> <div> { resultInfo.domaine } </div>
+                      </div>
+                    <div className='flex'>
+                      <div className='font-bold underline mr-2'> Mention: </div>
+                      <div> { resultInfo.mention } </div>
+                    </div>
+                    <div className='flex'>
+                      <div className='font-bold underline mr-2'> Parcours:</div>
+                      <div> { resultInfo.parcours }</div>
+                    </div>
+                    <div className='flex'>
+                      <div className='font-bold underline mr-2'> Niveau:</div>
+                      <div> { resultInfo.titre_niveau }</div>
+                    </div>
+                    <div className='text-right'>Année universitaire: { resultInfo.id_annee }</div>
+                  </div>
+                }
+                <div className=''>
+                  <table className=' min-w-full divide-y divide-gray-200'>
+                    <thead>
+                      <tr>
+                        <th className='sm:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Matricule</th>
+                        <th className='sm:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Nom et prenom</th>
+                        <th className='sm:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Resultat</th>
+                      </tr>
+                    </thead> 
+                    <tbody className='bg-white divide-y divide-gray-200'>
+                      {
+                        resultFinal &&
+                        resultFinal.map((final, index) => {
+                          return(
+                          <tr key={index} >
+                            <td className='sm:px-6 px-2 py-4 sm:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { final.matricule } </td>
+                            <td className='sm:px-6 px-2 py-4 sm:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { final.nom } { final.prenom }  </td>
+                            <td className='sm:px-6 px-2 py-4 sm:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { final.final }</td>
+                          </tr>)
+                        })
+                      }
+                    </tbody>
+                  </table>
+                </div>
+                <div className='flex justify-end my-10'>
+                  <a href={`/resultat/pdf/${selectedCritere}/${selectedNiveauId}/${transformLetter(selectedAnneeId)}`} target='_blank'>
+                    <button className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'> <FileOutlined /> GENERER LE RESULTAT </button>
+                  </a>
+                </div>
+              </div>
+            }
+          </div>
+      </div>
     </div>
   )
 }

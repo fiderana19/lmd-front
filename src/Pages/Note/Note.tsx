@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import AddNote from './AddNote';
 import Bg from '../../assets/pic/home-bg.jpg'
 import { handleFloatKeyPress } from '@/utils/handleKeyPress';
+import Navigation from '@/components/navigation/Navigation';
 
 const Note: FunctionComponent = () => {
   let [note, setNote] = useState([]);
@@ -175,166 +176,169 @@ const Note: FunctionComponent = () => {
   }
 
   return (
-    <div className='pb-5 pt-24'>
-      <div className='px-10'>
-        <div className='flex justify-between'>
-          <div className='text-xl font-bold font-lato'>LES NOTES</div>
-          <div>
-            <Dropdown className="mx-1" menu={{items}} trigger={['click']}>
-              <a className="cursor-pointer" onClick={(e) => e.preventDefault()}>
-                <Button>
-                  <SearchOutlined />
-                </Button>
-              </a>
-            </Dropdown>
-            <Button onClick={showModal} ><div className='sm:hidden block'><PlusOutlined /></div><div className='sm:block hidden'> AJOUTER </div></Button>
+    <div>
+      <Navigation />
+      <div className='pb-5 pt-24'>
+        <div className='px-10'>
+          <div className='flex justify-between'>
+            <div className='text-xl font-bold font-lato'>LES NOTES</div>
+            <div>
+              <Dropdown className="mx-1" menu={{items}} trigger={['click']}>
+                <a className="cursor-pointer" onClick={(e) => e.preventDefault()}>
+                  <Button>
+                    <SearchOutlined />
+                  </Button>
+                </a>
+              </Dropdown>
+              <Button onClick={showModal} ><div className='sm:hidden block'><PlusOutlined /></div><div className='sm:block hidden'> AJOUTER </div></Button>
+            </div>
           </div>
-        </div>
-        <Modal title="AJOUTER UN NOTE" open={isModalOpen} onCancel={handleCloseModal} footer={null} >
-          <AddNote />
-        </Modal>
-        <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
-        </div>
-          <div className='sm:block hidden'>                   
-            <table className='min-w-full divide-y divide-gray-200'>
-                <thead>
-                  <tr>
-                    <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Etudiant</th>
-                    <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Niveau</th>
-                    <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>EC</th>
-                    <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Annee</th>
-                    <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Note</th>
-                    <th className='px-1 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'></th>
-                  </tr>
-                </thead> 
-                <tbody className='bg-white divide-y divide-gray-200'>
-                {
-              loading ? (
-                <div className='text-center my-10'>
-                  <LoadingOutlined className='text-3xl' />
-                  <div>Chargement...</div>
-                </div>
-                  ) : (
-                note.map((notee, index) =>{
-                  return(
-                  <tr key={index}>
-                    <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_etudiant } </td>
-                    <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_niveau } </td>
-                    <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_ec } </td>
-                    <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_annee } </td>
-                    <td className='lg:px-6 px-2 py-4 whitespace-nowrap text-sm leading-5 text-gray-900 flex justify-evenly'>
-                    { notee.valeur }
-                    { notee.valeur >= 10 ?
-                        <div className='text-green-700 mx-1'><CheckCircleFilled /></div>
-                      :
-                      (notee.valeur >= 5 ? 
-                        <div className='text-yellow-300 mx-1'><WarningFilled /></div>
+          <Modal title="AJOUTER UN NOTE" open={isModalOpen} onCancel={handleCloseModal} footer={null} >
+            <AddNote />
+          </Modal>
+          <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
+          </div>
+            <div className='sm:block hidden'>                   
+              <table className='min-w-full divide-y divide-gray-200'>
+                  <thead>
+                    <tr>
+                      <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Etudiant</th>
+                      <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Niveau</th>
+                      <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>EC</th>
+                      <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Annee</th>
+                      <th className='lg:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Note</th>
+                      <th className='px-1 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'></th>
+                    </tr>
+                  </thead> 
+                  <tbody className='bg-white divide-y divide-gray-200'>
+                  {
+                loading ? (
+                  <div className='text-center my-10'>
+                    <LoadingOutlined className='text-3xl' />
+                    <div>Chargement...</div>
+                  </div>
+                    ) : (
+                  note.map((notee, index) =>{
+                    return(
+                    <tr key={index}>
+                      <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_etudiant } </td>
+                      <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_niveau } </td>
+                      <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_ec } </td>
+                      <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_annee } </td>
+                      <td className='lg:px-6 px-2 py-4 whitespace-nowrap text-sm leading-5 text-gray-900 flex justify-evenly'>
+                      { notee.valeur }
+                      { notee.valeur >= 10 ?
+                          <div className='text-green-700 mx-1'><CheckCircleFilled /></div>
                         :
-                        <div className='text-red-600 mx-1'><CloseCircleFilled /></div>
-                        )
-                    }
-                    </td>
-                    <td className='px-1 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
-                      <div className='flex justify-center'>
-                        <div  onClick={() => EditNote(notee)}   className='mx-1 border border-black w-min px-2 py-1 rounded-full hover:bg-gray-300 hover:scale-105 hover:transition-all'> <EditOutlined/></div>
-                        <div   onClick={() => showDeleteConfirmation(notee)} className='border bg-red-500 border-black w-min px-2 py-1 rounded-full hover:bg-red-600  hover:scale-105 hover:transition-all'> <DeleteOutlined/></div>
+                        (notee.valeur >= 5 ? 
+                          <div className='text-yellow-300 mx-1'><WarningFilled /></div>
+                          :
+                          <div className='text-red-600 mx-1'><CloseCircleFilled /></div>
+                          )
+                      }
+                      </td>
+                      <td className='px-1 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
+                        <div className='flex justify-center'>
+                          <div  onClick={() => EditNote(notee)}   className='mx-1 border border-black w-min px-2 py-1 rounded-full hover:bg-gray-300 hover:scale-105 hover:transition-all'> <EditOutlined/></div>
+                          <div   onClick={() => showDeleteConfirmation(notee)} className='border bg-red-500 border-black w-min px-2 py-1 rounded-full hover:bg-red-600  hover:scale-105 hover:transition-all'> <DeleteOutlined/></div>
+                        </div>
+                      </td>
+                    </tr>
+                      )
+                    })
+                  )
+                }
+                  </tbody>
+              </table>
+            </div>
+            <div className='sm:hidden grid gap-2 justify-center grid-cols-customized'>
+              {
+                loading ? (
+                  <div className='text-center my-10'>
+                    <LoadingOutlined className='text-3xl' />
+                    <div>Chargement...</div>
+                  </div>
+                    ) : (
+                  note.map((notee, index) =>{
+                    return(
+                    <Card  key={index} className='hover:scale-105 duration-300'>
+                      <div className='text-center'>
+                        <img src={Bg} />
+                        <div className='py-3'>
+                          <div className='text-base text-primary font-bold'>
+                          { notee.id_etudiant }
+                          </div>
+                          <div className='text-base font-bold'>
+                          { notee.id_niveau }
+                          </div>
+                          <div className='text-sm'>
+                          { notee.id_ec }
+                          </div>
+                          <div className='text-sm'>
+                          { notee.id_annee }
+                          </div>
+                          <div className='text-sm flex justify-center'>
+                            { notee.valeur }
+                            { notee.valeur >= 10 ?
+                                <div className='text-green-700 mx-1'><CheckCircleFilled /></div>
+                              :
+                              (notee.valeur >= 5 ? 
+                                <div className='text-yellow-300 mx-1'><WarningFilled /></div>
+                                :
+                                <div className='text-red-600 mx-1'><CloseCircleFilled /></div>
+                                )
+                            }
+                          </div>
+                        </div>
+                        <div className='flex justify-center'>
+                          <div  onClick={() => EditNote(notee)}   className='mx-1 border border-black w-min px-2 py-1 rounded-full hover:bg-gray-300 hover:scale-105 hover:transition-all'> <EditOutlined/></div>
+                          <div   onClick={() => showDeleteConfirmation(notee)} className='border bg-red-500 border-black w-min px-2 py-1 rounded-full hover:bg-red-600  hover:scale-105 hover:transition-all'> <DeleteOutlined/></div>
+                        </div>
                       </div>
-                    </td>
-                  </tr>
-                    )
+                  </Card>
+                  )
                   })
                 )
               }
-                </tbody>
-            </table>
-          </div>
-          <div className='sm:hidden grid gap-2 justify-center grid-cols-customized'>
-            {
-              loading ? (
-                <div className='text-center my-10'>
-                  <LoadingOutlined className='text-3xl' />
-                  <div>Chargement...</div>
-                </div>
-                  ) : (
-                note.map((notee, index) =>{
-                  return(
-                  <Card  key={index} className='hover:scale-105 duration-300'>
-                    <div className='text-center'>
-                      <img src={Bg} />
-                      <div className='py-3'>
-                        <div className='text-base text-primary font-bold'>
-                        { notee.id_etudiant }
-                        </div>
-                        <div className='text-base font-bold'>
-                        { notee.id_niveau }
-                        </div>
-                        <div className='text-sm'>
-                        { notee.id_ec }
-                        </div>
-                        <div className='text-sm'>
-                        { notee.id_annee }
-                        </div>
-                        <div className='text-sm flex justify-center'>
-                          { notee.valeur }
-                          { notee.valeur >= 10 ?
-                              <div className='text-green-700 mx-1'><CheckCircleFilled /></div>
-                            :
-                            (notee.valeur >= 5 ? 
-                              <div className='text-yellow-300 mx-1'><WarningFilled /></div>
-                              :
-                              <div className='text-red-600 mx-1'><CloseCircleFilled /></div>
-                              )
-                          }
-                        </div>
-                      </div>
-                      <div className='flex justify-center'>
-                        <div  onClick={() => EditNote(notee)}   className='mx-1 border border-black w-min px-2 py-1 rounded-full hover:bg-gray-300 hover:scale-105 hover:transition-all'> <EditOutlined/></div>
-                        <div   onClick={() => showDeleteConfirmation(notee)} className='border bg-red-500 border-black w-min px-2 py-1 rounded-full hover:bg-red-600  hover:scale-105 hover:transition-all'> <DeleteOutlined/></div>
-                      </div>
-                    </div>
-                </Card>
-                )
-                })
-              )
-            }
-          </div>
-        <Modal title="MODIFIER NOTE" open={isModalOpen1} onCancel={handleCloseModal1} footer={null} >
-          {selectedItem && 
-            <div>
-              <form className='sm:w-2/3 w-full my-7 mx-auto' onSubmit={handleSubmit}>
-              <label htmlFor='valeur' >Valeur : </label> <br />
-                <Input name='valeur' onKeyPress={handleFloatKeyPress} value={editedItem.valeur} onChange={handleInputChange}  className={valeurError ? 'border border-red-500' : '' } />
-                {valeurError && <div className="text-red-500 text-xs">{valeurError}</div>}
-                <label htmlFor='id_etudiant' >Etudiant : </label> <br />
-                <Input name='id_etudiant' value={editedItem.id_etudiant} onChange={handleInputChange} readOnly/>
-                <label htmlFor='id_niveau' >Niveau : </label> <br />
-                <Input name='id_niveau' value={editedItem.id_niveau} onChange={handleInputChange} readOnly/>
-                <label htmlFor='id_ec' >Element Constitutif : </label> <br />
-                <Input name='id_ec' value={editedItem.id_ec} onChange={handleInputChange} readOnly/>
-                <label htmlFor='id_annee' >Année universitaire : </label> <br />
-                <Input name='id_annee' value={editedItem.id_annee} onChange={handleInputChange} readOnly/>
-                <div className='flex justify-center my-3'>
-                  <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>MODIFIER</button>
-                </div>
-              </form>
             </div>
-          }
-        </Modal>
-        <Modal
-          title="Suppression"
-          open={isDeleteModalVisible}
-          onOk={handleDeleteConfirm}
-          onCancel={handleDeleteCancel}
-          okText="Supprimer"
-          cancelText="Annuler"
-          okButtonProps={{style: okDeleteStyle}}
-        >
-          <div className='text-red-900'>
-            <WarningOutlined className='mr-2' />  
-            Êtes-vous sûr de vouloir supprimer ce note ?
-            Cela pourrait entraînner des incohérences de données
-          </div>
-        </Modal>
+          <Modal title="MODIFIER NOTE" open={isModalOpen1} onCancel={handleCloseModal1} footer={null} >
+            {selectedItem && 
+              <div>
+                <form className='sm:w-2/3 w-full my-7 mx-auto' onSubmit={handleSubmit}>
+                <label htmlFor='valeur' >Valeur : </label> <br />
+                  <Input name='valeur' onKeyPress={handleFloatKeyPress} value={editedItem.valeur} onChange={handleInputChange}  className={valeurError ? 'border border-red-500' : '' } />
+                  {valeurError && <div className="text-red-500 text-xs">{valeurError}</div>}
+                  <label htmlFor='id_etudiant' >Etudiant : </label> <br />
+                  <Input name='id_etudiant' value={editedItem.id_etudiant} onChange={handleInputChange} readOnly/>
+                  <label htmlFor='id_niveau' >Niveau : </label> <br />
+                  <Input name='id_niveau' value={editedItem.id_niveau} onChange={handleInputChange} readOnly/>
+                  <label htmlFor='id_ec' >Element Constitutif : </label> <br />
+                  <Input name='id_ec' value={editedItem.id_ec} onChange={handleInputChange} readOnly/>
+                  <label htmlFor='id_annee' >Année universitaire : </label> <br />
+                  <Input name='id_annee' value={editedItem.id_annee} onChange={handleInputChange} readOnly/>
+                  <div className='flex justify-center my-3'>
+                    <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>MODIFIER</button>
+                  </div>
+                </form>
+              </div>
+            }
+          </Modal>
+          <Modal
+            title="Suppression"
+            open={isDeleteModalVisible}
+            onOk={handleDeleteConfirm}
+            onCancel={handleDeleteCancel}
+            okText="Supprimer"
+            cancelText="Annuler"
+            okButtonProps={{style: okDeleteStyle}}
+          >
+            <div className='text-red-900'>
+              <WarningOutlined className='mr-2' />  
+              Êtes-vous sûr de vouloir supprimer ce note ?
+              Cela pourrait entraînner des incohérences de données
+            </div>
+          </Modal>
+        </div>
       </div>
     </div>
   )

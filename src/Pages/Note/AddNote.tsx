@@ -8,6 +8,7 @@ import { useGetAllEtudiant } from '@/hooks/useGetAllEtudiant';
 import { useGetAllNiveau } from '@/hooks/useGetAllNiveau';
 import { useGetAllEC } from '@/hooks/useGetAllEC';
 import { LoadingOutlined } from '@ant-design/icons';
+import Navigation from '@/components/navigation/Navigation';
 
 const AddNote: FunctionComponent = () => {
   const { data: etudiants, isLoading: etudiantLoading } = useGetAllEtudiant();
@@ -133,118 +134,121 @@ const AddNote: FunctionComponent = () => {
     
   return (
     <div>
-      <form className='sm:w-2/3 w-full my-7 mx-auto' onSubmit={handleSubmit}>
-        <label htmlFor='valeur' >Note : </label> <br />
-        <Input name='valeur' value={formData.valeur} onChange={handleChange} onKeyPress={handleFloatKeyPress}  className={valeurError ? 'border border-red-500' : '' }/>
-        {valeurError && <div className="text-red-500 text-xs">{valeurError}</div>}
-        <label htmlFor='id_etudiant' >Etudiant : </label> <br />
-        <Select
-          value={selectedEtudiantId}
-          onChange={handleSelectEtudiantChange}
-          className={etudiantError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input: any, option: any) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          <Option value="">Sélectionnez un etudiant</Option>
-            {
-              etudiantLoading && <LoadingOutlined />
+      <Navigation />
+      <div>
+        <form className='sm:w-2/3 w-full my-7 mx-auto' onSubmit={handleSubmit}>
+          <label htmlFor='valeur' >Note : </label> <br />
+          <Input name='valeur' value={formData.valeur} onChange={handleChange} onKeyPress={handleFloatKeyPress}  className={valeurError ? 'border border-red-500' : '' }/>
+          {valeurError && <div className="text-red-500 text-xs">{valeurError}</div>}
+          <label htmlFor='id_etudiant' >Etudiant : </label> <br />
+          <Select
+            value={selectedEtudiantId}
+            onChange={handleSelectEtudiantChange}
+            className={etudiantError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input: any, option: any) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-            {
-              etudiants && etudiants.map((et: any, index: any) => {
-                return(
-                  <Option key={index} value={et.id_etudiant}>
-                    { `${et.matricule} -  ${et.nom} ${et.prenom}` }
-                  </Option>
-                )
-              })
+          >
+            <Option value="">Sélectionnez un etudiant</Option>
+              {
+                etudiantLoading && <LoadingOutlined />
+              }
+              {
+                etudiants && etudiants.map((et: any, index: any) => {
+                  return(
+                    <Option key={index} value={et.id_etudiant}>
+                      { `${et.matricule} -  ${et.nom} ${et.prenom}` }
+                    </Option>
+                  )
+                })
+              }
+          </Select>
+          {etudiantError && <div className="text-red-500 text-xs">{etudiantError}</div>}
+          <label htmlFor='id_niveau' >Niveau : </label> <br />
+          <Select
+            value={selectedNiveauId}
+            onChange={handleSelectNiveauChange}
+            className={niveauError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option: any) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-        </Select>
-        {etudiantError && <div className="text-red-500 text-xs">{etudiantError}</div>}
-        <label htmlFor='id_niveau' >Niveau : </label> <br />
-        <Select
-          value={selectedNiveauId}
-          onChange={handleSelectNiveauChange}
-          className={niveauError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option: any) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          <Option value="">Sélectionnez un niveau</Option>
-            {
-              niveauLoading && <LoadingOutlined />
+          >
+            <Option value="">Sélectionnez un niveau</Option>
+              {
+                niveauLoading && <LoadingOutlined />
+              }
+              {
+                niveaux && niveaux.map((niv: any, index: any) => {
+                  return(
+                    <Option key={index} value={niv.id_niveau}>
+                      { `${niv.titre_niveau} -  ${niv.parcours}` }
+                    </Option>
+                  )
+                })
+              }
+          </Select>
+          {niveauError && <div className="text-red-500 text-xs">{niveauError}</div>}
+          <label htmlFor='id_ec' >Element Constitutif : </label> <br />
+          <Select
+            value={selectedECId}
+            onChange={handleSelectECChange}
+            className={ecError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option: any) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-            {
-              niveaux && niveaux.map((niv: any, index: any) => {
-                return(
-                  <Option key={index} value={niv.id_niveau}>
-                    { `${niv.titre_niveau} -  ${niv.parcours}` }
-                  </Option>
-                )
-              })
+          >
+            <Option value="">Sélectionnez un element</Option>
+              {
+                ecLoading && <LoadingOutlined />
+              }
+              {
+                ecs && ecs.map((element: any, index: any) => {
+                  return(
+                    <Option key={index} value={element.id_ec}>
+                      { `${element.nom_ec} -  ${element.id_ue}` }
+                    </Option>
+                  )
+                })
+              }
+          </Select>
+          {ecError && <div className="text-red-500 text-xs">{ecError}</div>}
+          <label htmlFor='id_annee' >Année universitaire : </label> <br />
+          <Select
+            value={selectedAnneeId}
+            onChange={handleSelectAnneeChange}
+            className={anneeError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option: any) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-        </Select>
-        {niveauError && <div className="text-red-500 text-xs">{niveauError}</div>}
-        <label htmlFor='id_ec' >Element Constitutif : </label> <br />
-        <Select
-          value={selectedECId}
-          onChange={handleSelectECChange}
-          className={ecError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option: any) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          <Option value="">Sélectionnez un element</Option>
-            {
-              ecLoading && <LoadingOutlined />
-            }
-            {
-              ecs && ecs.map((element: any, index: any) => {
-                return(
-                  <Option key={index} value={element.id_ec}>
-                    { `${element.nom_ec} -  ${element.id_ue}` }
-                  </Option>
-                )
-              })
-            }
-        </Select>
-        {ecError && <div className="text-red-500 text-xs">{ecError}</div>}
-        <label htmlFor='id_annee' >Année universitaire : </label> <br />
-        <Select
-          value={selectedAnneeId}
-          onChange={handleSelectAnneeChange}
-          className={anneeError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option: any) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          <Option value="">Sélectionnez une année</Option>
-            {
-              annee.map((ann: any, index: any) => {
-                return(
-                  <Option key={index} value={ann.id_annee}>
-                    { `${ann.id_annee}` }
-                  </Option>
-                )
-              })
-            }
-        </Select>
-        {anneeError && <div className="text-red-500 text-xs">{anneeError}</div>}
-        <div className='flex justify-center my-3'>
-          <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>AJOUTER</button>
-        </div>
-      </form>
-      <Link to='/addnote' className='flex justify-center'>
-        <a className='underline'>Faire un ajout global</a>
-      </Link>
+          >
+            <Option value="">Sélectionnez une année</Option>
+              {
+                annee.map((ann: any, index: any) => {
+                  return(
+                    <Option key={index} value={ann.id_annee}>
+                      { `${ann.id_annee}` }
+                    </Option>
+                  )
+                })
+              }
+          </Select>
+          {anneeError && <div className="text-red-500 text-xs">{anneeError}</div>}
+          <div className='flex justify-center my-3'>
+            <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>AJOUTER</button>
+          </div>
+        </form>
+        <Link to='/addnote' className='flex justify-center'>
+          <a className='underline'>Faire un ajout global</a>
+        </Link>
+      </div>
     </div>
   );
 }

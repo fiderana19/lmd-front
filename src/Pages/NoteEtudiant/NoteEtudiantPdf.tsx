@@ -3,6 +3,7 @@ import { CheckCircleFilled , CloseCircleFilled } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import Navigation from '@/components/navigation/Navigation';
 
 const NoteEtudiantPdf: FunctionComponent = () => {
   let params = useParams()
@@ -91,6 +92,7 @@ const NoteEtudiantPdf: FunctionComponent = () => {
 
   return (
     <div>
+      <Navigation />
       <div className='text-xs'>
         <div className=' text-center'>
           <div className='text-sm font-bold font-lato'>UNIVERSITE DE FIANARANTSOA</div>

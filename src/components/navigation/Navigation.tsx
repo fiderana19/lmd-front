@@ -1,10 +1,13 @@
 import { Dropdown, Space } from "antd";
-import { Outlet, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { HomeOutlined, MenuOutlined , ReadOutlined , FileTextOutlined , GroupOutlined, UnorderedListOutlined , UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, MenuOutlined , ReadOutlined , FileTextOutlined , GroupOutlined, UnorderedListOutlined , UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "../ui/button";
 
-const AppLayout = () => {
-    const location = useLocation()
+const Navigation: React.FC = () => {
+    const { logout } = useAuth();
+    const location = useLocation();
 
     const items = [
         {
@@ -58,6 +61,10 @@ const AppLayout = () => {
 
     ];
 
+    const handleLogout = async () => {
+        await logout();
+    }
+
     return(
         <div className="w-full">
             <div className="w-full fixed px-5 h-14 bg-primary z-50 text-white flex justify-between items-center  font-lato">
@@ -95,6 +102,11 @@ const AppLayout = () => {
                             <UnorderedListOutlined /> Niveau
                         </div>
                     </Link>
+                    <Button
+                    variant={'secondary'}>
+                        <LogoutOutlined />
+                        Deconnexion
+                    </Button>
                 </div>
                 <Dropdown className="visible md:hidden" menu={{items}} trigger={['click']}>
                     <a className="cursor-pointer" onClick={(e) => e.preventDefault()}>
@@ -104,9 +116,8 @@ const AppLayout = () => {
                     </a>
                 </Dropdown>
             </div>
-            <Outlet />
         </div>
     )
 }
 
-export default AppLayout;
+export default Navigation;

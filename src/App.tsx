@@ -4,7 +4,6 @@ import { LoadingOutlined } from "@ant-design/icons";
 import Home from "./Pages/Home";
 import NoteEtudiantPdf from "./Pages/NoteEtudiant/NoteEtudiantPdf";
 import ResultatParNiveauPdf from "./Pages/NoteEtudiant/ResultatParNiveauPdf";
-import AppLayout from "./layouts/AppLayout";
 import AddNoteGlobal from "./Pages/Note/AddNoteGlobal";
 import AddNotePerso from "./Pages/Note/AddNotePerso";
 import Etudiant from "./Pages/Etudiant/Etudiant";
@@ -35,7 +34,7 @@ function App() {
             <Route path="/" index element={<Login/>}/>
             <Route path='/releve/pdf/:id/:niveau/:annee' element={<NoteEtudiantPdf />}/>
             <Route path='/resultat/pdf/:obs/:niveau/:annee' element={<ResultatParNiveauPdf />}/>
-            <Route path="/" element={<ProtectedRoute/>}>
+            <Route path="/admin/" element={<ProtectedRoute/>}>
                 <Route path='addglobal/note/:ec/:niveau/:annee' element={<AddNoteGlobal />}/>
                 <Route path='addnote' element={<AddNotePerso />}/>
                 <Route path="home" element={<Home/>}/>
