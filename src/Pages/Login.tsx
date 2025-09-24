@@ -8,16 +8,18 @@ import { Controller, useForm } from 'react-hook-form';
 import { LoginType } from '../types/User';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginValidation } from '@/validation/user.validation';
+import { useAuth } from '@/context/AuthContext';
 
 const Login: FunctionComponent = () => {
     const { handleSubmit: submit, formState: { errors }, control } = useForm<LoginType>({
         resolver: yupResolver(LoginValidation)
     });
+    const { login } = useAuth();
    
     const text = "LMD, L'APPLICATION DE GESTION DE NOTE UNIVERSITAIRE RESPECTANT LE REGIME LICENCE-MASTER-DOCTORAT";
 
     const submitLogin = async (data: LoginType) => {
-        console.log(data);
+        await login(data);
     }
 
   return (

@@ -27,6 +27,7 @@ import EditNiveau from "./Pages/Niveau/EditNiveau";
 import AddUE from "./Pages/UE/AddUE";
 import EditUE from "./Pages/UE/EditUE";
 import Login from "./Pages/Login";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
             <Route path="/" index element={<Login/>}/>
             <Route path='/releve/pdf/:id/:niveau/:annee' element={<NoteEtudiantPdf />}/>
             <Route path='/resultat/pdf/:obs/:niveau/:annee' element={<ResultatParNiveauPdf />}/>
-            <Route path="/" element={<AppLayout/>}>
+            <Route path="/" element={<ProtectedRoute/>}>
                 <Route path='addglobal/note/:ec/:niveau/:annee' element={<AddNoteGlobal />}/>
                 <Route path='addnote' element={<AddNotePerso />}/>
                 <Route path="home" element={<Home/>}/>
