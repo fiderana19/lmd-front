@@ -34,7 +34,7 @@ const EditUE: FunctionComponent = () => {
 
   const editUESubmit = (data: EditUEType) => {
     UEEdit(data);
-    navigate('/ue')
+    navigate('/admin/ue')
   }
     
   return (

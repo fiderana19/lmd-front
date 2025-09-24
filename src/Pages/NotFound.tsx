@@ -6,7 +6,7 @@ const NotFound: FunctionComponent = () => {
     <div className='container text-center add py-4'>
         <h1 className='text-black'>Page introuvable </h1>
         <Button variant={'link'}>
-          <a href='/' >Page d'acceuil</a>
+          <a href='/admin/home' >Page d'acceuil</a>
         </Button>
     </div>
   )

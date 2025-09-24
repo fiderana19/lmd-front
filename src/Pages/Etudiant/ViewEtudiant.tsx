@@ -21,7 +21,7 @@ const ViewEtudiant: FunctionComponent = () => {
 
   function handleDelete(itemId: number) {
     etudiantDelete(itemId);
-    navigate('/etudiant');
+    navigate('/admin/etudiant');
   }
 
 
@@ -75,7 +75,7 @@ const ViewEtudiant: FunctionComponent = () => {
                   <div className='p-6'>
                     <div className='flex justify-between items-center'>
                       <div>Modification : </div>
-                      <Button onClick={() => navigate(`/etudiant/edit/${etudiant[0].id_etudiant}`)}>Modifier</Button>
+                      <Button onClick={() => navigate(`/admin/etudiant/edit/${etudiant[0].id_etudiant}`)}>Modifier</Button>
                     </div>
                     <div className='flex justify-between items-center mt-4'>
                       <div>Suppression : </div>

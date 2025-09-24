@@ -33,7 +33,7 @@ const EditNiveau: FunctionComponent = () => {
 
   const editNiveauSubmit = (data: EditNiveauType) => {
     NiveauEdit(data)
-    navigate('/niveau')
+    navigate('/admin/niveau')
   }
 
   return (

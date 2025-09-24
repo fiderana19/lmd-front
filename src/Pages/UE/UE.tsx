@@ -29,7 +29,7 @@ const UE: FunctionComponent = () => {
             <div className='text-xl font-bold font-lato'>LES UNITES D'ENSEIGNEMENTS</div>
             <div className='flex justify-end items-center gap-1.5'>
               <Input className='my-1 mx-1 w-52' placeholder="Saisir le nom de l'UE..." value={searchUE} onChange={(e) => setSearchUE(e.target.value)}  />
-              <Button onClick={() => navigate('/ue/create')} ><div className='sm:hidden block'><PlusOutlined /></div><div className='sm:block hidden'> AJOUTER </div></Button>
+              <Button onClick={() => navigate('/admin/ue/create')} ><div className='sm:hidden block'><PlusOutlined /></div><div className='sm:block hidden'> AJOUTER </div></Button>
             </div>
           </div>
           <div className='my-7'>
@@ -55,7 +55,7 @@ const UE: FunctionComponent = () => {
                           <div className='flex justify-center gap-1.5'>
                             <Button 
                               size={'icon'}
-                              onClick={() => navigate(`/ue/edit/${uee.id_ue}`)} 
+                              onClick={() => navigate(`/admin/ue/edit/${uee.id_ue}`)} 
                             >
                               <EditOutlined />
                             </Button>

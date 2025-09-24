@@ -26,7 +26,7 @@ const AddEtudiant: FunctionComponent = () => {
 
   const submitCreateEtudiant = (data: CreateEtudiantType) => {
     createEtudiant(data);
-    navigate('/etudiant');
+    navigate('/admin/etudiant');
   }
 
   const formatDate = (dateString: string) => {

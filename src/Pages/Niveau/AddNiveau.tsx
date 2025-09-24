@@ -24,7 +24,7 @@ const AddNiveau: FunctionComponent = () => {
 
   const createNiveauSubmit = (data: CreateNiveauType) => {
     createNiveau(data);
-    navigate('/niveau')
+    navigate('/admin/niveau')
   }
 
   return (

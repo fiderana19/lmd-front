@@ -21,7 +21,7 @@ const ViewNiveau: FunctionComponent = () => {
 
   const NiveauDelete = (id: number) => {
     deleteNiveau(id);
-    navigate('/niveau');
+    navigate('/admin/niveau');
   }
 
   return (
@@ -79,7 +79,7 @@ const ViewNiveau: FunctionComponent = () => {
                   <div className='p-6'>
                     <div className='flex justify-between items-center'>
                       <div>Modification : </div>
-                      <Button onClick={() => navigate(`/niveau/edit/${niveau[0].id_niveau}`)}>Modifier</Button>
+                      <Button onClick={() => navigate(`/admin/niveau/edit/${niveau[0].id_niveau}`)}>Modifier</Button>
                     </div>
                     <div className='flex justify-between items-center mt-4'>
                       <div>Suppression : </div>

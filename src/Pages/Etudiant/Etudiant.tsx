@@ -30,7 +30,7 @@ const Etudiant: FunctionComponent = () => {
             <div className='text-xl font-bold font-lato'>LES ETUDIANTS</div>
             <div className='flex justify-end items-center'>
               <Input className='my-1 mx-1 w-52' placeholder='Saisir la matricule...' value={searchEtudiant} onChange={(e) => setSearchEtudiant(e.target.value)}  />
-              <Button onClick={() => navigate('/etudiant/create')}>AJOUTER</Button>
+              <Button onClick={() => navigate('/admin/etudiant/create')}>AJOUTER</Button>
             </div>
           </div>
           <div className='my-7'>
@@ -68,13 +68,13 @@ const Etudiant: FunctionComponent = () => {
                               <Button 
                                 size={'icon'}
                                 variant={'secondary'}
-                                onClick={() => navigate(`/etudiant/view/${et.id_etudiant}`)} 
+                                onClick={() => navigate(`/admin/etudiant/view/${et.id_etudiant}`)} 
                               >
                                 <EyeFilled />
                               </Button>
                               <Button 
                                 size={'icon'}
-                                onClick={() => navigate(`/etudiant/edit/${et.id_etudiant}`)} 
+                                onClick={() => navigate(`/admin/etudiant/edit/${et.id_etudiant}`)} 
                               >
                                 <EditOutlined />
                               </Button>

@@ -21,7 +21,7 @@ const ViewEC: FunctionComponent = () => {
 
   const EcDelete = (id: number) => {
     deleteEC(id);
-    navigate('/ec');
+    navigate('/admin/ec');
   }
 
   return (
@@ -94,7 +94,7 @@ const ViewEC: FunctionComponent = () => {
                   <div className='p-6'>
                     <div className='flex justify-between items-center'>
                       <div>Modification : </div>
-                      <Button onClick={() => navigate(`/ec/edit/${ec[0].id_ec}`)}>Modifier</Button>
+                      <Button onClick={() => navigate(`/admin/ec/edit/${ec[0].id_ec}`)}>Modifier</Button>
                     </div>
                     <div className='flex justify-between items-center mt-4'>
                       <div>Suppression : </div>

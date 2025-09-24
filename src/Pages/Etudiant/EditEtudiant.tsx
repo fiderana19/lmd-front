@@ -35,7 +35,7 @@ const EditEtudiant: FunctionComponent = () => {
 
   const submitEditEtudiant = (data: EditEtudiantType) => {
     etudiantEdit(data);
-    navigate('/etudiant');
+    navigate('/admin/etudiant');
   }
 
   const formatDate = (dateString: string) => {

@@ -29,7 +29,7 @@ const Niveau: FunctionComponent = () => {
             <div className='text-xl font-bold font-lato'>LES NIVEAUX</div>
             <div className='flex justify-end items-center gap-1.5'>
               <Input className='my-1 mx-1 w-52' placeholder='Saisir le titre...' value={searchNiveau} onChange={(e) => setSearchNiveau(e.target.value)}  />
-              <Button onClick={() => navigate('/niveau/create')} ><div className='sm:hidden block'><PlusOutlined /></div><div className='sm:block hidden'> AJOUTER </div></Button>
+              <Button onClick={() => navigate('/admin/niveau/create')} ><div className='sm:hidden block'><PlusOutlined /></div><div className='sm:block hidden'> AJOUTER </div></Button>
             </div>
           </div>
           <div className='my-7'>  
@@ -63,13 +63,13 @@ const Niveau: FunctionComponent = () => {
                               <Button 
                                 size={'icon'}
                                 variant={'secondary'}
-                                onClick={() => navigate(`/niveau/view/${niv.id_niveau}`)} 
+                                onClick={() => navigate(`/admin/niveau/view/${niv.id_niveau}`)} 
                               >
                                 <EyeFilled />
                               </Button>
                               <Button 
                                 size={'icon'}
-                                onClick={() => navigate(`/niveau/edit/${niv.id_niveau}`)} 
+                                onClick={() => navigate(`/admin/niveau/edit/${niv.id_niveau}`)} 
                               >
                                 <EditOutlined />
                               </Button>

@@ -30,7 +30,7 @@ const AddEC: FunctionComponent = () => {
 
   const ECSubmit = async (data: CreateECType) => {
     createEC(data);
-    navigate('/ec')
+    navigate('/admin/ec')
   }
 
   return (

@@ -38,7 +38,7 @@ const EditEC: FunctionComponent = () => {
 
   const ECSubmit = async (data: EditECType) => {
     ECEdit(data);
-    navigate('/ec')
+    navigate('/admin/ec')
   }
 
   return (

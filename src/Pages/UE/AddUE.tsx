@@ -25,7 +25,7 @@ const AddUE: FunctionComponent = () => {
 
   const createUESubmit = (data: CreateUEType) => {
     createUE(data)
-    navigate('/ue')
+    navigate('/admin/ue')
   }
     
   return (

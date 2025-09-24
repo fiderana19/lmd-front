@@ -36,7 +36,7 @@ const EC: FunctionComponent = () => {
             <div className='text-xl font-bold font-lato'>LES ELEMENTS CONSTUTITIFS</div>
             <div className='flex justify-end items-center gap-1.5'>
               <Input className='w-52' placeholder="Saisir le nom de l'EC..." value={searchEC} onChange={(e) => setSearchEC(e.target.value)}  />
-              <Button onClick={() => navigate("/ec/create")} >AJOUTER</Button>
+              <Button onClick={() => navigate("/admin/ec/create")} >AJOUTER</Button>
             </div>
           </div>
           <div className='my-7'>    
@@ -70,13 +70,13 @@ const EC: FunctionComponent = () => {
                             <Button 
                               size={'icon'}
                               variant={'secondary'}
-                              onClick={() => navigate(`/ec/view/${element.id_ec}`)} 
+                              onClick={() => navigate(`/admin/ec/view/${element.id_ec}`)} 
                             >
                               <EyeFilled />
                             </Button>
                             <Button 
                               size={'icon'}
-                              onClick={() => navigate(`/ec/edit/${element.id_ec}`)} 
+                              onClick={() => navigate(`/admin/ec/edit/${element.id_ec}`)} 
                             >
                               <EditOutlined />
                             </Button>
@@ -204,7 +204,7 @@ const EC: FunctionComponent = () => {
                                 </AlertDialogContent>
                             </AlertDialog>
                             <Button 
-                              onClick={() => navigate(`/ec/edit/${element.id_ec}`)} 
+                              onClick={() => navigate(`/admin/ec/edit/${element.id_ec}`)} 
                             >
                               <EditOutlined />
                             </Button>

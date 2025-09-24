@@ -19,7 +19,7 @@ const Home: FunctionComponent = () => {
                         <Typewriter text={text} />
                     </div>
                     <div className='my-4 flex justify-center'>
-                        <Link to='/note'>
+                        <Link to='/admin/note'>
                             <Button>VOIR LES NOTES</Button>
                         </Link>
                     </div>
