@@ -30,7 +30,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
         if(response?.status === HttpStatus.OK) {
             await localStorage.setItem('token', response?.data?.token);
             setToken(response?.data.token);
-            navigate("/home")
+            navigate("/admin/home")
         } else if(response?.status === HttpStatus.UNAUTHORIZED) {
             showToast({
                 type: TOAST_TYPE.ERROR,

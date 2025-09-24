@@ -2,12 +2,12 @@ import { useAuth } from "@/context/AuthContext";
 import { Navigate, Outlet } from "react-router-dom"
 
 const ProtectedRoute: React.FC = () => {
-    const { token,  isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();
 
-    if(isAuthenticated && token) {
+    if(isAuthenticated) {
         return <Outlet />
     } else {
-        return <Navigate to="/unauthorized" />
+        return <Navigate to="/" />
     }
 }
 

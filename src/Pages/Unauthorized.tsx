@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import React, { FunctionComponent } from 'react'
 
-const NotFound: FunctionComponent = () => {
+const Unauthorized: FunctionComponent = () => {
   return (
     <div className='container text-center add py-4'>
-        <h1 className='text-black'>Page introuvable </h1>
+        <h1 className='text-black'>Page non autorisé ! </h1>
         <Button variant={'link'}>
           <a href='/' >Page d'acceuil</a>
         </Button>
@@ -12,4 +12,4 @@ const NotFound: FunctionComponent = () => {
   )
 }
 
-export default NotFound;
+export default Unauthorized;
