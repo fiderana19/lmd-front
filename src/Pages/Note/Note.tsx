@@ -8,14 +8,18 @@ import AddNote from './AddNote';
 import Bg from '../../assets/pic/home-bg.jpg'
 import { handleFloatKeyPress } from '@/utils/handleKeyPress';
 import Navigation from '@/components/navigation/Navigation';
+import { useGetAllNote } from '../../hooks/useGetAllNote';
+import { useGetAllNiveau } from '@/hooks/useGetAllNiveau';
+import { useGetAllEtudiant } from '@/hooks/useGetAllEtudiant';
+import { useGetAllEC } from '@/hooks/useGetAllEC';
 
 const Note: FunctionComponent = () => {
-  let [note, setNote] = useState([]);
-  let [etudiant, setEtudiant] = useState([]);
+  const { data: note, isLoading: noteLoading } = useGetAllNote();
+  const { data: niveau } = useGetAllNiveau();
+  const { data: etudiant } = useGetAllEtudiant();
+  const { data: ec } = useGetAllEC();
   const [selectedEtudiantId, setSelectedEtudiantId] = useState('');  
-  let [niveau, setNiveau] = useState([]);
   const [selectedNiveauId, setSelectedNiveauId] = useState('');  
-  let [ec, setEC] = useState([]);
   const [selectedECId, setSelectedECId] = useState('');
   let [annee, setAnnee] = useState([]);
   const [selectedAnneeId, setSelectedAnneeId] = useState('');
@@ -24,7 +28,6 @@ const Note: FunctionComponent = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [loading , setLoading] = useState(true);
   const [valeurError, setValeurError] = useState('');
   const [editedItem, setEditedItem] = useState({   
     id_note: 0,
@@ -55,22 +58,6 @@ const Note: FunctionComponent = () => {
 ];
 
   useEffect(() => {      
-    //getting all note
-    try {
-      axios({
-        method: 'get',
-        url: 'http://localhost:3002/note/',
-      })
-      .then((rep) => {
-        {
-          setNote(rep.data)
-          setLoading(false);
-        }
-      })
-    } catch (error) {
-      console.error("Note : Erreur de recuperation des notes : " + error);
-    }  
-
   }, [])
   //show delete confirmation
   const showDeleteConfirmation = (item) => {
@@ -84,7 +71,6 @@ const Note: FunctionComponent = () => {
       url: `http://localhost:3002/note/delete/${itemId}`,
     })
     .then(() => {
-      setNote(note.filter((item) => item.id_note !== itemId));
       deleteMessage()
     })
     .catch(error => {
@@ -212,13 +198,7 @@ const Note: FunctionComponent = () => {
                   </thead> 
                   <tbody className='bg-white divide-y divide-gray-200'>
                   {
-                loading ? (
-                  <div className='text-center my-10'>
-                    <LoadingOutlined className='text-3xl' />
-                    <div>Chargement...</div>
-                  </div>
-                    ) : (
-                  note.map((notee, index) =>{
+                   note && note.map((notee: any, index: any) =>{
                     return(
                     <tr key={index}>
                       <td className='lg:px-6 px-2 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { notee.id_etudiant } </td>
@@ -246,20 +226,21 @@ const Note: FunctionComponent = () => {
                     </tr>
                       )
                     })
-                  )
                 }
                   </tbody>
-              </table>
-            </div>
-            <div className='sm:hidden grid gap-2 justify-center grid-cols-customized'>
-              {
-                loading ? (
+                  {
+                                      noteLoading && 
                   <div className='text-center my-10'>
                     <LoadingOutlined className='text-3xl' />
                     <div>Chargement...</div>
                   </div>
-                    ) : (
-                  note.map((notee, index) =>{
+                  }
+              </table>
+            </div>
+            <div className='sm:hidden grid gap-2 justify-center grid-cols-customized'>
+              {
+                (
+                  note && note.map((notee, index) =>{
                     return(
                     <Card  key={index} className='hover:scale-105 duration-300'>
                       <div className='text-center'>
