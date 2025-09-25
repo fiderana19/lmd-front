@@ -1,43 +1,40 @@
-import { useState, useEffect, FunctionComponent } from 'react'
-import { Button, Dropdown, message, Modal, Input, Card } from 'antd'
-import { HomeOutlined, UserOutlined ,EditOutlined, DeleteOutlined, WarningFilled, SearchOutlined , UnorderedListOutlined,  WarningOutlined, CheckCircleFilled , CloseCircleFilled, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import { useLocation } from "react-router";
+import { useState, FunctionComponent } from 'react'
+import { Dropdown, Modal, Card } from 'antd'
+import { UserOutlined ,EditOutlined, DeleteOutlined, WarningFilled, SearchOutlined , UnorderedListOutlined,  WarningOutlined, CheckCircleFilled , CloseCircleFilled, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import AddNote from './AddNote';
 import Bg from '../../assets/pic/home-bg.jpg'
 import { handleFloatKeyPress } from '@/utils/handleKeyPress';
 import Navigation from '@/components/navigation/Navigation';
 import { useGetAllNote } from '../../hooks/useGetAllNote';
-import { useGetAllNiveau } from '@/hooks/useGetAllNiveau';
-import { useGetAllEtudiant } from '@/hooks/useGetAllEtudiant';
-import { useGetAllEC } from '@/hooks/useGetAllEC';
+import { EditNote } from '@/types/Note';
+import { Controller, useForm } from 'react-hook-form';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { EditNoteValidation } from '@/validation/note.validation';
+import { Button } from '@/components/ui/button';
+import { usePatchNote } from '@/hooks/usePatchNote';
+import { useDeleteNote } from '@/hooks/useDeleteNote';
 
 const Note: FunctionComponent = () => {
-  const { data: note, isLoading: noteLoading } = useGetAllNote();
-  const { data: niveau } = useGetAllNiveau();
-  const { data: etudiant } = useGetAllEtudiant();
-  const { data: ec } = useGetAllEC();
-  const [selectedEtudiantId, setSelectedEtudiantId] = useState('');  
-  const [selectedNiveauId, setSelectedNiveauId] = useState('');  
-  const [selectedECId, setSelectedECId] = useState('');
-  let [annee, setAnnee] = useState([]);
-  const [selectedAnneeId, setSelectedAnneeId] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpen1, setIsModalOpen1] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
-  const [valeurError, setValeurError] = useState('');
-  const [editedItem, setEditedItem] = useState({   
-    id_note: 0,
-    valeur: 0,
-    id_etudiant: '',
-    id_niveau: '',
-    id_ec: '',
-    id_annee: '',
+  const { data: note, isLoading: noteLoading, refetch: refetchNote } = useGetAllNote();
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<EditNote | null>(null);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
+  const [itemToDelete, setItemToDelete] = useState<EditNote | null>(null);
+  const [editedItem, setEditedItem] = useState<EditNote | null>(null);
+  const { handleSubmit: editSubmit, formState: { errors }, control, setValue: setEditValue } = useForm<EditNote>({
+    resolver: yupResolver(EditNoteValidation)
   });
-  const location = useLocation()
+  const { mutateAsync: editNote, isPending: editLoading } = usePatchNote({action() {
+    refetchNote();
+  },})
+  const { mutateAsync: deleteNote, isPending: deleteLoading } = useDeleteNote({action() {
+    refetchNote();
+  },})
+
   const items = [
     {
         label: <Link to='/note/etudiant'>
@@ -57,106 +54,38 @@ const Note: FunctionComponent = () => {
     },
 ];
 
-  useEffect(() => {      
-  }, [])
-  //show delete confirmation
-  const showDeleteConfirmation = (item) => {
+  const showDeleteConfirmation = (item: EditNote) => {
     setItemToDelete(item);
     setIsDeleteModalVisible(true);
   };
-  //handling note delete
-  function handleDelete(itemId) {
-    axios({
-      method: 'delete',
-      url: `http://localhost:3002/note/delete/${itemId}`,
-    })
-    .then(() => {
-      deleteMessage()
-    })
-    .catch(error => {
-      console.error('Note : Erreur lors de la suppression de l\'élément :', error);
-    });
+
+  async function handleDelete(itemId: number) {
+    await deleteNote(itemId);
   }
-  //edit note item
-  function EditNote(item) {
+
+  function EditNote(item: EditNote) {
     setSelectedItem(item);
     showModal1();
   
-    setEditedItem({
-        id_note: item.id_note,
-        valeur: item.valeur,
-        id_etudiant: item.id_etudiant,
-        id_niveau: item.id_niveau,
-        id_ec: item.id_ec,
-        id_annee: item.id_annee,
-    });    
+    setEditedItem(item);
+    setEditValue('id_note', item?.id_note);   
   }
-  //handlign the form submit
-  const handleSubmit = (e) => {
-    // e.preventDefault();
-    setValeurError('')
 
-    if(editedItem.valeur > 20 ) {
-      setValeurError("La note ne doit pas etre superieur à 20 !")
-    }
-
-    if (editedItem) {
-      if(editedItem.valeur <= 20) {
-        axios({
-          method: 'patch',
-          url: `http://localhost:3002/note/edit/${editedItem.id_note}`,
-          data: editedItem,
-        })
-        .then(() => {
-          setEditedItem({id_note: '',valeur: 0,  id_etudiant: '', id_niveau: '', id_ec: '', id_annee: '', });
-        })
-        .catch((error) => {
-          console.error('EditNote : Erreur lors du modification:', error);
-        });
-      } else {
-        e.preventDefault()
-      }
-      
-    }
+  const handleSubmit = async (data: EditNote) => {
+    await editNote(data);
   }
-  //handle edit input change
-  const handleInputChange = (e) => {
-    if (editedItem) {
-      const { name, value } = e.target;
-      setEditedItem({ ...editedItem, [name]: value });
-    }
-  };
-  //handling delete confirmation
+
   const handleDeleteConfirm = () => {
     if (itemToDelete) {
       handleDelete(itemToDelete.id_note);
       setIsDeleteModalVisible(false);
     }
   };
-  //handlign delete cancel
-  const handleDeleteCancel = () => {
-    setIsDeleteModalVisible(false);
-  };
-  ///message
-  const deleteMessage = () => {
-    message.success("Suppression du note réussie !");
-  };
-  //show add modal
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  //closing add modal
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-  //show edit modal
+
   const showModal1 = () => {
-    setIsModalOpen1(true);
+    setIsEditModalOpen(true);
   };
-  //close edit modal
-  const handleCloseModal1 = () => {
-    setIsModalOpen1(false);
-  };
+
   const okDeleteStyle = {
     background: 'red'
   }
@@ -168,7 +97,7 @@ const Note: FunctionComponent = () => {
         <div className='px-10'>
           <div className='flex justify-between'>
             <div className='text-xl font-bold font-lato'>LES NOTES</div>
-            <div>
+            <div className='flex items-center'>
               <Dropdown className="mx-1" menu={{items}} trigger={['click']}>
                 <a className="cursor-pointer" onClick={(e) => e.preventDefault()}>
                   <Button>
@@ -176,10 +105,10 @@ const Note: FunctionComponent = () => {
                   </Button>
                 </a>
               </Dropdown>
-              <Button onClick={showModal} ><div className='sm:hidden block'><PlusOutlined /></div><div className='sm:block hidden'> AJOUTER </div></Button>
+              <Button onClick={() => setIsAddModalOpen(true)} ><div className='sm:hidden block'><PlusOutlined /></div><div className='sm:block hidden'> AJOUTER </div></Button>
             </div>
           </div>
-          <Modal title="AJOUTER UN NOTE" open={isModalOpen} onCancel={handleCloseModal} footer={null} >
+          <Modal title="AJOUTER UN NOTE" open={isAddModalOpen} onCancel={() => setIsAddModalOpen(false)} footer={null} >
             <AddNote />
           </Modal>
           <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
@@ -218,9 +147,13 @@ const Note: FunctionComponent = () => {
                       }
                       </td>
                       <td className='px-1 py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
-                        <div className='flex justify-center'>
-                          <div  onClick={() => EditNote(notee)}   className='mx-1 border border-black w-min px-2 py-1 rounded-full hover:bg-gray-300 hover:scale-105 hover:transition-all'> <EditOutlined/></div>
-                          <div   onClick={() => showDeleteConfirmation(notee)} className='border bg-red-500 border-black w-min px-2 py-1 rounded-full hover:bg-red-600  hover:scale-105 hover:transition-all'> <DeleteOutlined/></div>
+                        <div className='flex justify-center gap-1'>
+                          <Button size={'icon'} onClick={() => EditNote(notee)}>
+                            <EditOutlined/>
+                          </Button>
+                          <Button size={'icon'} variant={'destructive'} onClick={() => showDeleteConfirmation(notee)}>
+                            <DeleteOutlined/>
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -240,7 +173,7 @@ const Note: FunctionComponent = () => {
             <div className='sm:hidden grid gap-2 justify-center grid-cols-customized'>
               {
                 (
-                  note && note.map((notee, index) =>{
+                  note && note.map((notee: any, index: any) =>{
                     return(
                     <Card  key={index} className='hover:scale-105 duration-300'>
                       <div className='text-center'>
@@ -271,9 +204,13 @@ const Note: FunctionComponent = () => {
                             }
                           </div>
                         </div>
-                        <div className='flex justify-center'>
-                          <div  onClick={() => EditNote(notee)}   className='mx-1 border border-black w-min px-2 py-1 rounded-full hover:bg-gray-300 hover:scale-105 hover:transition-all'> <EditOutlined/></div>
-                          <div   onClick={() => showDeleteConfirmation(notee)} className='border bg-red-500 border-black w-min px-2 py-1 rounded-full hover:bg-red-600  hover:scale-105 hover:transition-all'> <DeleteOutlined/></div>
+                        <div className='flex justify-center gap-1'>
+                          <Button size={'icon'} onClick={() => EditNote(notee)}>
+                            <EditOutlined/>
+                          </Button>
+                          <Button size={'icon'} variant={'destructive'} onClick={() => showDeleteConfirmation(notee)}>
+                            <DeleteOutlined/>
+                          </Button>
                         </div>
                       </div>
                   </Card>
@@ -282,23 +219,78 @@ const Note: FunctionComponent = () => {
                 )
               }
             </div>
-          <Modal title="MODIFIER NOTE" open={isModalOpen1} onCancel={handleCloseModal1} footer={null} >
-            {selectedItem && 
+          <Modal title="MODIFIER NOTE" open={isEditModalOpen} onCancel={() => setIsEditModalOpen(false)} footer={null} >
+            {selectedItem && editedItem && 
               <div>
-                <form className='sm:w-2/3 w-full my-7 mx-auto' onSubmit={handleSubmit}>
-                <label htmlFor='valeur' >Valeur : </label> <br />
-                  <Input name='valeur' onKeyPress={handleFloatKeyPress} value={editedItem.valeur} onChange={handleInputChange}  className={valeurError ? 'border border-red-500' : '' } />
-                  {valeurError && <div className="text-red-500 text-xs">{valeurError}</div>}
-                  <label htmlFor='id_etudiant' >Etudiant : </label> <br />
-                  <Input name='id_etudiant' value={editedItem.id_etudiant} onChange={handleInputChange} readOnly/>
-                  <label htmlFor='id_niveau' >Niveau : </label> <br />
-                  <Input name='id_niveau' value={editedItem.id_niveau} onChange={handleInputChange} readOnly/>
-                  <label htmlFor='id_ec' >Element Constitutif : </label> <br />
-                  <Input name='id_ec' value={editedItem.id_ec} onChange={handleInputChange} readOnly/>
-                  <label htmlFor='id_annee' >Année universitaire : </label> <br />
-                  <Input name='id_annee' value={editedItem.id_annee} onChange={handleInputChange} readOnly/>
+                <form className='sm:w-2/3 w-full my-7 mx-auto' onSubmit={editSubmit(handleSubmit)}>
+                  <Label htmlFor='valeur' className='mb-1'>Valeur : </Label>
+                  <Controller 
+                    control={control}
+                    name='valeur'
+                    defaultValue={editedItem?.valeur}
+                    render={({ field: { value, onChange } }) => (
+                      <Input 
+                        onKeyPress={handleFloatKeyPress} 
+                        value={value} 
+                        onChange={onChange}  
+                        className={errors?.valeur ? 'border border-red-500' : '' } 
+                      />
+                    )}
+                  />
+                  {errors?.valeur && <div className="text-red-500 text-xs">{errors?.valeur?.message}</div>}
+                  <Label htmlFor='id_etudiant' className='mb-1 mt-4'>Etudiant : </Label>
+                  <Controller 
+                    control={control}
+                    name='id_etudiant'
+                    defaultValue={editedItem?.id_etudiant}
+                    render={({ field: { value } }) => (
+                      <Input 
+                        readOnly 
+                        value={value}
+                      />
+                    )}
+                  />
+                  <Label htmlFor='id_niveau' className='mb-1 mt-4'>Niveau : </Label>
+                  <Controller 
+                    control={control}
+                    name='id_niveau'
+                    defaultValue={editedItem?.id_niveau}
+                    render={({ field: { value } }) => (
+                      <Input 
+                        readOnly 
+                        value={value}
+                      />
+                    )}
+                  />
+                  <Label htmlFor='id_ec' className='mb-1 mt-4'>Element Constitutif : </Label>
+                  <Controller 
+                    control={control}
+                    name='id_ec'
+                    defaultValue={editedItem?.id_ec}
+                    render={({ field: { value } }) => (
+                      <Input 
+                        readOnly 
+                        value={value}
+                      />
+                    )}
+                  />
+                  <Label htmlFor='id_annee' className='mb-1 mt-4'>Année universitaire : </Label>
+                  <Controller 
+                    control={control}
+                    name='id_annee'
+                    defaultValue={editedItem?.id_annee}
+                    render={({ field: { value } }) => (
+                      <Input 
+                        readOnly 
+                        value={value}
+                      />
+                    )}
+                  />
                   <div className='flex justify-center my-3'>
-                    <button className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' type='submit'>MODIFIER</button>
+                    <Button variant={'primary'} type='submit'>
+                      { editLoading && <LoadingOutlined /> }
+                      Modifier
+                    </Button>
                   </div>
                 </form>
               </div>
@@ -308,7 +300,7 @@ const Note: FunctionComponent = () => {
             title="Suppression"
             open={isDeleteModalVisible}
             onOk={handleDeleteConfirm}
-            onCancel={handleDeleteCancel}
+            onCancel={() => setIsDeleteModalVisible(false)}
             okText="Supprimer"
             cancelText="Annuler"
             okButtonProps={{style: okDeleteStyle}}
