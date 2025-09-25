@@ -3,5 +3,6 @@ export enum QueryCacheKey {
     EC = "EC",
     ETUDIANT = "ETUDIANT",
     NIVEAU = "NIVEAU",
-    NOTE = "NOTE"
+    NOTE = "NOTE",
+    ANNEE = "ANNEE"
 }
