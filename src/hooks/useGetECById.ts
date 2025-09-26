@@ -9,7 +9,8 @@ export const useGetECById = (id: number) => {
     const { data, isLoading, error, isError } = useQuery({
         queryKey: [QueryCacheKey.EC, id],
         queryFn: () => getECById(id),
-        staleTime: Infinity
+        staleTime: Infinity,
+        enabled: id !== 0
     })
 
     useEffect(() => {

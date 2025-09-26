@@ -20,3 +20,9 @@ export type CreateGlobalNote = {
     ec: string;
     annee: string;
 }
+
+export type NoteByNiveau = {
+    id_niveau: number;
+    id_ec: number;
+    id_annee: string;
+}

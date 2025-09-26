@@ -9,7 +9,8 @@ export const useGetNiveauById = (id: number) => {
     const { data, isLoading, error, isError, refetch } = useQuery({
         queryKey: [QueryCacheKey.NIVEAU, id],
         queryFn: () => getNiveauById(id),
-        staleTime: Infinity
+        staleTime: Infinity,
+        enabled: id !== 0
     })
 
     useEffect(() => {

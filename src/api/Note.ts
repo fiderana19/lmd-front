@@ -1,4 +1,4 @@
-import { CreateNote, EditNote } from "@/types/Note";
+import { CreateNote, EditNote, NoteByNiveau } from "@/types/Note";
 import { axiosAuthInstance } from "./Config"
 
 const NOTE_BASE_URL = `${import.meta.env.VITE_BASE_URL}/note`;
@@ -17,4 +17,8 @@ export const patchNote = async (data: EditNote) => {
 
 export const deleteNote = async (id: number) => {
     return await axiosAuthInstance.delete(`${NOTE_BASE_URL}/delete/${id}`);
+}
+
+export const postNoteByNiveau = async (data: NoteByNiveau) => {
+    return await axiosAuthInstance.post(`${NOTE_BASE_URL}/niveau`, data);
 }
