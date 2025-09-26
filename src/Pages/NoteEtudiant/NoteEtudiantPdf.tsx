@@ -1,98 +1,48 @@
 import { useState, useEffect, FunctionComponent } from 'react'
 import { CheckCircleFilled , CloseCircleFilled } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import dayjs from 'dayjs';
-import Navigation from '@/components/navigation/Navigation';
+import { usePostEtudiantFinalForResult } from '@/hooks/usePostEtudiantFinalForResult ';
+import { usePostEtudiantForResult } from '@/hooks/usePostEtudiantForResult';
+import { usePostEtudiantMarkForResult } from '@/hooks/usePostEtudiantMarkForResult';
+import { usePostEtudiantUnityForResult } from '@/hooks/usePostEtudiantUnityForResult';
+import { invertLetter } from '@/utils/Format';
 
 const NoteEtudiantPdf: FunctionComponent = () => {
   let params = useParams()
-  let [id , setId] = useState(params.id)
-  let [annee , setAnnee] = useState(transformLetter(params.annee))
-  let [niveau , setNiveau] = useState(params.niveau)
-  let [resultEtudiant, setResultEtudiant] = useState([]);
-  let [resultUnity, setEtudiantUnity] = useState([]);
-  let [resultMark, setResultMark] = useState([]);
-  let [resultFinal, setResultFinal] = useState('');
-  const [formData, setFormData] = useState({ id_etudiant: id, id_niveau: niveau, id_annee: annee});
- 
-  function transformLetter(lettre){
-    let tableau = lettre.split('')
-    for (let index = 0; index < tableau.length; index++) {
-      const element = tableau[index];
-      if (element == '-') {
-        tableau[index] = '/'
-      }
-    }
-    let result = tableau.join('')
-    return result
-  }
+  const id = params.id ? Number(params?.id) : 0;
+  const annee = params?.annee ? invertLetter(params.annee) : '';
+  const niveau = params.niveau ? Number(params?.niveau) : 0;
+  const fetchData = {id_etudiant: id, id_niveau: niveau, id_annee: annee};
+  const { mutateAsync: postEtudiant } = usePostEtudiantForResult();
+  const { mutateAsync: postFinal } = usePostEtudiantFinalForResult();
+  const { mutateAsync: postMark } = usePostEtudiantMarkForResult();
+  const { mutateAsync: postUnity } = usePostEtudiantUnityForResult();
+  const [resultEtudiant, setResultEtudiant] = useState<any>();
+  const [resultFinal, setResultFinal] = useState<any>();
+  const [resultMark, setResultMark] = useState<any>();
+  const [resultUnity, setResultUnity] = useState<any>();
 
   useEffect(() => { 
-    //Getting the student infomation
-    window.print()
-    async function getEtudiant() {
-      try {
-        const response = await axios({
-          method: 'post',
-          url: 'http://localhost:3002/result/etudiant/',
-          data: formData,
-        }); 
-        setResultEtudiant(response.data[0]);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-      }
-    }
-    getEtudiant()
+    fetch();
+    fetch();
+    window.print();
 
-    //Getting the student unity
-    async function getUnity() {
-      try {
-        const response = await axios({
-        method: 'post',
-        url: 'http://localhost:3002/result/etudiant/unity',
-        data: formData,
-        }); 
-        setEtudiantUnity(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-      }
-    }
-    getUnity()
-
-    //Getting the student mark
-    async function getMark() {
-      try {
-        const response = await axios({
-          method: 'post',
-          url: 'http://localhost:3002/result/etudiant/result',
-          data: formData,
-        }); 
-        setResultMark(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-      }
-    }
-    getMark()
-    //Getting the student final result
-    async function getFinal() {
-      try {
-        const response = await axios({
-          method: 'post',
-          url: 'http://localhost:3002/result/etudiant/final',
-          data: formData,
-        }); 
-        setResultFinal(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-      }
-    }
-    getFinal()     
-  }, [])
+    async function fetch() {
+      const et = await postEtudiant(fetchData);
+      console.log(et?.data[0])
+      setResultEtudiant(et?.data[0]);
+      const f = await postFinal(fetchData);
+      setResultFinal(f?.data);
+      const m = await postMark(fetchData);
+      setResultMark(m?.data);
+      const u = await postUnity(fetchData);
+      setResultUnity(u?.data);
+    }    
+  }, [id, annee, niveau])
 
   return (
     <div>
-      <Navigation />
       <div className='text-xs'>
         <div className=' text-center'>
           <div className='text-sm font-bold font-lato'>UNIVERSITE DE FIANARANTSOA</div>
@@ -161,11 +111,11 @@ const NoteEtudiantPdf: FunctionComponent = () => {
               </thead> 
                 {
                   resultUnity &&
-                resultUnity.map((item , index) => (
+                resultUnity.map((item: any , index: any) => (
                   <tbody key={index} className='text-xs bg-white divide-y divide-gray-200'>
                       <tr key={item.id_ue}>
                         <td className='px-6 whitespace-nowrap leading-5 text-gray-900'> { item.id_ue }</td>
-                        {item.notes.map(note => (
+                        {item.notes.map((note: any) => (
                           <div className='flex justify-between' key={note.nom_ec}>
                               <td className='px-6 whitespace-nowrap leading-5 text-gray-900'>{ note.nom_ec } </td>
                               <td className='mr-6 px-6 whitespace-nowrap leading-5 text-gray-900'> { note.valeur }</td>

@@ -26,3 +26,9 @@ export type NoteByNiveau = {
     id_ec: number;
     id_annee: string;
 }
+
+export type NoteEtudiantSearch = {
+    id_niveau: number;
+    id_etudiant: number;
+    id_annee: string;
+}

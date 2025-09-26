@@ -37,7 +37,7 @@ const Note: FunctionComponent = () => {
 
   const items = [
     {
-        label: <Link to='/note/etudiant'>
+        label: <Link to='/admin/note/etudiant'>
                     <div className='px-4 py-1'>
                         <UserOutlined /> NOTE D'UN ETUDIANT
                     </div>
@@ -45,7 +45,7 @@ const Note: FunctionComponent = () => {
         key: '01'
     },
     {
-        label: <Link to='/note/result'>
+        label: <Link to='/admin/note/result'>
                 <div className='px-4 py-1'>
                     <UnorderedListOutlined /> RESULTAT D'UN NIVEAU
                 </div>

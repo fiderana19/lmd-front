@@ -22,3 +22,9 @@ export const CreateGlobalNoteValidation = yup.object({
     ec: yup.string().required("Element requis !"), 
     annee: yup.string().required("Année requis !"), 
 })
+
+export const NoteEtudiantSearchValidation = yup.object({
+    id_niveau: yup.number().required("Niveau requis !"), 
+    id_etudiant: yup.number().required("Etudiant requis !"), 
+    id_annee: yup.string().required("Année requis !"), 
+})
