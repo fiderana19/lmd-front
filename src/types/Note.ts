@@ -14,3 +14,9 @@ export type EditNote = {
     id_ec: string, 
     id_annee: string
 }
+
+export type CreateGlobalNote = {
+    niveau: string;
+    ec: string;
+    annee: string;
+}

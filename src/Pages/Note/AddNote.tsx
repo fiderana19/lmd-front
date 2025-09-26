@@ -190,7 +190,7 @@ const AddNote: FunctionComponent = () => {
             </Button>
           </div>
         </form>
-        <Link to='/addnote' className='flex justify-center'>
+        <Link to='/admin/addnote' className='flex justify-center'>
           <Button variant={'link'} type='submit'>
             Faire un ajout global
           </Button>

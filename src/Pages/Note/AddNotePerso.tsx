@@ -1,196 +1,132 @@
-import { Input, Select , message  } from 'antd'
+import { Select  } from 'antd'
 import { Option } from 'antd/es/mentions';
-import React, {  useState, useEffect, FunctionComponent } from 'react'
-import axios from 'axios';
+import {  FunctionComponent } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/navigation/Navigation';
+import { useGetAllNiveau } from '@/hooks/useGetAllNiveau';
+import { useGetAllEC } from '@/hooks/useGetAllEC';
+import { useGetAllAnnee } from '@/hooks/useGetAllAnnee';
+import { Controller, useForm } from 'react-hook-form';
+import { CreateGlobalNote } from '@/types/Note';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateGlobalNoteValidation } from '../../validation/note.validation';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { LoadingOutlined } from '@ant-design/icons';
+import { transformLetter } from '@/utils/Format';
 
 const AddNotePerso: FunctionComponent = () => { 
-  let [niveau, setNiveau] = useState([]);
-  const [selectedNiveauId, setSelectedNiveauId] = useState('');  
-  let [ec, setEC] = useState([]);
-  const [selectedECId, setSelectedECId] = useState('');
-  let [annee, setAnnee] = useState([]);
-  const [selectedAnneeId, setSelectedAnneeId] = useState('');
-  const [niveauError, setNiveauError] = useState('');
-  const [ecError, setECError] = useState('');
-  const [anneeError, setAnneeError] = useState('');
+  const { data: niveau, isLoading: niveauLoading } = useGetAllNiveau();
+  const { data: ec, isLoading: ecLoading } = useGetAllEC();
+  const { data: annee, isLoading: anneeLoading } = useGetAllAnnee();
+  const { handleSubmit: submit, formState: { errors }, control } = useForm<CreateGlobalNote>({
+    resolver: yupResolver(CreateGlobalNoteValidation)
+  })
   const navigate = useNavigate()
 
-  useEffect(() => {
-    //fethcing all niveau item
-    async function fetchNiveau() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/niveau/',
-        }); 
-        setNiveau(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des niveaux :', error);
-      }
-    }
-    fetchNiveau();    
-    //fethcing all ec item
-    async function fetchEC() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/ec/',
-         }); 
-        setEC(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des elements :', error);
-      }
-    }
-    fetchEC();    
-    //fethcing all annee item
-    async function fetchAnnee() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/annee/',
-        }); 
-        setAnnee(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des annees :', error);
-      }
-     }
-     fetchAnnee();
-   return () => {
-    
-    };
-  }, []);
-
-  //handling the select niveau change
-  const handleSelectNiveauChange = (value) => {
-    setSelectedNiveauId(value);
+  const handleSubmit = (data: CreateGlobalNote) => {
+    navigate(`/admin/addglobal/note/${data?.ec}/${data?.niveau}/${transformLetter(data?.annee)}`)
   };
-  //handling the select ec change
-  const handleSelectECChange = (value) => {
-    setSelectedECId(value);
-  };
-  //handling the select annee change
-  const handleSelectAnneeChange = (value) => {
-    setSelectedAnneeId(value);
-  };
-
-  //handling the select annee change
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setNiveauError('')
-    setAnneeError('')
-    setECError('')
-
-    if(selectedNiveauId == '' ) {
-      setNiveauError("Vous devez selectionner un niveau ! ")
-    }
-    if(selectedAnneeId == '' ) {
-      setAnneeError("Vous devez selectionner une année ! ")
-    }
-    if(selectedECId == '' ) {
-      setECError("Vous devez selectionner un element ! ")
-    }
-
-    if(selectedAnneeId != '' && selectedECId != '' && selectedNiveauId != '') {
-      navigate(`/addglobal/note/${selectedECId}/${selectedNiveauId}/${transformLetter(selectedAnneeId)}`)
-    }
-  };
-
-  function transformLetter(lettre){
-    let tableau = lettre.split('')
-    for (let index = 0; index < tableau.length; index++) {
-      const element = tableau[index];
-      if (element == '/') {
-        tableau[index] = '-'
-      }
-    }
-    let result = tableau.join('')
-    return result
-  }
     
   return (
     <div>
       <Navigation />
       <div className='md:w-1/3 w-4/5 mx-auto pb-5 pt-24'>
         <h1 className='text-xl font-bold font-lato text-center my-5'>AJOUT GLOBAL DES NOTES</h1>
-        <form>
-          <label htmlFor='id_niveau' >Niveau : </label> <br />
-          <Select
-            value={selectedNiveauId}
-            onChange={handleSelectNiveauChange}
-            className={niveauError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            <Option value="">Sélectionnez un niveau</Option>
-              {
-                niveau.map((niv, index) => {
+        <form onSubmit={submit(handleSubmit)}>
+          <Label htmlFor='niveau' className='mb-1'>Niveau : </Label>
+          <Controller 
+            control={control}
+            name='niveau'
+            render={({ field: { value, onChange } }) => (
+              <Select
+                value={value}
+                onChange={onChange}
+                className={errors?.niveau ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input: any, option: any) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                <Option value="">Sélectionnez un niveau</Option>
+                { niveauLoading && <Option value=""><LoadingOutlined /></Option>}
+                { niveau && niveau.map((niv: any, index: any) => {
                   return(
                     <Option key={index} value={niv.id_niveau}>
                       { `${niv.titre_niveau} -  ${niv.parcours}` }
                     </Option>
                   )
-                })
-              }
-          </Select>
-          {niveauError && <div className="text-red-500 text-xs">{niveauError}</div>}
-          <label htmlFor='id_ec' >Element Constitutif : </label> <br />
-          <Select
-            value={selectedECId}
-            onChange={handleSelectECChange}
-            className={ecError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            <Option value="">Sélectionnez un element</Option>
-              {
-                ec.map((element, index) => {
+                })}
+              </Select>
+            )}
+          />
+          {errors?.niveau && <div className="text-red-500 text-xs">{errors?.niveau?.message}</div>}
+          <Label htmlFor='ec' className='mb-1 mt-4'>Element Constitutif : </Label>
+          <Controller 
+            control={control}
+            name='ec'
+            render={({ field: { value, onChange } }) => (
+              <Select
+                value={value}
+                onChange={onChange}
+                className={errors?.ec ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input: any, option: any) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                <Option value="">Sélectionnez un element</Option>
+                { ecLoading && <Option value=""><LoadingOutlined /></Option>}
+                { ec && ec.map((element: any, index: any) => {
                   return(
                     <Option key={index} value={element.id_ec}>
                       { `${element.nom_ec} -  ${element.id_ue}` }
                     </Option>
                   )
-                })
-              }
-          </Select>
-          {ecError && <div className="text-red-500 text-xs">{ecError}</div>}
-          <label htmlFor='id_annee' >Année universitaire : </label> <br />
-          <Select
-            value={selectedAnneeId}
-            onChange={handleSelectAnneeChange}
-            className={anneeError ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            <Option value="">Sélectionnez une année</Option>
-              {
-                annee.map((ann, index) => {
+                })}
+              </Select>
+            )}
+          />
+          {errors?.ec && <div className="text-red-500 text-xs">{errors?.ec?.message}</div>}
+          <Label htmlFor='annee' className='mb-1 mt-4'>Année universitaire : </Label>
+          <Controller 
+            control={control}
+            name='annee'
+            render={({ field: { value, onChange } }) => (
+              <Select
+                value={value}
+                onChange={onChange}
+                className={errors?.annee ? 'border w-full my-1 border-red-500' : 'w-full my-1' }
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input: any, option: any) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                <Option value="">Sélectionnez une année</Option>
+                { anneeLoading && <Option value=""><LoadingOutlined /></Option>}
+                { annee && annee.map((ann: any, index: any) => {
                   return(
                     <Option key={index} value={ann.id_annee}>
                       { `${ann.id_annee}` }
                     </Option>
                   )
-                })
-              }
-          </Select>
-          {anneeError && <div className="text-red-500 text-xs">{anneeError}</div>}
-        </form>
-        <div className='flex justify-end my-3'>
-            <Link to='/note'>
-              <button className='text-black border-black border mx-2 py-2 px-4 text-sm  rounded focus:outline-none'>RETOUR</button>
-            </Link>
-            <button onClick={handleSubmit} className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'> CONFIRMER </button>
+                })}
+              </Select>
+            )}
+          />
+          {errors?.annee && <div className="text-red-500 text-xs">{errors?.annee?.message}</div>}
+          <div className='flex justify-end my-4 gap-1'>
+            <Button variant={'secondary'}>
+              <Link to='/admin/note'>Retour</Link>
+            </Button>
+            <Button type='submit'>
+                Suivant
+            </Button>
           </div>
+        </form>
       </div>
     </div>
   );
