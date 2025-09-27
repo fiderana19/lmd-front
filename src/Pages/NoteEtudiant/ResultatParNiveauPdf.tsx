@@ -1,70 +1,43 @@
 import { useState, useEffect, FunctionComponent } from 'react'
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import Navigation from '@/components/navigation/Navigation';
+import { invertLetter } from '@/utils/Format';
+import { usePostResultNiveauFinal } from '@/hooks/usePostResultNiveauFinal';
+import { usePostResultNiveauInfo } from '@/hooks/usePostResultNiveauInfo';
 
 const ResultatParNiveauPdf: FunctionComponent = () => {
-  let params = useParams()
-  let [resultFinal, setResultFinal] = useState([]);
-  let [resultInfo, setResultInfo] = useState([]);
-  let [annee, setAnnee] = useState(transformLetter(params.annee));
-  let [niveau, setNiveau] = useState(params.niveau);
-  let [obs, setObs] = useState(params.obs);
-  const [formData, setFormData] = useState({ id_niveau: niveau, id_annee: annee, obs: obs});
-   
-  function transformLetter(lettre){
-    let tableau = lettre.split('')
-    for (let index = 0; index < tableau.length; index++) {
-      const element = tableau[index];
-      if (element == '-') {
-        tableau[index] = '/'
-      }
-    }
-    let result = tableau.join('')
-    return result
-  }
-  useEffect(() => {      
-    //Getting the student unity
-    window.print()
-    async function getInfo() {
-      try {
-        const response = await axios({
-        method: 'post',
-        url: 'http://localhost:3002/result/niveau/info',
-        data: formData,
-        }); 
-        setResultInfo(response.data[0]);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-      }
-    }
-    getInfo()
+  let params = useParams();
+  const annee = params?.annee ? invertLetter(params.annee) : '';
+  const niveau = params.niveau ? Number(params.niveau) : 0;
+  const obs = params.obs ? params?.obs : '';
+  const formData = { id_niveau: niveau, id_annee: annee, obs: obs};
+  const { mutateAsync: getResultInfo } = usePostResultNiveauInfo();
+  const { mutateAsync: getResultFinal } = usePostResultNiveauFinal();
 
-    //Getting the student final result
-    async function getFinal() {
-      try {
-        const response = await axios({
-          method: 'post',
-          url: 'http://localhost:3002/result/niveau/final',
-          data: formData,
-        }); 
-        setResultFinal(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-      }
+  const [resultFinal, setResultFinal] = useState<any>();
+  const [resultInfo, setResultInfo] = useState<any>();
+   
+  useEffect(() => {      
+    async function fetch() {
+      const i = await getResultInfo(formData);
+      setResultInfo(i?.data[0]);
+      const f = await getResultFinal(formData);
+      setResultFinal(f?.data);
     }
-    getFinal()
-  }, [])
+    fetch()
+    window.print()
+  }, [annee, niveau, obs])
 
   return (
     <div>
-      <Navigation />
       <div className='py-1'>
         <div className='px-4'>
           <div className=' text-center'>
             <div className='text-lg font-bold font-lato'>UNIVERSITE DE FIANARANTSOA</div>
             <div className=' text-lg font-bold font-lato'>ECOLE NATIONALE D'INFORMATIQUE</div>
+            {
+              resultInfo &&
             <div className='text-right mt-4'>ANNEE UNIVERSITAIRE : { resultInfo.id_annee }</div>
+            }
             <div className='underline text-xl font-bold font-lato my-1'>LISTE DES ETUDIANTS { obs }</div>
           </div>        
           {
@@ -92,7 +65,7 @@ const ResultatParNiveauPdf: FunctionComponent = () => {
                 <tbody className='bg-white divide-y divide-gray-200'>
                 {
                   resultFinal &&
-                  resultFinal.map((final, index) => {
+                  resultFinal.map((final: any, index: any) => {
                     return(
                     <tr key={index} >
                       <td className='px-6 whitespace-nowrap text-sm leading-5 text-gray-900'> { final.matricule } </td>
