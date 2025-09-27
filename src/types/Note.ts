@@ -1,40 +1,40 @@
 export type CreateNote = {
-    valeur: number, 
-    id_etudiant: string, 
-    id_niveau: string, 
-    id_ec: string, 
-    id_annee: string
-}
+  valeur: number;
+  id_etudiant: string;
+  id_niveau: string;
+  id_ec: string;
+  id_annee: string;
+};
 
 export type EditNote = {
-    id_note: number, 
-    valeur: number, 
-    id_etudiant: string, 
-    id_niveau: string, 
-    id_ec: string, 
-    id_annee: string
-}
+  id_note: number;
+  valeur: number;
+  id_etudiant: string;
+  id_niveau: string;
+  id_ec: string;
+  id_annee: string;
+};
 
 export type CreateGlobalNote = {
-    niveau: string;
-    ec: string;
-    annee: string;
-}
+  niveau: string;
+  ec: string;
+  annee: string;
+};
 
 export type NoteByNiveau = {
-    id_niveau: number;
-    id_ec: number;
-    id_annee: string;
-}
+  id_niveau: number;
+  id_ec: number;
+  id_annee: string;
+};
 
 export type NoteEtudiantSearch = {
-    id_niveau: number;
-    id_etudiant: number;
-    id_annee: string;
-}
+  id_niveau: number;
+  id_etudiant: number;
+  id_annee: string;
+};
 
 export type ResultNiveauSearch = {
-    id_niveau: number;
-    id_annee: string;
-    obs: string;
-}
+  id_niveau: number;
+  id_annee: string;
+  obs: string;
+};

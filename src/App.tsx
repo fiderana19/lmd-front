@@ -32,38 +32,47 @@ import AdminNotFound from "./Pages/AdminNotFound";
 
 function App() {
   return (
-        <Routes>
-            <Route index element={<Login/>}/>
-            <Route path="*" element={<NotFound/>}/>
-            <Route path="/unauthorized" element={<Unauthorized/>}/>
-            <Route path="/admin/" element={<ProtectedRoute/>}>
-              <Route path='addglobal/note/:ec/:niveau/:annee' element={<AddNoteGlobal />}/>
-              <Route path='addnote' element={<AddNotePerso />}/>
-              <Route path="home" element={<Home/>}/>
-              <Route path='etudiant/create' element={<AddEtudiant/>}/>
-              <Route path='etudiant/edit/:id' element={<EditEtudiant/>}/>
-              <Route path='etudiant/view/:id' element={<ViewEtudiant/>}/>
-              <Route path='etudiant' element={<Etudiant/>}/>
-              <Route path='niveau/create' element={<AddNiveau/>}/>
-              <Route path='niveau/view/:id' element={<ViewNiveau/>}/>
-              <Route path='niveau/edit/:id' element={<EditNiveau/>}/>
-              <Route path='niveau' element={<Niveau/>}/>
-              <Route path='note' element={<Note/>}/>
-              <Route path='ue/create' element={<AddUE/>}/>
-              <Route path='ue/edit/:id' element={<EditUE/>}/>
-              <Route path='ue' element={<UE/>}/>
-              <Route path='ec/create' element={<AddEC/>}/>
-              <Route path='ec/edit/:id' element={<EditEC/>}/>
-              <Route path='ec/view/:id' element={<ViewEC/>}/>
-              <Route path='ec' element={<EC/>}/>
-              <Route path='note/etudiant' element={<NoteEtudiant/>}/>
-              <Route path='note/result' element={<ResultatParNiveau/>}/>
-              <Route path='*' element={<AdminNotFound />} />
-              <Route path='releve/pdf/:id/:niveau/:annee' element={<NoteEtudiantPdf />}/>
-              <Route path='resultat/pdf/:obs/:niveau/:annee' element={<ResultatParNiveauPdf />}/>
-            </Route>
-        </Routes>
-  )
+    <Routes>
+      <Route index element={<Login />} />
+      <Route path="*" element={<NotFound />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/admin/" element={<ProtectedRoute />}>
+        <Route
+          path="addglobal/note/:ec/:niveau/:annee"
+          element={<AddNoteGlobal />}
+        />
+        <Route path="addnote" element={<AddNotePerso />} />
+        <Route path="home" element={<Home />} />
+        <Route path="etudiant/create" element={<AddEtudiant />} />
+        <Route path="etudiant/edit/:id" element={<EditEtudiant />} />
+        <Route path="etudiant/view/:id" element={<ViewEtudiant />} />
+        <Route path="etudiant" element={<Etudiant />} />
+        <Route path="niveau/create" element={<AddNiveau />} />
+        <Route path="niveau/view/:id" element={<ViewNiveau />} />
+        <Route path="niveau/edit/:id" element={<EditNiveau />} />
+        <Route path="niveau" element={<Niveau />} />
+        <Route path="note" element={<Note />} />
+        <Route path="ue/create" element={<AddUE />} />
+        <Route path="ue/edit/:id" element={<EditUE />} />
+        <Route path="ue" element={<UE />} />
+        <Route path="ec/create" element={<AddEC />} />
+        <Route path="ec/edit/:id" element={<EditEC />} />
+        <Route path="ec/view/:id" element={<ViewEC />} />
+        <Route path="ec" element={<EC />} />
+        <Route path="note/etudiant" element={<NoteEtudiant />} />
+        <Route path="note/result" element={<ResultatParNiveau />} />
+        <Route path="*" element={<AdminNotFound />} />
+        <Route
+          path="releve/pdf/:id/:niveau/:annee"
+          element={<NoteEtudiantPdf />}
+        />
+        <Route
+          path="resultat/pdf/:obs/:niveau/:annee"
+          element={<ResultatParNiveauPdf />}
+        />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import Typed from 'typed.js';
+import React, { useEffect, useRef } from "react";
+import Typed from "typed.js";
 
 const Typewriter = ({ text }: { text: string }) => {
   const typewriterRef = useRef(null);
