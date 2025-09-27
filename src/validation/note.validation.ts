@@ -28,3 +28,9 @@ export const NoteEtudiantSearchValidation = yup.object({
     id_etudiant: yup.number().required("Etudiant requis !"), 
     id_annee: yup.string().required("Année requis !"), 
 })
+
+export const ResultNiveauSearchValidation = yup.object({
+    id_niveau: yup.number().required("Niveau requis !"), 
+    id_annee: yup.string().required("Année requis !"), 
+    obs: yup.string().required("Critere requis !"), 
+})

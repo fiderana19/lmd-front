@@ -1,4 +1,4 @@
-import { NoteEtudiantSearch } from "@/types/Note";
+import { NoteEtudiantSearch, ResultNiveauSearch } from "@/types/Note";
 import { axiosAuthInstance } from "./Config"
 
 const RESULT_BASE_URL = `${import.meta.env.VITE_BASE_URL}/result`;
@@ -17,4 +17,12 @@ export const postEtudiantMarkForResult = async (data: NoteEtudiantSearch) => {
 
 export const postEtudiantFinalForResult = async (data: NoteEtudiantSearch) => {
     return await axiosAuthInstance.post(`${RESULT_BASE_URL}/etudiant/final`, data);
+}
+
+export const postResultNiveauInfo = async (data: ResultNiveauSearch) => {
+    return await axiosAuthInstance.post(`${RESULT_BASE_URL}/niveau/info`, data);
+}
+
+export const postResultNiveauFinal = async (data: ResultNiveauSearch) => {
+    return await axiosAuthInstance.post(`${RESULT_BASE_URL}/niveau/final`, data);
 }

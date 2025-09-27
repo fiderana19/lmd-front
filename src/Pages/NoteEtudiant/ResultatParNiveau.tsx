@@ -1,137 +1,48 @@
-import { useState, useEffect, FunctionComponent } from 'react'
-import { Button, Select } from 'antd'
+import { useState, FunctionComponent } from 'react'
+import { Select } from 'antd'
 import { FileOutlined } from '@ant-design/icons';
 import { Option } from 'antd/es/mentions';
-import axios from 'axios';
 import Navigation from '@/components/navigation/Navigation';
+import { useGetAllAnnee } from '@/hooks/useGetAllAnnee';
+import { useGetAllNiveau } from '@/hooks/useGetAllNiveau';
+import { ResultCritere } from '@/constants/Critere';
+import { Controller, useForm } from 'react-hook-form';
+import { ResultNiveauSearch } from '@/types/Note';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ResultNiveauSearchValidation } from '@/validation/note.validation';
+import { usePostResultNiveauInfo } from '@/hooks/usePostResultNiveauInfo';
+import { usePostResultNiveauFinal } from '@/hooks/usePostResultNiveauFinal';
+import { Button } from '@/components/ui/button';
+import { transformLetter } from '@/utils/Format';
 
 const ResultatParNiveau: FunctionComponent = () => {
-  const [anneeError, setAnneeError] = useState('');
-  const [obsError, setObsError] = useState('');
-  const [niveauError, setNiveauError] = useState('');
-  let [annee, setAnnee] = useState([]);
-  let [resultFinal, setResultFinal] = useState([]);
-  let [resultInfo, setResultInfo] = useState([]);
-  const [selectedAnneeId, setSelectedAnneeId] = useState(''); 
-  const [selectedCritere, setSelectedCritere] = useState(''); 
-  let [niveau, setNiveau] = useState([]);
-  let [critere, setCritere] = useState(["ADMIS", "EXCLUS", 'AUTORISE A PASSE AU NIVEAU SUPERIEUR','AUTORISER A REDOUBLER' ]);
-  const [selectedNiveauId, setSelectedNiveauId] = useState('');
-  let [isView, setIsView] = useState(false);
-  const [formData, setFormData] = useState({ id_niveau: "", id_annee: "", obs: ""});
+  const { data: annee } = useGetAllAnnee();
+  const { data: niveau } = useGetAllNiveau();
+  const [isView, setIsView] = useState<boolean>(false);
+  const { handleSubmit: search, formState: { errors }, control } = useForm<ResultNiveauSearch>({
+    resolver: yupResolver(ResultNiveauSearchValidation)
+  });
+  const { mutateAsync: getResultInfo } = usePostResultNiveauInfo();
+  const { mutateAsync: getResultFinal } = usePostResultNiveauFinal();
 
-  useEffect(() => {      
-    //fethcing all niveau item
-    async function fetchNiveau() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/niveau/',
-        }); 
-        setNiveau(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des niveaux :', error);
-      }
-    }
-    fetchNiveau(); 
-    //fethcing all annee item
-    async function fetchAnnee() {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://localhost:3002/annee/',
-        }); 
-        setAnnee(response.data);
-      } catch (error) {
-        console.error('AddNote : Erreur lors de la récupération des annees :', error);
-      }
-    }
-    fetchAnnee();
-  }, [])
+  const [resultFinal, setResultFinal] = useState<any>();
+  const [resultInfo, setResultInfo] = useState<any>();
+  const [selectedAnneeId, setSelectedAnneeId] = useState<string>(''); 
+  const [selectedCritere, setSelectedCritere] = useState<string>(''); 
+  const [selectedNiveauId, setSelectedNiveauId] = useState<number>();
 
-  function transformLetter(lettre){
-    let tableau = lettre.split('')
-    for (let index = 0; index < tableau.length; index++) {
-      const element = tableau[index];
-      if (element == '/') {
-        tableau[index] = '-'
-      }
-    }
-    let result = tableau.join('')
-    return result
+  const handleSubmit = async (data: ResultNiveauSearch) => {
+    const i = await getResultInfo(data);
+    setResultInfo(i?.data[0]);
+    const f = await getResultFinal(data);
+    setResultFinal(f?.data);
+
+    setIsView(true)
+
+    setSelectedAnneeId(data?.id_annee);
+    setSelectedNiveauId(data?.id_niveau);
+    setSelectedCritere(data?.obs)
   }
-  //handling the form submit
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setAnneeError('')
-    setNiveauError('')
-    setObsError('')
-
-    if(formData.id_annee == '' ) {
-      setAnneeError("Vous devez selectionner une année ! ")
-    }
-    if(formData.id_niveau == '' ) {
-      setNiveauError("Vous devez selectionner un niveau ! ")
-    }
-    if(formData.obs == '' ) {
-      setObsError("Vous devez selectionner un critère ! ")
-    }
-    if(formData.id_annee != '' && formData.id_niveau != '' && formData.obs != '') {
-      setIsView(true)
-      //Getting the student unity
-      async function getInfo() {
-        try {
-          const response = await axios({
-          method: 'post',
-          url: 'http://localhost:3002/result/niveau/info',
-          data: formData,
-          }); 
-          setResultInfo(response.data[0]);
-        } catch (error) {
-          console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-        }
-      }
-      getInfo()
-      //Getting the student final result
-      async function getFinal() {
-        try {
-          const response = await axios({
-            method: 'post',
-            url: 'http://localhost:3002/result/niveau/final',
-            data: formData,
-          }); 
-          setResultFinal(response.data);
-        } catch (error) {
-          console.error('AddNote : Erreur lors de la récupération des etudiants :', error);
-        }
-      }
-      getFinal()
-    }
-  }
-  //handling the select annee change
-  const handleSelectAnneeChange = (value) => {
-    setSelectedAnneeId(value);
-    setFormData({
-      ...formData,
-      id_annee: value,
-    });
-  };
-  //handling the select niveau change
-  const handleSelectNiveauChange = (value) => {
-    setSelectedNiveauId(value);
-    setFormData({
-      ...formData,
-      id_niveau: value,
-    });
-  };
-  //handling the select niveau change
-  const handleSelectCritereChange = (value) => {
-    setSelectedCritere(value);
-    setFormData({
-      ...formData,
-      obs: value,
-    });
-  };
 
   return (
     <div>
@@ -140,83 +51,101 @@ const ResultatParNiveau: FunctionComponent = () => {
         <div className='lg:px-5 px-1'>
           <div className='mb-10'>
             <div className='text-xl text-center font-bold font-lato'>RECHERCHER RESULTAT D'UN NIVEAU</div>
-              <div className='lg:flex block lg:justify-end text-center'>
+              <form onSubmit={search(handleSubmit)} className='lg:flex block lg:justify-end text-center items-center mt-2'>
                 <div className='mx-1'>
-                  <Select
-                    value={selectedNiveauId}
-                    onChange={handleSelectNiveauChange}
-                    className={niveauError ? 'border  md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    <Option value="">Sélectionnez un niveau</Option>
-                    {
-                      niveau.map((niv, index) => {
-                        return(
-                          <Option key={index} value={niv.id_niveau}>
-                            { `${niv.titre_niveau} ${niv.parcours}` }
-                          </Option>
-                        )
-                      })
-                    }
-                  </Select>
-                  {niveauError && <div className="text-red-500 text-xs">{niveauError}</div>}
+                  <Controller 
+                    control={control}
+                    name='id_niveau'
+                    render={({ field: { value, onChange } }) => (
+                      <Select
+                        value={value}
+                        onChange={onChange}
+                        className={errors?.id_niveau ? 'border  md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option: any) =>
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        <Option value="">Sélectionnez un niveau</Option>
+                        {
+                          niveau && niveau.map((niv: any, index: any) => {
+                            return(
+                              <Option key={index} value={niv.id_niveau}>
+                                { `${niv.titre_niveau} ${niv.parcours}` }
+                              </Option>
+                            )
+                          })
+                        }
+                      </Select>
+                    )}
+                  />
+                  {errors?.id_niveau && <div className="text-red-500 text-xs">{errors?.id_niveau.message}</div>}
                 </div>
                 <div className='mx-1'>
-                  <Select
-                    value={selectedAnneeId}
-                    onChange={handleSelectAnneeChange}
-                    className={anneeError ? 'border md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    <Option value="">Sélectionnez une année</Option>
-                    {
-                      annee.map((ann, index) => {
-                        return(
-                          <Option key={index} value={ann.id_annee}>
-                            { `${ann.id_annee}` }
-                          </Option>
-                        )
-                      })
-                    }
-                  </Select>
-                  {anneeError && <div className="text-red-500 text-xs">{anneeError}</div>}
+                  <Controller 
+                    control={control}
+                    name='id_annee'
+                    render={({ field: { value, onChange } }) => (
+                      <Select
+                        value={value}
+                        onChange={onChange}
+                        className={errors?.id_annee ? 'border md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option: any) =>
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        <Option value="">Sélectionnez une année</Option>
+                        {
+                          annee && annee.map((ann: any, index: any) => {
+                            return(
+                              <Option key={index} value={ann.id_annee}>
+                                { `${ann.id_annee}` }
+                              </Option>
+                            )
+                          })
+                        }
+                      </Select>
+                    )}
+                  />
+                  {errors?.id_annee && <div className="text-red-500 text-xs">{errors?.id_annee?.message}</div>}
                 </div>
                 <div className='mx-1'>
-                  <Select
-                    value={selectedCritere}
-                    onChange={handleSelectCritereChange}
-                    className={obsError ? 'border md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    <Option value="">Sélectionnez une critere</Option>
-                    {
-                      critere.map((ann, index) => {
-                        return(
-                          <Option key={index} value={ann}>
-                            { `${ann}` }
-                          </Option>
-                        )
-                      })
-                    }
-                  </Select>
-                  {obsError && <div className="text-red-500 text-xs">{obsError}</div>}
+                  <Controller 
+                    control={control}
+                    name='obs'
+                    render={({ field: { value, onChange } }) => (
+                      <Select
+                        value={value}
+                        onChange={onChange}
+                        className={errors?.obs ? 'border md:w-56 w-full my-1 border-red-500' : 'md:w-56 w-full my-1' }
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option: any) =>
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        <Option value="">Sélectionnez une critere</Option>
+                        {
+                          ResultCritere.map((ann, index: any) => {
+                            return(
+                              <Option key={index} value={ann}>
+                                { `${ann}` }
+                              </Option>
+                            )
+                          })
+                        }
+                      </Select>
+                    )}
+                  />
+                  {errors?.obs && <div className="text-red-500 text-xs">{errors?.obs?.message}</div>}
                 </div>
                 <div className='md:block flex justify-center mx-1'>
-                  <button onClick={handleSubmit} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500'>RECHERCHER</button>
+                  <Button type='submit'>Rechercher</Button>
                 </div>
-              </div>
+              </form>
             </div>
             {isView && 
               <div>
@@ -229,15 +158,15 @@ const ResultatParNiveau: FunctionComponent = () => {
                       </div>
                     <div className='flex'>
                       <div className='font-bold underline mr-2'> Mention: </div>
-                      <div> { resultInfo.mention } </div>
+                      <div> { resultInfo?.mention } </div>
                     </div>
                     <div className='flex'>
                       <div className='font-bold underline mr-2'> Parcours:</div>
-                      <div> { resultInfo.parcours }</div>
+                      <div> { resultInfo?.parcours }</div>
                     </div>
                     <div className='flex'>
                       <div className='font-bold underline mr-2'> Niveau:</div>
-                      <div> { resultInfo.titre_niveau }</div>
+                      <div> { resultInfo?.titre_niveau }</div>
                     </div>
                     <div className='text-right'>Année universitaire: { resultInfo.id_annee }</div>
                   </div>
@@ -254,7 +183,7 @@ const ResultatParNiveau: FunctionComponent = () => {
                     <tbody className='bg-white divide-y divide-gray-200'>
                       {
                         resultFinal &&
-                        resultFinal.map((final, index) => {
+                        resultFinal.map((final: any, index: any) => {
                           return(
                           <tr key={index} >
                             <td className='sm:px-6 px-2 py-4 sm:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { final.matricule } </td>
@@ -267,7 +196,7 @@ const ResultatParNiveau: FunctionComponent = () => {
                   </table>
                 </div>
                 <div className='flex justify-end my-10'>
-                  <a href={`/resultat/pdf/${selectedCritere}/${selectedNiveauId}/${transformLetter(selectedAnneeId)}`} target='_blank'>
+                  <a href={`/admin/resultat/pdf/${selectedCritere}/${selectedNiveauId}/${transformLetter(selectedAnneeId)}`} target='_blank'>
                     <button className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'> <FileOutlined /> GENERER LE RESULTAT </button>
                   </a>
                 </div>

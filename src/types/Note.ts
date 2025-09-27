@@ -32,3 +32,9 @@ export type NoteEtudiantSearch = {
     id_etudiant: number;
     id_annee: string;
 }
+
+export type ResultNiveauSearch = {
+    id_niveau: number;
+    id_annee: string;
+    obs: string;
+}
