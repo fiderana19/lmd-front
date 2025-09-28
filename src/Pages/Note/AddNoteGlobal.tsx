@@ -1,6 +1,6 @@
 import { Select, Card } from "antd";
 import { Option } from "antd/es/mentions";
-import { useState, useEffect, FunctionComponent } from "react";
+import { useState, useEffect, FunctionComponent, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import {
   CloseCircleFilled,
@@ -9,7 +9,7 @@ import {
   LoadingOutlined,
 } from "@ant-design/icons";
 import { handleFloatKeyPress } from "@/utils/handleKeyPress";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 import { invertLetter } from "@/utils/Format";
 import { useGetAllEtudiant } from "@/hooks/useGetAllEtudiant";
 import { useGetNiveauById } from "@/hooks/useGetNiveauById";
@@ -69,7 +69,9 @@ const AddNoteGlobal: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="mx-auto pb-5 pt-24 sm:px-10 px-5">
         <div className="lg:whitespace-nowrap whitespace-normal uppercase flex justify-center text-2xl font-bold font-lato">
           NOTE {element?.nom_ec} DES ETUDIANTS {niv?.titre_niveau} EN ANNEE{" "}

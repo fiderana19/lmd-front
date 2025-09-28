@@ -1,5 +1,5 @@
 import { Select } from "antd";
-import { FunctionComponent } from "react";
+import { FunctionComponent, lazy, Suspense } from "react";
 import {
   handleFloatKeyPress,
   handleNumberKeyPress,
@@ -16,7 +16,7 @@ import { usePostEC } from "@/hooks/usePostEC";
 import { useGetAllEC } from "@/hooks/useGetAllEC";
 import { useNavigate } from "react-router-dom";
 import { CreateECType } from "@/types/EC";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const { Option } = Select;
 
@@ -44,7 +44,9 @@ const AddEC: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24 bg-gray-100 min-h-screen">
         <div className="text-3xl mx-auto w-max font-bold">
           NOUVEAU ELEMENT CONSTITUTIF

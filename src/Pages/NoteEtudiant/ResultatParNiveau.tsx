@@ -1,8 +1,8 @@
-import { useState, FunctionComponent } from "react";
+import { useState, FunctionComponent, Suspense, lazy } from "react";
 import { Select } from "antd";
-import { FileOutlined } from "@ant-design/icons";
+import { FileOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { ResultCritere } from "@/constants/Critere";
@@ -50,7 +50,9 @@ const ResultatParNiveau: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24">
         <div className="lg:px-5 px-1">
           <div className="mb-10">

@@ -1,5 +1,5 @@
-import { FunctionComponent } from "react";
-import Typewriter from "../components/Typewritter";
+import { FunctionComponent, lazy, Suspense } from "react";
+const Typewriter = lazy(() => import("../components/Typewritter"));
 import Bg from "../assets/pic/home-bg.jpg";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { LoginType } from "../types/User";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginValidation } from "@/validation/user.validation";
 import { useAuth } from "@/context/AuthContext";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const Login: FunctionComponent = () => {
   const {
@@ -35,7 +36,9 @@ const Login: FunctionComponent = () => {
             <img src={Bg} className="w-48" />
           </div>
           <div className="sm:text-3xl text-2xl text-center sm:text-left font-bold font-lato">
-            <Typewriter text={text} />
+            <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+              <Typewriter text={text} />
+            </Suspense>
           </div>
         </div>
         <div className="bg-gray-400 w-1/3 flex flex-col justify-center">

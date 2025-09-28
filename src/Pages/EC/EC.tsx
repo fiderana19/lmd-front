@@ -1,4 +1,4 @@
-import { useState, FunctionComponent, useEffect } from "react";
+import { useState, FunctionComponent, useEffect, lazy, Suspense } from "react";
 import { Card } from "antd";
 import {
   EditOutlined,
@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const EC: FunctionComponent = () => {
   const {
@@ -50,7 +50,9 @@ const EC: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24">
         <div className="px-10">
           <div className="block sm:flex justify-between">

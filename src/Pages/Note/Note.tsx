@@ -1,4 +1,4 @@
-import { useState, FunctionComponent } from "react";
+import { useState, FunctionComponent, Suspense, lazy } from "react";
 import { Dropdown, Modal, Card } from "antd";
 import {
   UserOutlined,
@@ -14,10 +14,10 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import AddNote from "./AddNote";
+const AddNote = lazy(() => import("./AddNote"));
 import Bg from "../../assets/pic/home-bg.jpg";
 import { handleFloatKeyPress } from "@/utils/handleKeyPress";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 import { useGetAllNote } from "../../hooks/useGetAllNote";
 import { EditNote } from "@/types/Note";
 import { Controller, useForm } from "react-hook-form";
@@ -122,7 +122,9 @@ const Note: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24">
         <div className="px-10">
           <div className="flex justify-between">
@@ -152,7 +154,9 @@ const Note: FunctionComponent = () => {
             onCancel={() => setIsAddModalOpen(false)}
             footer={null}
           >
-            <AddNote />
+            <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+              <AddNote />
+            </Suspense>
           </Modal>
           <div className="my-7 grid gap-2 justify-center grid-cols-customized"></div>
           <div className="sm:block hidden">

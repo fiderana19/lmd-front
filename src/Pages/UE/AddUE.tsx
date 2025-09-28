@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, lazy, Suspense } from "react";
 import { useGetAllUE } from "@/hooks/useGetAllUE";
 import { usePostUE } from "@/hooks/usePostUE";
 import { Controller, useForm } from "react-hook-form";
@@ -11,7 +11,7 @@ import { handleNumberKeyPress } from "@/utils/handleKeyPress";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LoadingOutlined } from "@ant-design/icons";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const AddUE: FunctionComponent = () => {
   const { refetch: refetchUE } = useGetAllUE();
@@ -36,7 +36,9 @@ const AddUE: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24 bg-gray-100 min-h-screen">
         <div className="text-3xl mx-auto w-max font-bold">
           NOUVEAU UNITE D'ENSEIGNEMENT

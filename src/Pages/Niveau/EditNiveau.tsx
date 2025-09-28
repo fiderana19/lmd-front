@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, lazy, Suspense, useEffect } from "react";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { Controller, useForm } from "react-hook-form";
 import { EditNiveauType } from "@/types/Niveau";
@@ -11,7 +11,7 @@ import { useGetNiveauById } from "@/hooks/useGetNiveauById";
 import { usePatchNiveau } from "@/hooks/usePatchNiveau";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EditNiveauValidation } from "@/validation/niveau.validation";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const EditNiveau: FunctionComponent = () => {
   const req = useParams();
@@ -49,7 +49,9 @@ const EditNiveau: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24 bg-gray-100 min-h-screen">
         <div className="text-3xl mx-auto w-max font-bold">MODIFIER NIVEAU</div>
         {niveauLoading && <LoadingOutlined className="text-3xl" />}

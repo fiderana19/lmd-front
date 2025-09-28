@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, lazy, Suspense } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button } from "@/components/ui/button";
 import { useGetAllEC } from "@/hooks/useGetAllEC";
@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useDeleteEC } from "@/hooks/useDeleteEC";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const ViewEC: FunctionComponent = () => {
   const req = useParams();
@@ -38,7 +38,9 @@ const ViewEC: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24 bg-gray-100 min-h-screen">
         {ecLoading && (
           <div className="my-4 mx-auto w-max">

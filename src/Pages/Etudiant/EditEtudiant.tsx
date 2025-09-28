@@ -1,5 +1,5 @@
 import { DatePicker } from "antd";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, lazy, Suspense, useEffect } from "react";
 import dayjs from "dayjs";
 import { Input } from "@/components/ui/input";
 import { Controller, useForm } from "react-hook-form";
@@ -13,7 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useGetEtudiantById } from "@/hooks/useGetEtudiantById";
 import { usePatchEtudiant } from "@/hooks/usePatchEtudiant";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const EditEtudiant: FunctionComponent = () => {
   const req = useParams();
@@ -52,7 +52,9 @@ const EditEtudiant: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24 bg-gray-100 min-h-screen">
         <div className="text-3xl mx-auto w-max font-bold">
           MODIFER UN ETUDIANT

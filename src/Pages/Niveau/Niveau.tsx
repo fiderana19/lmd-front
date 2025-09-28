@@ -1,4 +1,4 @@
-import { useState, FunctionComponent } from "react";
+import { useState, FunctionComponent, Suspense, lazy } from "react";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -22,7 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const Niveau: FunctionComponent = () => {
   const { data: niveau, isLoading, refetch: refecthNiveau } = useGetAllNiveau();
@@ -41,7 +41,9 @@ const Niveau: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24">
         <div className="px-10">
           <div className="block sm:flex justify-between">

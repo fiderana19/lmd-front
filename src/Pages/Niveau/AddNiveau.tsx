@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import { FunctionComponent, lazy, Suspense } from "react";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { usePostNiveau } from "@/hooks/usePostNiveau";
 import { Controller, useForm } from "react-hook-form";
@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateNiveauValidation } from "@/validation/niveau.validation";
 import { useNavigate } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const AddNiveau: FunctionComponent = () => {
   const { refetch: refetchNiveau } = useGetAllNiveau();
@@ -37,7 +37,9 @@ const AddNiveau: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24 bg-gray-100 min-h-screen">
         <div className="text-3xl mx-auto w-max font-bold">NOUVEAU NIVEAU</div>
         <form

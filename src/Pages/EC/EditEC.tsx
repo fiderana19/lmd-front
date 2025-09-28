@@ -1,5 +1,5 @@
 import { Select } from "antd";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, lazy, Suspense, useEffect } from "react";
 import {
   handleFloatKeyPress,
   handleNumberKeyPress,
@@ -17,7 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useGetECById } from "@/hooks/useGetECById";
 import { usePatchEC } from "@/hooks/usePatchEC";
 import { EditECType } from "@/types/EC";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const { Option } = Select;
 
@@ -53,7 +53,9 @@ const EditEC: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24 bg-gray-100 min-h-screen">
         <div className="text-3xl mx-auto w-max font-bold">
           MODIFIER UN ELEMENT CONSTITUTIF

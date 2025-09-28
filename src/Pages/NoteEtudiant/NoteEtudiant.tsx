@@ -1,12 +1,13 @@
-import { useState, FunctionComponent } from "react";
+import { useState, FunctionComponent, Suspense, lazy } from "react";
 import { Select } from "antd";
 import {
   CheckCircleFilled,
   CloseCircleFilled,
   FileOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 import { useGetAllEtudiant } from "@/hooks/useGetAllEtudiant";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
@@ -63,7 +64,9 @@ const NoteEtudiant: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="pb-5 pt-24">
         <div className="lg:px-5 px-1">
           <div className="text-xl text-center font-bold font-lato mb-3">

@@ -1,8 +1,8 @@
 import { Select } from "antd";
 import { Option } from "antd/es/mentions";
-import { FunctionComponent } from "react";
+import { FunctionComponent, lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navigation from "@/components/navigation/Navigation";
+const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { useGetAllEC } from "@/hooks/useGetAllEC";
 import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
@@ -36,7 +36,9 @@ const AddNotePerso: FunctionComponent = () => {
 
   return (
     <div>
-      <Navigation />
+      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
+        <Navigation />
+      </Suspense>
       <div className="md:w-1/3 w-4/5 mx-auto pb-5 pt-24">
         <h1 className="text-xl font-bold font-lato text-center my-5">
           AJOUT GLOBAL DES NOTES
