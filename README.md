@@ -1,55 +1,136 @@
-# React + TypeScript + Vite
+# 💻 LMD
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+LMD is a React, TypeScript, and Vite application designed to manage marks and universitary result following the LMD cycle. This app allows the store's agent to log in and manage the marks. The application is still a work in progress, with ongoing improvements to the source code, new features, and updates.
 
-Currently, two official plugins are available:
+-----
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+The LMD app has several key features, including:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+  * Managing students.
+  * Managing unity of study.
+  * Managing levels.
+  * Managing items of study.
+  * Managing marks.
+  * Searching results.
+  * PDF generation.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+The app also incorporates features for better performance and user experience, such as:
+
+  * Form handling with validation.
+  * Lazy loading.
+  * Data caching.
+  * Clean code structure.
+
+-----
+
+## 🚧 Status
+
+The application is still in progress for a better source code, new features, and updates.
+
+-----
+
+## Getting Started
+
+### Prerequisites
+
+* Node.js
+* npm or yarn
+
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone <repository_url>
+    cd <repository_name>
+    ```
+2.  Install the required modules. Be sure to execute the following command for modules installation:
+    ```bash
+    npm install
+    ```
+    or
+    ```bash
+    yarn
+    ```
+
+### Running the App
+
+Run the application with the following command:
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+-----
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Login Page
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
-# shadcn-study
+The home page is a login form to access the app features with an account.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/login.png?raw=true" alt="Login" width="800"/>
+</p>
+
+-----
+
+## 🔒 Admin space
+
+This application is an admin-only application.
+
+* **Home Page**: A greeting is displayed upon login.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/home.png?raw=true" alt="Home" width="800"/>
+</p>
+
+* **Student Page**: A dedicated page where can managed the students informations.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/student.png?raw=true" alt="Student page." width="800"/>
+</p>
+
+* **Level Page**: A dedicated page where can managed the levels informations.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/level.png?raw=true" alt="Level page." width="800"/>
+</p>
+
+* **Item of study Page**: A dedicated page where can managed the items of study informations.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/item.png?raw=true" alt="Item of study page." width="800"/>
+</p>
+
+* **Unity Page**: A dedicated page where can managed the unity informations.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/unity.png?raw=true" alt="Unity page." width="800"/>
+</p>
+
+* **Mark Page**: A dedicated page where can managed the marks informations.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/mark.png?raw=true" alt="Mark page." width="800"/>
+</p>
+
+-----
+
+## Result search and generation
+
+* **Student Result**: A student's result for a year at a level can be searched and generated to PDF.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/result_student.png?raw=true" alt="Student Result." width="800"/>
+</p>
+
+* **Level Result**: A level's result for a year with an observation can be searched and generated to PDF.
+
+<p align="center">
+<img src="https://github.com/fiderana19/lmd-front/blob/feat/readme/src/assets/readme/result_level.png?raw=true" alt="Level Result." width="800"/>
+</p>
+
+-----
+
+## ⭐️ Star
+
+Don't hesitate to give a star, it will gives me a motivation for my projects and my progress.
