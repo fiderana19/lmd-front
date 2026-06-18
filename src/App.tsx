@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import { LoadingOutlined } from "@ant-design/icons";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+const AdminLayout = lazy(() => import("@/components/shared/AdminLayout"));
 const Home = lazy(() => import("./Pages/Home"));
 const NoteEtudiantPdf = lazy(() => import("./Pages/NoteEtudiant/NoteEtudiantPdf"));
 const ResultatParNiveauPdf = lazy(() => import("./Pages/NoteEtudiant/ResultatParNiveauPdf"));
@@ -30,46 +31,43 @@ const ProtectedRoute = lazy(() => import("./routes/ProtectedRoute"));
 const Unauthorized = lazy(() => import("./Pages/Unauthorized"));
 const AdminNotFound = lazy(() => import("./Pages/AdminNotFound"));
 
+const S = ({ children }: { children: React.ReactNode }) => (
+  <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
+);
+
 function App() {
   return (
     <Routes>
-      <Route index element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><Login /></Suspense>} />
-      <Route path="*" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><NotFound /></Suspense>} />
-      <Route path="/unauthorized" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><Unauthorized /></Suspense>} />
-      <Route path="/admin/" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><ProtectedRoute /></Suspense>}>
-        <Route
-          path="addglobal/note/:ec/:niveau/:annee"
-          element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><AddNoteGlobal /></Suspense>}
-        />
-        <Route path="addnote" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><AddNotePerso /></Suspense>} />
-        <Route path="home" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><Home /></Suspense>} />
-        <Route path="etudiant/create" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><AddEtudiant /></Suspense>} />
-        <Route path="etudiant/edit/:id" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><EditEtudiant /></Suspense>} />
-        <Route path="etudiant/view/:id" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><ViewEtudiant /></Suspense>} />
-        <Route path="etudiant" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><Etudiant /></Suspense>} />
-        <Route path="niveau/create" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><AddNiveau /></Suspense>} />
-        <Route path="niveau/view/:id" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><ViewNiveau /></Suspense>} />
-        <Route path="niveau/edit/:id" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><EditNiveau /></Suspense>} />
-        <Route path="niveau" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><Niveau /></Suspense>} />
-        <Route path="note" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><Note /></Suspense>} />
-        <Route path="ue/create" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><AddUE /></Suspense>} />
-        <Route path="ue/edit/:id" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><EditUE /></Suspense>} />
-        <Route path="ue" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><UE /></Suspense>} />
-        <Route path="ec/create" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><AddEC /></Suspense>} />
-        <Route path="ec/edit/:id" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><EditEC /></Suspense>} />
-        <Route path="ec/view/:id" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><ViewEC /></Suspense>} />
-        <Route path="ec" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><EC /></Suspense>} />
-        <Route path="note/etudiant" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><NoteEtudiant /></Suspense>} />
-        <Route path="note/result" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><ResultatParNiveau /></Suspense>} />
-        <Route path="*" element={<Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}><AdminNotFound /></Suspense>} />
-        <Route
-          path="releve/pdf/:id/:niveau/:annee"
-          element={<NoteEtudiantPdf />}
-        />
-        <Route
-          path="resultat/pdf/:obs/:niveau/:annee"
-          element={<ResultatParNiveauPdf />}
-        />
+      <Route index element={<S><Login /></S>} />
+      <Route path="*" element={<S><NotFound /></S>} />
+      <Route path="/unauthorized" element={<S><Unauthorized /></S>} />
+      <Route path="/admin/" element={<S><ProtectedRoute /></S>}>
+        <Route element={<S><AdminLayout /></S>}>
+          <Route path="home" element={<S><Home /></S>} />
+          <Route path="etudiant" element={<S><Etudiant /></S>} />
+          <Route path="etudiant/create" element={<S><AddEtudiant /></S>} />
+          <Route path="etudiant/edit/:id" element={<S><EditEtudiant /></S>} />
+          <Route path="etudiant/view/:id" element={<S><ViewEtudiant /></S>} />
+          <Route path="niveau" element={<S><Niveau /></S>} />
+          <Route path="niveau/create" element={<S><AddNiveau /></S>} />
+          <Route path="niveau/edit/:id" element={<S><EditNiveau /></S>} />
+          <Route path="niveau/view/:id" element={<S><ViewNiveau /></S>} />
+          <Route path="note" element={<S><Note /></S>} />
+          <Route path="ue" element={<S><UE /></S>} />
+          <Route path="ue/create" element={<S><AddUE /></S>} />
+          <Route path="ue/edit/:id" element={<S><EditUE /></S>} />
+          <Route path="ec" element={<S><EC /></S>} />
+          <Route path="ec/create" element={<S><AddEC /></S>} />
+          <Route path="ec/edit/:id" element={<S><EditEC /></S>} />
+          <Route path="ec/view/:id" element={<S><ViewEC /></S>} />
+          <Route path="note/etudiant" element={<S><NoteEtudiant /></S>} />
+          <Route path="note/result" element={<S><ResultatParNiveau /></S>} />
+          <Route path="addnote" element={<S><AddNotePerso /></S>} />
+          <Route path="addglobal/note/:ec/:niveau/:annee" element={<S><AddNoteGlobal /></S>} />
+          <Route path="*" element={<S><AdminNotFound /></S>} />
+        </Route>
+        <Route path="releve/pdf/:id/:niveau/:annee" element={<NoteEtudiantPdf />} />
+        <Route path="resultat/pdf/:obs/:niveau/:annee" element={<ResultatParNiveauPdf />} />
       </Route>
     </Routes>
   );

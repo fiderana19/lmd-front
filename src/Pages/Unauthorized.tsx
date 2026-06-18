@@ -1,15 +1,13 @@
-import { Button } from "@/components/ui/button";
-import React, { FunctionComponent } from "react";
+import ErrorPage from "@/components/shared/ErrorPage";
 
-const Unauthorized: FunctionComponent = () => {
-  return (
-    <div className="container text-center add py-4">
-      <h1 className="text-black">Page non autorisé ! </h1>
-      <Button variant={"link"}>
-        <a href="/">Page d'acceuil</a>
-      </Button>
-    </div>
-  );
-};
+const Unauthorized = () => (
+  <ErrorPage
+    code="403"
+    title="Page non autorisée"
+    message="Vous n'avez pas les droits nécessaires pour accéder à cette page."
+    actionLabel="Page d'accueil"
+    actionHref="/"
+  />
+);
 
 export default Unauthorized;

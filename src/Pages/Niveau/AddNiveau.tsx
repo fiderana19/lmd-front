@@ -1,6 +1,4 @@
-import { FunctionComponent, lazy, Suspense } from "react";
-import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
-import { usePostNiveau } from "@/hooks/usePostNiveau";
+import { FunctionComponent } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { CreateNiveauType } from "@/types/Niveau";
 import { Label } from "@/components/ui/label";
@@ -8,24 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateNiveauValidation } from "@/validation/niveau.validation";
+import { usePostNiveau } from "@/hooks/usePostNiveau";
+import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { useNavigate } from "react-router-dom";
-import { LoadingOutlined } from "@ant-design/icons";
-const Navigation = lazy(() => import("@/components/navigation/Navigation"));
+import { LoadingOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import FormCard from "@/components/shared/FormCard";
 
 const AddNiveau: FunctionComponent = () => {
   const { refetch: refetchNiveau } = useGetAllNiveau();
-  const { mutateAsync: createNiveau, isPending: createLoading } = usePostNiveau(
-    {
-      action() {
-        refetchNiveau();
-      },
-    },
-  );
-  const {
-    handleSubmit: submit,
-    formState: { errors },
-    control,
-  } = useForm<CreateNiveauType>({
+  const { mutateAsync: createNiveau, isPending: createLoading } = usePostNiveau({
+    action() { refetchNiveau(); },
+  });
+  const { handleSubmit: submit, formState: { errors }, control } = useForm<CreateNiveauType>({
     resolver: yupResolver(CreateNiveauValidation),
   });
   const navigate = useNavigate();
@@ -36,125 +28,29 @@ const AddNiveau: FunctionComponent = () => {
   };
 
   return (
-    <div>
-      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
-        <Navigation />
-      </Suspense>
-      <div className="pb-5 pt-24 bg-gray-100 min-h-screen">
-        <div className="text-3xl mx-auto w-max font-bold">NOUVEAU NIVEAU</div>
-        <form
-          className="p-7 mx-auto w-80 bg-white rounded mt-4"
-          onSubmit={submit(createNiveauSubmit)}
-        >
-          <Label htmlFor="titre_niveau" className="mb-1">
-            Titre :{" "}
-          </Label>
-          <Controller
-            control={control}
-            name="titre_niveau"
-            render={({ field: { value, onChange } }) => (
-              <Input
-                value={value}
-                onChange={onChange}
-                className={`${errors.titre_niveau && "border border-red-500 text-red-500 rounded"}`}
-              />
-            )}
-          />
-          {errors.titre_niveau && (
-            <div className="text-red-500 text-xs w-full">
-              {errors.titre_niveau.message}
-            </div>
-          )}
-          <Label htmlFor="descri_niveau" className="mt-4 mb-1">
-            Description :{" "}
-          </Label>
-          <Controller
-            control={control}
-            name="descri_niveau"
-            render={({ field: { value, onChange } }) => (
-              <Input
-                value={value}
-                onChange={onChange}
-                className={`${errors.descri_niveau && "border border-red-500 text-red-500 rounded"}`}
-              />
-            )}
-          />
-          {errors.descri_niveau && (
-            <div className="text-red-500 text-xs w-full">
-              {errors.descri_niveau.message}
-            </div>
-          )}
-          <Label htmlFor="domaine" className="mt-4 mb-1">
-            Domaine :{" "}
-          </Label>
-          <Controller
-            control={control}
-            name="domaine"
-            render={({ field: { value, onChange } }) => (
-              <Input
-                value={value}
-                onChange={onChange}
-                className={`${errors.domaine && "border border-red-500 text-red-500 rounded"}`}
-              />
-            )}
-          />
-          {errors.domaine && (
-            <div className="text-red-500 text-xs w-full">
-              {errors.domaine.message}
-            </div>
-          )}
-          <Label htmlFor="mention" className="mt-4 mb-1">
-            Mention :{" "}
-          </Label>
-          <Controller
-            control={control}
-            name="mention"
-            render={({ field: { value, onChange } }) => (
-              <Input
-                value={value}
-                onChange={onChange}
-                className={`${errors.mention && "border border-red-500 text-red-500 rounded"}`}
-              />
-            )}
-          />
-          {errors.mention && (
-            <div className="text-red-500 text-xs w-full">
-              {errors.mention.message}
-            </div>
-          )}
-          <Label htmlFor="parcours" className="mt-4 mb-1">
-            Parcours :{" "}
-          </Label>
-          <Controller
-            control={control}
-            name="parcours"
-            render={({ field: { value, onChange } }) => (
-              <Input
-                value={value}
-                onChange={onChange}
-                className={`${errors.parcours && "border border-red-500 text-red-500 rounded"}`}
-              />
-            )}
-          />
-          {errors.parcours && (
-            <div className="text-red-500 text-xs w-full">
-              {errors.parcours.message}
-            </div>
-          )}
-          <div className="flex justify-center mt-4">
-            <Button
-              variant={"success"}
-              type="submit"
-              disabled={createLoading}
-              className={`${createLoading && "cursor-not-allowed"}`}
-            >
-              {createLoading && <LoadingOutlined />}
-              AJOUTER
-            </Button>
+    <FormCard title="NOUVEAU NIVEAU">
+      <form onSubmit={submit(createNiveauSubmit)} className="space-y-4">
+        {(["titre_niveau", "descri_niveau", "domaine", "mention", "parcours"] as const).map((field) => (
+          <div key={field}>
+            <Label htmlFor={field}>{field === "titre_niveau" ? "Titre" : field.charAt(0).toUpperCase() + field.slice(1)}</Label>
+            <Controller control={control} name={field}
+              render={({ field: { value, onChange } }) => (
+                <Input value={value} onChange={onChange} className={errors[field] ? "border-red-500" : ""} />
+              )}
+            />
+            {errors[field] && <p className="text-xs text-red-500 mt-1">{errors[field].message}</p>}
           </div>
-        </form>
-      </div>
-    </div>
+        ))}
+        <div className="flex justify-between pt-2">
+          <Button type="button" variant="ghost" onClick={() => navigate("/admin/niveau")}>
+            <ArrowLeftOutlined className="mr-1" /> Retour
+          </Button>
+          <Button type="submit" disabled={createLoading}>
+            {createLoading && <LoadingOutlined className="mr-1" />} AJOUTER
+          </Button>
+        </div>
+      </form>
+    </FormCard>
   );
 };
 

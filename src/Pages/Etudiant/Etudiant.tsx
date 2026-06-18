@@ -1,9 +1,9 @@
-import { useState, FunctionComponent, lazy, Suspense } from "react";
+import { useState, FunctionComponent } from "react";
 import {
   EditOutlined,
   DeleteOutlined,
-  LoadingOutlined,
   EyeFilled,
+  PlusOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useGetAllEtudiant } from "@/hooks/useGetAllEtudiant";
@@ -22,20 +22,24 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-const Navigation = lazy(() => import("@/components/navigation/Navigation"));
+import PageHeader from "@/components/shared/PageHeader";
+import DataTable, { Column } from "@/components/shared/DataTable";
+import EmptyState from "@/components/shared/EmptyState";
+
+interface EtudiantItem {
+  id_etudiant: number;
+  matricule: string;
+  nom: string;
+  prenom: string;
+  date_naiss: string;
+  lieu_naiss: string;
+}
 
 const Etudiant: FunctionComponent = () => {
-  const {
-    data: etudiants,
-    isLoading,
-    refetch: refetchEtudiant,
-  } = useGetAllEtudiant();
-  const { mutateAsync: etudiantDelete, isPending: deleteLoading } =
-    useDeleteEtudiant({
-      action() {
-        refetchEtudiant();
-      },
-    });
+  const { data: etudiants, isLoading, refetch: refetchEtudiant } = useGetAllEtudiant();
+  const { mutateAsync: etudiantDelete, isPending: deleteLoading } = useDeleteEtudiant({
+    action() { refetchEtudiant(); },
+  });
   const [searchEtudiant, setSearchEtudiant] = useState("");
   const navigate = useNavigate();
 
@@ -43,149 +47,79 @@ const Etudiant: FunctionComponent = () => {
     etudiantDelete(itemId);
   }
 
+  const filtered = etudiants?.filter((et: any) =>
+    !searchEtudiant || et.matricule.includes(searchEtudiant)
+  );
+
+  const columns: Column<EtudiantItem>[] = [
+    { key: "matricule", header: "Matricule", className: "font-medium" },
+    {
+      key: "nom",
+      header: "Nom et prénoms",
+      render: (et) => `${et.nom} ${et.prenom}`,
+    },
+    {
+      key: "date_naiss",
+      header: "Date de naissance",
+      className: "text-center",
+      render: (et) => dayjs(et.date_naiss).format("DD-MM-YYYY"),
+    },
+    {
+      key: "lieu_naiss",
+      header: "Lieu de naissance",
+      className: "text-center",
+    },
+    {
+      key: "actions",
+      header: "",
+      className: "text-right",
+      render: (et) => (
+        <div className="flex justify-end gap-1.5">
+          <Button size="icon" variant="secondary" onClick={() => navigate(`/admin/etudiant/view/${et.id_etudiant}`)}>
+            <EyeFilled />
+          </Button>
+          <Button size="icon" onClick={() => navigate(`/admin/etudiant/edit/${et.id_etudiant}`)}>
+            <EditOutlined />
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="icon"><DeleteOutlined /></Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Suppression d'un étudiant</AlertDialogTitle>
+                <AlertDialogDescription>Voulez-vous vraiment supprimer cet étudiant ?</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogAction className="m-0 p-0" asChild>
+                  <Button onClick={() => handleDelete(et.id_etudiant)} variant="destructive" disabled={deleteLoading}>
+                    {deleteLoading && <span className="mr-1">...</span>}Supprimer
+                  </Button>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div>
-      <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4" />}>
-        <Navigation />
-      </Suspense>
-      <div className="pb-5 pt-24">
-        <div className="px-10">
-          <div className="block sm:flex justify-between">
-            <div className="text-xl font-bold font-lato">LES ETUDIANTS</div>
-            <div className="flex justify-end items-center">
-              <Input
-                className="my-1 mx-1 w-52"
-                placeholder="Saisir la matricule..."
-                value={searchEtudiant}
-                onChange={(e) => setSearchEtudiant(e.target.value)}
-              />
-              <Button onClick={() => navigate("/admin/etudiant/create")}>
-                AJOUTER
-              </Button>
-            </div>
-          </div>
-          <div className="my-7">
-            <div className="sm:block hidden">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead>
-                  <tr>
-                    <th className="md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Matricule
-                    </th>
-                    <th className="md:px-6 px-2  py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Nom et prenoms
-                    </th>
-                    <th className="md:px-6 px-2  py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Date de naissance
-                    </th>
-                    <th className="md:px-6 px-2  py-3 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Lieu de naissance
-                    </th>
-                    <th className="px-1 py-4  bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"></th>
-                  </tr>
-                </thead>
-                {isLoading && (
-                  <div className="text-center my-10">
-                    <LoadingOutlined className="text-3xl" />
-                    <div>Chargement...</div>
-                  </div>
-                )}
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {etudiants &&
-                    etudiants.map((et: any, index: any) => {
-                      if (
-                        searchEtudiant &&
-                        !et.matricule.includes(searchEtudiant)
-                      ) {
-                        return null;
-                      }
-                      return (
-                        <tr key={index}>
-                          <td className="md:px-6 px-2 py-4 whitespace-nowrap text-sm leading-5 text-gray-900">
-                            {" "}
-                            {et.matricule}{" "}
-                          </td>
-                          <td className="md:px-6 px-2  py-4 md:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900 w-10 truncate">
-                            {" "}
-                            {et.nom} {et.prenom}{" "}
-                          </td>
-                          <td className="md:px-6 px-2  py-4 whitespace-nowrap text-sm leading-5 text-gray-900 text-center">
-                            {" "}
-                            {dayjs(et.date_naiss).format("DD-MM-YYYY")}{" "}
-                          </td>
-                          <td className="md:px-6 px-2  py-4 whitespace-nowrap text-sm leading-5 text-gray-900 text-center">
-                            {" "}
-                            {et.lieu_naiss}{" "}
-                          </td>
-                          <td className="px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900">
-                            <div className="flex justify-center gap-1.5">
-                              <Button
-                                size={"icon"}
-                                variant={"secondary"}
-                                onClick={() =>
-                                  navigate(
-                                    `/admin/etudiant/view/${et.id_etudiant}`,
-                                  )
-                                }
-                              >
-                                <EyeFilled />
-                              </Button>
-                              <Button
-                                size={"icon"}
-                                onClick={() =>
-                                  navigate(
-                                    `/admin/etudiant/edit/${et.id_etudiant}`,
-                                  )
-                                }
-                              >
-                                <EditOutlined />
-                              </Button>
-                              <AlertDialog>
-                                <AlertDialogTrigger>
-                                  <Button variant={"destructive"} size={"icon"}>
-                                    <DeleteOutlined />
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>
-                                      Suppression d'un etudiant
-                                    </AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      Voulez-vous vraiment supprimer cet
-                                      etudiant ?
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>
-                                      Cancel
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction className="m-0 p-0">
-                                      <Button
-                                        onClick={() =>
-                                          handleDelete(et.id_etudiant)
-                                        }
-                                        variant={"destructive"}
-                                        disabled={deleteLoading}
-                                        className={`${deleteLoading && "cursor-not-allowed"}`}
-                                      >
-                                        {deleteLoading && <LoadingOutlined />}
-                                        Supprimer
-                                      </Button>
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+      <PageHeader title="LES ETUDIANTS">
+        <Input
+          className="w-48"
+          placeholder="Saisir la matricule..."
+          value={searchEtudiant}
+          onChange={(e) => setSearchEtudiant(e.target.value)}
+        />
+        <Button onClick={() => navigate("/admin/etudiant/create")}>
+          <PlusOutlined className="mr-1" /> AJOUTER
+        </Button>
+      </PageHeader>
+      <div className="px-10">
+        <DataTable columns={columns} data={filtered} isLoading={isLoading} />
       </div>
     </div>
   );
