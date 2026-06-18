@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginValidation } from "@/validation/user.validation";
 import { useAuth } from "@/context/AuthContext";
 import { LoadingOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import FormField from "@/components/shared/FormField";
 
 const Login: FunctionComponent = () => {
   const { handleSubmit: submit, formState: { errors }, control } = useForm<LoginType>({
@@ -46,22 +47,15 @@ const Login: FunctionComponent = () => {
               <p className="text-sm text-muted-foreground">Accédez à votre espace administrateur</p>
             </div>
             <form onSubmit={submit(submitLogin)} className="w-full space-y-5">
-              <div>
-                <Label htmlFor="username">Utilisateur</Label>
-                <Controller name="username" control={control}
-                  render={({ field: { value, onChange } }) => (
-                    <Input value={value} onChange={onChange}
-                      className={errors.username ? "border-destructive" : ""} placeholder="Nom d'utilisateur" />
-                  )}
-                />
-                {errors.username && <p className="text-xs text-destructive mt-1">{errors.username.message}</p>}
-              </div>
+              <FormField label="Utilisateur" name="username" control={control} error={errors.username}>
+                <Input placeholder="Nom d'utilisateur" />
+              </FormField>
               <div>
                 <Label htmlFor="password">Mot de passe</Label>
                 <div className="relative">
                   <Controller name="password" control={control}
-                    render={({ field: { value, onChange } }) => (
-                      <Input value={value} onChange={onChange}
+                    render={({ field: { value, onChange, onBlur } }) => (
+                      <Input value={value} onChange={onChange} onBlur={onBlur}
                         type={showPassword ? "text" : "password"}
                         className={errors.password ? "border-destructive pr-10" : "pr-10"}
                         placeholder="Mot de passe" />

@@ -1,18 +1,46 @@
 import * as yup from "yup";
 
 export const CreateEtudiantValidation = yup.object({
-  matricule: yup.string().required("Matricule de l'etudiant requis !"),
-  nom: yup.string().required("Nom de l'etudiant requis !"),
-  prenom: yup.string().required(),
-  date_naiss: yup.string().required("Date de naissance de l'etudiant requis !"),
-  lieu_naiss: yup.string().required("Lieu de naissance de l'etudiant requis !"),
+  matricule: yup
+    .string()
+    .min(2, "Le matricule doit contenir au moins 2 caractères")
+    .required("Le matricule de l'étudiant est requis"),
+  nom: yup
+    .string()
+    .min(2, "Le nom doit contenir au moins 2 caractères")
+    .required("Le nom de l'étudiant est requis"),
+  prenom: yup
+    .string()
+    .min(2, "Le prénom doit contenir au moins 2 caractères")
+    .required("Le prénom de l'étudiant est requis"),
+  date_naiss: yup
+    .string()
+    .required("La date de naissance de l'étudiant est requise"),
+  lieu_naiss: yup
+    .string()
+    .min(2, "Le lieu de naissance doit contenir au moins 2 caractères")
+    .required("Le lieu de naissance de l'étudiant est requis"),
 });
 
 export const EditEtudiantValidation = yup.object({
-  id_etudiant: yup.string().required("Id de l'etudiant requis !"),
-  matricule: yup.string().required("Matricule de l'etudiant requis !"),
-  nom: yup.string().required("Nom de l'etudiant requis !"),
-  prenom: yup.string().required(),
-  date_naiss: yup.string().required("Date de naissance de l'etudiant requis !"),
-  lieu_naiss: yup.string().required("Lieu de naissance de l'etudiant requis !"),
+  id_etudiant: yup.string().required("L'identifiant de l'étudiant est requis"),
+  matricule: yup
+    .string()
+    .min(2, "Le matricule doit contenir au moins 2 caractères")
+    .required("Le matricule de l'étudiant est requis"),
+  nom: yup
+    .string()
+    .min(2, "Le nom doit contenir au moins 2 caractères")
+    .required("Le nom de l'étudiant est requis"),
+  prenom: yup
+    .string()
+    .min(2, "Le prénom doit contenir au moins 2 caractères")
+    .required("Le prénom de l'étudiant est requis"),
+  date_naiss: yup
+    .string()
+    .required("La date de naissance de l'étudiant est requise"),
+  lieu_naiss: yup
+    .string()
+    .min(2, "Le lieu de naissance doit contenir au moins 2 caractères")
+    .required("Le lieu de naissance de l'étudiant est requis"),
 });

@@ -1,19 +1,18 @@
-import { Select } from "antd";
-import { Option } from "antd/es/mentions";
 import { FunctionComponent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { useGetAllEC } from "@/hooks/useGetAllEC";
 import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { CreateGlobalNote } from "@/types/Note";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateGlobalNoteValidation } from "../../validation/note.validation";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { LoadingOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { transformLetter } from "@/utils/Format";
 import FormCard from "@/components/shared/FormCard";
+import FormField from "@/components/shared/FormField";
+import Combobox from "@/components/ui/combobox";
 
 const AddNotePerso: FunctionComponent = () => {
   const { data: niveau, isLoading: niveauLoading } = useGetAllNiveau();
@@ -28,69 +27,33 @@ const AddNotePerso: FunctionComponent = () => {
     navigate(`/admin/addglobal/note/${data?.ec}/${data?.niveau}/${transformLetter(data?.annee)}`);
   };
 
+  const niveauOptions = niveau?.map((niv: any) => ({
+    value: String(niv.id_niveau),
+    label: `${niv.titre_niveau} - ${niv.parcours}`,
+  })) || [];
+
+  const ecOptions = ec?.map((element: any) => ({
+    value: String(element.id_ec),
+    label: `${element.nom_ec} - ${element.id_ue}`,
+  })) || [];
+
+  const anneeOptions = annee?.map((ann: any) => ({
+    value: String(ann.id_annee),
+    label: String(ann.id_annee),
+  })) || [];
+
   return (
     <FormCard title="AJOUT GLOBAL DES NOTES">
       <form onSubmit={submit(handleSubmit)} className="space-y-4">
-        <div>
-          <Label htmlFor="niveau">Niveau</Label>
-          <Controller control={control} name="niveau"
-            render={({ field: { value, onChange } }) => (
-              <Select value={value} onChange={onChange}
-                className={errors.niveau ? "border w-full border-red-500" : "w-full"}
-                showSearch optionFilterProp="children"
-                filterOption={(input: any, option: any) =>
-                  option.children?.toLowerCase().includes(input.toLowerCase())
-                }>
-                <Option value="">Sélectionnez un niveau</Option>
-                {niveauLoading && <Option value=""><LoadingOutlined /></Option>}
-                {niveau?.map((niv: any, index: any) => (
-                  <Option key={index} value={niv.id_niveau}>{niv.titre_niveau} - {niv.parcours}</Option>
-                ))}
-              </Select>
-            )}
-          />
-          {errors.niveau && <p className="text-xs text-red-500 mt-1">{errors.niveau.message}</p>}
-        </div>
-        <div>
-          <Label htmlFor="ec">Élément Constitutif</Label>
-          <Controller control={control} name="ec"
-            render={({ field: { value, onChange } }) => (
-              <Select value={value} onChange={onChange}
-                className={errors.ec ? "border w-full border-red-500" : "w-full"}
-                showSearch optionFilterProp="children"
-                filterOption={(input: any, option: any) =>
-                  option.children?.toLowerCase().includes(input.toLowerCase())
-                }>
-                <Option value="">Sélectionnez un élément</Option>
-                {ecLoading && <Option value=""><LoadingOutlined /></Option>}
-                {ec?.map((element: any, index: any) => (
-                  <Option key={index} value={element.id_ec}>{element.nom_ec} - {element.id_ue}</Option>
-                ))}
-              </Select>
-            )}
-          />
-          {errors.ec && <p className="text-xs text-red-500 mt-1">{errors.ec.message}</p>}
-        </div>
-        <div>
-          <Label htmlFor="annee">Année universitaire</Label>
-          <Controller control={control} name="annee"
-            render={({ field: { value, onChange } }) => (
-              <Select value={value} onChange={onChange}
-                className={errors.annee ? "border w-full border-red-500" : "w-full"}
-                showSearch optionFilterProp="children"
-                filterOption={(input: any, option: any) =>
-                  option.children?.toLowerCase().includes(input.toLowerCase())
-                }>
-                <Option value="">Sélectionnez une année</Option>
-                {anneeLoading && <Option value=""><LoadingOutlined /></Option>}
-                {annee?.map((ann: any, index: any) => (
-                  <Option key={index} value={ann.id_annee}>{ann.id_annee}</Option>
-                ))}
-              </Select>
-            )}
-          />
-          {errors.annee && <p className="text-xs text-red-500 mt-1">{errors.annee.message}</p>}
-        </div>
+        <FormField label="Niveau" name="niveau" control={control} error={errors.niveau}>
+          <Combobox items={niveauOptions} placeholder="Sélectionnez un niveau" searchPlaceholder="Rechercher un niveau..." emptyText={niveauLoading ? "Chargement..." : "Aucun niveau"} />
+        </FormField>
+        <FormField label="Élément Constitutif" name="ec" control={control} error={errors.ec}>
+          <Combobox items={ecOptions} placeholder="Sélectionnez un élément" searchPlaceholder="Rechercher un élément..." emptyText={ecLoading ? "Chargement..." : "Aucun élément"} />
+        </FormField>
+        <FormField label="Année universitaire" name="annee" control={control} error={errors.annee}>
+          <Combobox items={anneeOptions} placeholder="Sélectionnez une année" searchPlaceholder="Rechercher une année..." emptyText={anneeLoading ? "Chargement..." : "Aucune année"} />
+        </FormField>
         <div className="flex justify-between pt-2">
           <Button variant="secondary" asChild>
             <Link to="/admin/note"><ArrowLeftOutlined className="mr-1" /> Retour</Link>

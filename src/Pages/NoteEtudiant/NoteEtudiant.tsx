@@ -1,13 +1,11 @@
 import { useState, FunctionComponent } from "react";
-import { Select } from "antd";
 import {
   CheckCircleFilled, CloseCircleFilled, FileOutlined, LoadingOutlined,
 } from "@ant-design/icons";
-import { Option } from "antd/es/mentions";
 import { useGetAllEtudiant } from "@/hooks/useGetAllEtudiant";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { NoteEtudiantSearch } from "@/types/Note";
 import { usePostEtudiantForResult } from "@/hooks/usePostEtudiantForResult";
 import { usePostEtudiantFinalForResult } from "@/hooks/usePostEtudiantFinalForResult ";
@@ -18,6 +16,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { NoteEtudiantSearchValidation } from "@/validation/note.validation";
 import { transformLetter } from "@/utils/Format";
 import { Card, CardContent } from "@/components/ui/card";
+import FormField from "@/components/shared/FormField";
+import Combobox from "@/components/ui/combobox";
 
 const NoteEtudiant: FunctionComponent = () => {
   const { data: etudiant } = useGetAllEtudiant();
@@ -54,38 +54,36 @@ const NoteEtudiant: FunctionComponent = () => {
     setSelectedNiveauId(data?.id_niveau);
   };
 
+  const etudiantOptions = etudiant?.map((et: any) => ({
+    value: String(et.id_etudiant),
+    label: `${et.matricule} ${et.nom} ${et.prenom}`,
+  })) || [];
+
+  const niveauOptions = niveau?.map((niv: any) => ({
+    value: String(niv.id_niveau),
+    label: `${niv.titre_niveau} ${niv.parcours}`,
+  })) || [];
+
+  const anneeOptions = annee?.map((ann: any) => ({
+    value: String(ann.id_annee),
+    label: String(ann.id_annee),
+  })) || [];
+
   return (
     <div className="px-4 sm:px-10">
       <div className="text-xl font-bold font-lato text-center mb-6">
         RECHERCHER NOTE D'UN ÉTUDIANT
       </div>
       <form className="flex flex-wrap justify-center gap-2 items-end" onSubmit={submit(handleSubmit)}>
-        {(["id_etudiant", "id_niveau", "id_annee"] as const).map((field) => (
-          <div key={field}>
-            <Controller control={control} name={field}
-              render={({ field: { value, onChange } }) => (
-                <Select value={value} onChange={onChange}
-                  className={errors[field] ? "border md:w-56 w-full border-red-500" : "md:w-56 w-full"}
-                  showSearch optionFilterProp="children"
-                  filterOption={(input: any, option: any) =>
-                    option.children?.toLowerCase().includes(input.toLowerCase())
-                  }>
-                  <Option value="">{field === "id_etudiant" ? "Étudiant" : field === "id_niveau" ? "Niveau" : "Année"}</Option>
-                  {field === "id_etudiant" && etudiant?.map((et: any, i: any) => (
-                    <Option key={i} value={et.id_etudiant}>{et.matricule} {et.nom} {et.prenom}</Option>
-                  ))}
-                  {field === "id_niveau" && niveau?.map((niv: any, i: any) => (
-                    <Option key={i} value={niv.id_niveau}>{niv.titre_niveau} {niv.parcours}</Option>
-                  ))}
-                  {field === "id_annee" && annee?.map((ann: any, i: any) => (
-                    <Option key={i} value={ann.id_annee}>{ann.id_annee}</Option>
-                  ))}
-                </Select>
-              )}
-            />
-            {errors[field] && <p className="text-xs text-red-500 mt-1">{errors[field].message}</p>}
-          </div>
-        ))}
+        <FormField label="Étudiant" name="id_etudiant" control={control} error={errors.id_etudiant} className="md:w-56">
+          <Combobox items={etudiantOptions} placeholder="Étudiant" searchPlaceholder="Rechercher..." />
+        </FormField>
+        <FormField label="Niveau" name="id_niveau" control={control} error={errors.id_niveau} className="md:w-56">
+          <Combobox items={niveauOptions} placeholder="Niveau" searchPlaceholder="Rechercher..." />
+        </FormField>
+        <FormField label="Année" name="id_annee" control={control} error={errors.id_annee} className="md:w-56">
+          <Combobox items={anneeOptions} placeholder="Année" searchPlaceholder="Rechercher..." />
+        </FormField>
         <Button type="submit">Rechercher</Button>
       </form>
 

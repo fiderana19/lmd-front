@@ -18,8 +18,7 @@ const AddNote = lazy(() => import("./AddNote"));
 import { handleFloatKeyPress } from "@/utils/handleKeyPress";
 import { useGetAllNote } from "../../hooks/useGetAllNote";
 import { EditNote } from "@/types/Note";
-import { Controller, useForm } from "react-hook-form";
-import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EditNoteValidation } from "@/validation/note.validation";
@@ -34,6 +33,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import FormField from "@/components/shared/FormField";
 
 const Note: FunctionComponent = () => {
   const { data: note, isLoading: noteLoading, refetch: refetchNote } = useGetAllNote();
@@ -89,6 +89,11 @@ const Note: FunctionComponent = () => {
     setSelectedItem(item);
     setEditedItem(item);
     setEditValue("id_note", item?.id_note);
+    setEditValue("valeur", item?.valeur);
+    setEditValue("id_etudiant", item?.id_etudiant);
+    setEditValue("id_niveau", item?.id_niveau);
+    setEditValue("id_ec", item?.id_ec);
+    setEditValue("id_annee", item?.id_annee);
     setIsEditModalOpen(true);
   }
 
@@ -157,22 +162,18 @@ const Note: FunctionComponent = () => {
           </DialogHeader>
           {selectedItem && editedItem && (
             <form className="space-y-4" onSubmit={editSubmit(handleSubmitEdit)}>
-              <div>
-                <Label htmlFor="valeur">Valeur</Label>
-                <Controller control={control} name="valeur" defaultValue={editedItem?.valeur}
-                  render={({ field: { value, onChange } }) => (
-                    <Input onKeyPress={handleFloatKeyPress} value={value} onChange={onChange}
-                      className={errors.valeur ? "border-red-500" : ""} />
-                  )}
-                />
-                {errors.valeur && <p className="text-xs text-red-500 mt-1">{errors.valeur.message}</p>}
-              </div>
+              <FormField label="Valeur" name="valeur" control={control} error={errors.valeur}>
+                <Input onKeyPress={handleFloatKeyPress} />
+              </FormField>
               {(["id_etudiant", "id_niveau", "id_ec", "id_annee"] as const).map((field) => (
                 <div key={field}>
-                  <Label>{field === "id_etudiant" ? "Étudiant" : field === "id_niveau" ? "Niveau" : field === "id_ec" ? "EC" : "Année"}</Label>
-                  <Controller control={control} name={field} defaultValue={editedItem?.[field]}
-                    render={({ field: { value } }) => <Input readOnly value={value} />}
-                  />
+                  <FormField
+                    label={field === "id_etudiant" ? "Étudiant" : field === "id_niveau" ? "Niveau" : field === "id_ec" ? "EC" : "Année"}
+                    name={field}
+                    control={control}
+                  >
+                    <Input readOnly />
+                  </FormField>
                 </div>
               ))}
               <Button type="submit" className="w-full">

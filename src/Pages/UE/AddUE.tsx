@@ -1,9 +1,8 @@
 import { FunctionComponent } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { CreateUEType } from "@/types/UE";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateUEValidation } from "@/validation/ue.validation";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { handleNumberKeyPress } from "@/utils/handleKeyPress";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,7 @@ import { LoadingOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { usePostUE } from "@/hooks/usePostUE";
 import { useGetAllUE } from "@/hooks/useGetAllUE";
 import FormCard from "@/components/shared/FormCard";
+import FormField from "@/components/shared/FormField";
 
 const AddUE: FunctionComponent = () => {
   const { refetch: refetchUE } = useGetAllUE();
@@ -28,25 +28,12 @@ const AddUE: FunctionComponent = () => {
   return (
     <FormCard title="NOUVEAU UNITE D'ENSEIGNEMENT">
       <form onSubmit={submit(createUESubmit)} className="space-y-4">
-        <div>
-          <Label htmlFor="nom_ue">Nom de l'UE</Label>
-          <Controller name="nom_ue" control={control}
-            render={({ field: { value, onChange } }) => (
-              <Input value={value} onChange={onChange} className={errors.nom_ue ? "border-red-500" : ""} />
-            )}
-          />
-          {errors.nom_ue && <p className="text-xs text-red-500 mt-1">{errors.nom_ue.message}</p>}
-        </div>
-        <div>
-          <Label htmlFor="credit_ue">Crédit de l'UE</Label>
-          <Controller name="credit_ue" control={control}
-            render={({ field: { value, onChange } }) => (
-              <Input value={value} onChange={onChange} onKeyPress={handleNumberKeyPress}
-                className={errors.credit_ue ? "border-red-500" : ""} />
-            )}
-          />
-          {errors.credit_ue && <p className="text-xs text-red-500 mt-1">{errors.credit_ue.message}</p>}
-        </div>
+        <FormField label="Nom de l'UE" name="nom_ue" control={control} error={errors.nom_ue}>
+          <Input />
+        </FormField>
+        <FormField label="Crédit de l'UE" name="credit_ue" control={control} error={errors.credit_ue}>
+          <Input onKeyPress={handleNumberKeyPress} />
+        </FormField>
         <div className="flex justify-between pt-2">
           <Button type="button" variant="ghost" onClick={() => navigate("/admin/ue")}>
             <ArrowLeftOutlined className="mr-1" /> Retour

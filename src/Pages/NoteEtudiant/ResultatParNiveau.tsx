@@ -1,11 +1,9 @@
 import { useState, FunctionComponent } from "react";
-import { Select } from "antd";
 import { FileOutlined, LoadingOutlined } from "@ant-design/icons";
-import { Option } from "antd/es/mentions";
 import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { ResultCritere } from "@/constants/Critere";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ResultNiveauSearch } from "@/types/Note";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ResultNiveauSearchValidation } from "@/validation/note.validation";
@@ -14,6 +12,8 @@ import { usePostResultNiveauFinal } from "@/hooks/usePostResultNiveauFinal";
 import { Button } from "@/components/ui/button";
 import { transformLetter } from "@/utils/Format";
 import { Card, CardContent } from "@/components/ui/card";
+import FormField from "@/components/shared/FormField";
+import Combobox from "@/components/ui/combobox";
 
 const ResultatParNiveau: FunctionComponent = () => {
   const { data: annee } = useGetAllAnnee();
@@ -41,38 +41,36 @@ const ResultatParNiveau: FunctionComponent = () => {
     setSelectedCritere(data?.obs);
   };
 
+  const niveauOptions = niveau?.map((niv: any) => ({
+    value: String(niv.id_niveau),
+    label: `${niv.titre_niveau} ${niv.parcours}`,
+  })) || [];
+
+  const anneeOptions = annee?.map((ann: any) => ({
+    value: String(ann.id_annee),
+    label: String(ann.id_annee),
+  })) || [];
+
+  const critereOptions = ResultCritere?.map((c: any) => ({
+    value: c,
+    label: c,
+  })) || [];
+
   return (
     <div className="px-4 sm:px-10">
       <div className="text-xl font-bold font-lato text-center mb-6">
         RECHERCHER RÉSULTAT D'UN NIVEAU
       </div>
       <form className="flex flex-wrap justify-center gap-2 items-end" onSubmit={search(handleSubmit)}>
-        {(["id_niveau", "id_annee", "obs"] as const).map((field) => (
-          <div key={field}>
-            <Controller control={control} name={field}
-              render={({ field: { value, onChange } }) => (
-                <Select value={value} onChange={onChange}
-                  className={errors[field] ? "border md:w-56 w-full border-red-500" : "md:w-56 w-full"}
-                  showSearch optionFilterProp="children"
-                  filterOption={(input: any, option: any) =>
-                    option.children?.toLowerCase().includes(input.toLowerCase())
-                  }>
-                  <Option value="">{field === "id_niveau" ? "Niveau" : field === "id_annee" ? "Année" : "Critère"}</Option>
-                  {field === "id_niveau" && niveau?.map((niv: any, i: any) => (
-                    <Option key={i} value={niv.id_niveau}>{niv.titre_niveau} {niv.parcours}</Option>
-                  ))}
-                  {field === "id_annee" && annee?.map((ann: any, i: any) => (
-                    <Option key={i} value={ann.id_annee}>{ann.id_annee}</Option>
-                  ))}
-                  {field === "obs" && ResultCritere.map((c: any, i: any) => (
-                    <Option key={i} value={c}>{c}</Option>
-                  ))}
-                </Select>
-              )}
-            />
-            {errors[field] && <p className="text-xs text-red-500">{errors[field].message}</p>}
-          </div>
-        ))}
+        <FormField label="Niveau" name="id_niveau" control={control} error={errors.id_niveau} className="md:w-56">
+          <Combobox items={niveauOptions} placeholder="Niveau" searchPlaceholder="Rechercher..." />
+        </FormField>
+        <FormField label="Année" name="id_annee" control={control} error={errors.id_annee} className="md:w-56">
+          <Combobox items={anneeOptions} placeholder="Année" searchPlaceholder="Rechercher..." />
+        </FormField>
+        <FormField label="Critère" name="obs" control={control} error={errors.obs} className="md:w-56">
+          <Combobox items={critereOptions} placeholder="Critère" searchPlaceholder="Rechercher..." />
+        </FormField>
         <Button type="submit">Rechercher</Button>
       </form>
 

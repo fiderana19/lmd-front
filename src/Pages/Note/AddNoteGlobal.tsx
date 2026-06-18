@@ -1,5 +1,3 @@
-import { Select } from "antd";
-import { Option } from "antd/es/mentions";
 import { useState, useEffect, FunctionComponent } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -13,14 +11,15 @@ import { useGetECById } from "@/hooks/useGetECById";
 import { usePostNoteByNiveau } from "@/hooks/usePostNoteByNiveau";
 import { CreateNote } from "@/types/Note";
 import { Input } from "@/components/ui/input";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateNoteValidation } from "@/validation/note.validation";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { usePostNote } from "@/hooks/usePostNote";
 import { useGetAllNote } from "@/hooks/useGetAllNote";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import FormField from "@/components/shared/FormField";
+import Combobox from "@/components/ui/combobox";
 
 const AddNoteGlobal: FunctionComponent = () => {
   let params = useParams();
@@ -58,6 +57,11 @@ const AddNoteGlobal: FunctionComponent = () => {
     return <CloseCircleFilled className="text-red-600" />;
   };
 
+  const etudiantOptions = etudiant?.map((et: any) => ({
+    value: String(et.id_etudiant),
+    label: `${et.nom} ${et.matricule}`,
+  })) || [];
+
   return (
     <div>
       <div className="text-xl sm:text-2xl font-bold font-lato text-center text-gray-800 mb-6">
@@ -68,35 +72,12 @@ const AddNoteGlobal: FunctionComponent = () => {
           <CardHeader><CardTitle>Ajouter une note</CardTitle></CardHeader>
           <CardContent>
             <form onSubmit={submit(handleSubmit)} className="space-y-4">
-              <div>
-                <Label htmlFor="id_etudiant">Étudiant</Label>
-                <Controller control={control} name="id_etudiant"
-                  render={({ field: { value, onChange } }) => (
-                    <Select value={value} onChange={onChange}
-                      className={errors.id_etudiant ? "border w-full border-red-500" : "w-full"}
-                      showSearch optionFilterProp="children"
-                      filterOption={(input: any, option: any) =>
-                        option.children?.toLowerCase().includes(input.toLowerCase())
-                      }>
-                      <Option value="">Sélectionnez un étudiant</Option>
-                      {etudiant?.map((et: any, index: any) => (
-                        <Option key={index} value={et.id_etudiant}>{et.nom} {et.matricule}</Option>
-                      ))}
-                    </Select>
-                  )}
-                />
-                {errors.id_etudiant && <p className="text-xs text-red-500 mt-1">{errors.id_etudiant.message}</p>}
-              </div>
-              <div>
-                <Label htmlFor="valeur">Note</Label>
-                <Controller control={control} name="valeur"
-                  render={({ field: { value, onChange } }) => (
-                    <Input value={value} onChange={onChange} onKeyPress={handleFloatKeyPress}
-                      className={errors.valeur ? "border-red-500" : ""} />
-                  )}
-                />
-                {errors.valeur && <p className="text-xs text-red-500 mt-1">{errors.valeur.message}</p>}
-              </div>
+              <FormField label="Étudiant" name="id_etudiant" control={control} error={errors.id_etudiant}>
+                <Combobox items={etudiantOptions} placeholder="Sélectionnez un étudiant" searchPlaceholder="Rechercher..." emptyText="Aucun étudiant" />
+              </FormField>
+              <FormField label="Note" name="valeur" control={control} error={errors.valeur}>
+                <Input onKeyPress={handleFloatKeyPress} />
+              </FormField>
               <Button type="submit" className="w-full" disabled={createLoading}>
                 {createLoading && <LoadingOutlined className="mr-1" />} Ajouter
               </Button>
