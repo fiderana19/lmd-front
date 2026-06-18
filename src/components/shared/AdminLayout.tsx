@@ -6,7 +6,7 @@ const Navigation = lazy(() => import("@/components/navigation/Navigation"));
 
 const AdminLayout = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-background to-accent/30 dark:from-background dark:to-background">
       <Suspense fallback={<LoadingOutlined className="w-full text-center text-6xl my-4 text-primary" />}>
         <Navigation />
       </Suspense>
