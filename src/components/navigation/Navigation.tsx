@@ -16,7 +16,6 @@ import {
 } from "@ant-design/icons";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
-import { Button } from "../ui/button";
 
 const navLinks = [
   { to: "/admin/home", label: "Accueil", icon: <HomeOutlined /> },
@@ -27,114 +26,101 @@ const navLinks = [
   { to: "/admin/niveau", label: "Niveau", icon: <UnorderedListOutlined /> },
 ];
 
-const Navigation: React.FC = () => {
-  const { logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const handleLogout = async () => {
-    await logout();
-  };
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="w-full fixed px-5 h-14 bg-white/70 dark:bg-gray-900/80 backdrop-blur-lg z-50 text-foreground flex justify-between items-center font-lato shadow-nav border-b border-border/50">
-      <Link to="/admin/home" onClick={() => setMobileOpen(false)}>
-        <span className="text-xl font-black tracking-tight bg-gradient-to-r from-primary to-five bg-clip-text text-transparent">
-          LMD
-        </span>
-      </Link>
-
-      {/* Desktop nav */}
-      <div className="hidden md:flex items-center gap-1">
-        {navLinks.map((link) => (
-          <Link
-            key={link.to}
-            to={link.to}
-            className={`px-3 py-1.5 rounded-lg text-sm transition-all duration-200 ${
-              isActive(link.to)
-                ? "bg-primary/10 text-primary font-semibold"
-                : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-            }`}
-          >
-            <span className="flex items-center gap-1.5">
-              {link.icon}
-              {link.label}
-            </span>
-          </Link>
-        ))}
-        <button
-          onClick={toggleTheme}
-          className="ml-2 p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all"
-          aria-label="Toggle theme"
+    <nav className="flex flex-col h-full px-3 py-4 space-y-1">
+      {navLinks.map((link) => (
+        <Link
+          key={link.to}
+          to={link.to}
+          onClick={onNavigate}
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
+            isActive(link.to)
+              ? "bg-primary/10 text-primary font-semibold border-l-[3px] border-primary"
+              : "text-muted-foreground hover:text-foreground hover:bg-accent/50 border-l-[3px] border-transparent"
+          }`}
         >
-          {theme === "light" ? <MoonOutlined /> : <SunOutlined />}
-        </button>
-        <Button
-          onClick={handleLogout}
-          variant="ghost"
-          size="sm"
-          className="ml-1 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-        >
-          <LogoutOutlined className="mr-1" />
-          Déconnexion
-        </Button>
-      </div>
+          <span className="text-base">{link.icon}</span>
+          {link.label}
+        </Link>
+      ))}
+    </nav>
+  );
+};
 
-      {/* Mobile hamburger */}
-      <button
-        className="md:hidden text-foreground text-xl p-1"
-        onClick={() => setMobileOpen(!mobileOpen)}
-        aria-label="Menu"
-      >
-        {mobileOpen ? <CloseOutlined /> : <MenuOutlined />}
-      </button>
+const Navigation: React.FC = () => {
+  const { logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div className="fixed inset-0 top-14 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md md:hidden animate-fade-in border-t border-border/50">
-          <div className="flex flex-col items-center gap-2 py-8 px-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMobileOpen(false)}
-                className={`w-full max-w-xs text-center py-3 rounded-lg text-sm transition-all ${
-                  isActive(link.to)
-                    ? "bg-primary/10 text-primary font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                }`}
-              >
-                <span className="flex items-center justify-center gap-2">
-                  {link.icon}
-                  {link.label}
-                </span>
-              </Link>
-            ))}
+  return (
+    <>
+      {/* Top bar */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-40 bg-white/70 dark:bg-gray-900/80 backdrop-blur-lg border-b border-border/50 shadow-nav">
+        <div className="h-full flex items-center justify-between px-4">
+          <div className="flex items-center gap-3">
+            {/* Mobile hamburger */}
+            <button
+              className="md:hidden text-foreground text-lg p-1 -ml-1"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Menu"
+            >
+              {mobileOpen ? <CloseOutlined /> : <MenuOutlined />}
+            </button>
+            <Link to="/admin/home">
+              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-primary to-five bg-clip-text text-transparent">
+                LMD
+              </span>
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-1">
             <button
               onClick={toggleTheme}
-              className="w-full max-w-xs text-center py-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all"
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all"
+              aria-label="Toggle theme"
             >
-              <span className="flex items-center justify-center gap-2">
-                {theme === "light" ? <MoonOutlined /> : <SunOutlined />}
-                {theme === "light" ? "Mode sombre" : "Mode clair"}
-              </span>
+              {theme === "light" ? <MoonOutlined /> : <SunOutlined />}
             </button>
-            <Button
-              onClick={handleLogout}
-              variant="ghost"
-              size="sm"
-              className="mt-2 w-full max-w-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+            <button
+              onClick={async () => { await logout(); }}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all"
             >
-              <LogoutOutlined className="mr-1" />
-              Déconnexion
-            </Button>
+              <LogoutOutlined />
+              <span className="hidden sm:inline">Déconnexion</span>
+            </button>
           </div>
         </div>
+      </header>
+
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/50 md:hidden animate-fade-in"
+          onClick={() => setMobileOpen(false)}
+        />
       )}
-    </nav>
+
+      {/* Mobile drawer */}
+      <div
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-gray-900 shadow-xl md:hidden transition-transform duration-300 ease-in-out ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="pt-14">
+          <SidebarContent onNavigate={() => setMobileOpen(false)} />
+        </div>
+      </div>
+
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex fixed left-0 top-14 bottom-0 w-64 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-r border-border/50 shadow-nav z-20">
+        <SidebarContent />
+      </aside>
+    </>
   );
 };
 
