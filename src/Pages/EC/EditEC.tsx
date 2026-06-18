@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { EditECValidation } from "../../validation/ec.validation";
+import { EditECValidation } from "@/validation/ec.validation";
 import { useGetAllEC } from "@/hooks/useGetAllEC";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetECById } from "@/hooks/useGetECById";
@@ -51,7 +51,7 @@ const EditEC: FunctionComponent = () => {
         id_ue: String(ec[0].id_ue),
       });
     }
-  }, [ec]);
+  }, [ec, req.id]);
 
   const ECSubmit = (data: EditECType) => { ECEdit(data); navigate("/admin/ec"); };
 

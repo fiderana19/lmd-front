@@ -1,5 +1,5 @@
 import { useState, FunctionComponent } from "react";
-import { FileOutlined, LoadingOutlined } from "@ant-design/icons";
+import { FileOutlined } from "@ant-design/icons";
 import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { ResultCritere } from "@/constants/Critere";

@@ -19,7 +19,7 @@ const EditEtudiant: FunctionComponent = () => {
   const req = useParams();
   const etudiantId = Number(req.id);
   const { data: etudiant, isLoading, refetch } = useGetEtudiantById(etudiantId);
-  const { handleSubmit: submit, formState: { errors }, control, setValue, reset } = useForm<EditEtudiantType>({
+  const { handleSubmit: submit, formState: { errors }, control, reset } = useForm<EditEtudiantType>({
     resolver: yupResolver(EditEtudiantValidation),
   });
   const { refetch: refetchEtudiant } = useGetAllEtudiant();
@@ -30,7 +30,6 @@ const EditEtudiant: FunctionComponent = () => {
 
   useEffect(() => {
     if (etudiant) {
-      setValue("id_etudiant", req.id ? req.id : "");
       reset({
         id_etudiant: req.id || "",
         matricule: etudiant[0].matricule,

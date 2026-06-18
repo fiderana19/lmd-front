@@ -25,7 +25,7 @@ const FormField = ({ label, name, control, error, children, className, labelClas
         control={control}
         defaultValue={defaultValue}
         render={({ field: { value, onChange, onBlur } }) =>
-          cloneElement(children, {
+          cloneElement(children as any, {
             value,
             onChange,
             onBlur,

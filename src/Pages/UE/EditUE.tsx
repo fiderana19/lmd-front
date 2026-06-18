@@ -28,7 +28,7 @@ const EditUE: FunctionComponent = () => {
   });
   const navigate = useNavigate();
 
-  useEffect(() => { setValue("id_ue", req.id ? req.id : ""); }, []);
+  useEffect(() => { setValue("id_ue", req.id ? req.id : ""); }, [req.id]);
 
   const editUESubmit = (data: EditUEType) => { UEEdit(data); navigate("/admin/ue"); };
 

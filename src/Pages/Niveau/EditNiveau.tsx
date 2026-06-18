@@ -35,7 +35,7 @@ const EditNiveau: FunctionComponent = () => {
   });
   const navigate = useNavigate();
 
-  useEffect(() => { setValue("id_niveau", req.id ? req.id : ""); }, []);
+  useEffect(() => { setValue("id_niveau", req.id ? req.id : ""); }, [req.id]);
 
   const editNiveauSubmit = (data: EditNiveauType) => {
     NiveauEdit(data);

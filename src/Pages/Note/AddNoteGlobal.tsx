@@ -28,8 +28,8 @@ const AddNoteGlobal: FunctionComponent = () => {
   const niveau = params.niveau ? Number(params.niveau) : 0;
   const fetchData = { id_ec: ec, id_niveau: niveau, id_annee: annee };
   const { data: etudiant } = useGetAllEtudiant();
-  const { data: niv } = useGetNiveauById(Number(niveau) | 0);
-  const { data: element } = useGetECById(Number(ec) | 0);
+  const { data: niv } = useGetNiveauById(niveau);
+  const { data: element } = useGetECById(ec);
   const { mutateAsync: fetchNotes, data: notes } = usePostNoteByNiveau();
   const { handleSubmit: submit, formState: { errors }, control, setValue } = useForm<CreateNote>({
     resolver: yupResolver(CreateNoteValidation),

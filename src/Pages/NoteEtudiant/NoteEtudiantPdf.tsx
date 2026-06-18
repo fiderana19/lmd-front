@@ -2,7 +2,7 @@ import { useState, useEffect, FunctionComponent } from "react";
 import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import { usePostEtudiantFinalForResult } from "@/hooks/usePostEtudiantFinalForResult ";
+import { usePostEtudiantFinalForResult } from "@/hooks/usePostEtudiantFinalForResult";
 import { usePostEtudiantForResult } from "@/hooks/usePostEtudiantForResult";
 import { usePostEtudiantMarkForResult } from "@/hooks/usePostEtudiantMarkForResult";
 import { usePostEtudiantUnityForResult } from "@/hooks/usePostEtudiantUnityForResult";
@@ -24,7 +24,6 @@ const NoteEtudiantPdf: FunctionComponent = () => {
   const [resultUnity, setResultUnity] = useState<any>();
 
   useEffect(() => {
-    fetch();
     fetch();
     window.print();
 

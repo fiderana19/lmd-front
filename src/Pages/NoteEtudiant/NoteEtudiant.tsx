@@ -1,6 +1,6 @@
 import { useState, FunctionComponent } from "react";
 import {
-  CheckCircleFilled, CloseCircleFilled, FileOutlined, LoadingOutlined,
+  CheckCircleFilled, CloseCircleFilled, FileOutlined,
 } from "@ant-design/icons";
 import { useGetAllEtudiant } from "@/hooks/useGetAllEtudiant";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
@@ -8,7 +8,7 @@ import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
 import { useForm } from "react-hook-form";
 import { NoteEtudiantSearch } from "@/types/Note";
 import { usePostEtudiantForResult } from "@/hooks/usePostEtudiantForResult";
-import { usePostEtudiantFinalForResult } from "@/hooks/usePostEtudiantFinalForResult ";
+import { usePostEtudiantFinalForResult } from "@/hooks/usePostEtudiantFinalForResult";
 import { usePostEtudiantMarkForResult } from "@/hooks/usePostEtudiantMarkForResult";
 import { usePostEtudiantUnityForResult } from "@/hooks/usePostEtudiantUnityForResult";
 import { Button } from "@/components/ui/button";

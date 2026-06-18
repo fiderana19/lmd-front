@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import PageHeader from "@/components/shared/PageHeader";
 import DataTable, { Column } from "@/components/shared/DataTable";
-import EmptyState from "@/components/shared/EmptyState";
 
 interface EtudiantItem {
   id_etudiant: number;

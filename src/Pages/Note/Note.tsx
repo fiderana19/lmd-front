@@ -16,7 +16,7 @@ import {
 import { Link } from "react-router-dom";
 const AddNote = lazy(() => import("./AddNote"));
 import { handleFloatKeyPress } from "@/utils/handleKeyPress";
-import { useGetAllNote } from "../../hooks/useGetAllNote";
+import { useGetAllNote } from "@/hooks/useGetAllNote";
 import { EditNote } from "@/types/Note";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -52,7 +52,7 @@ const Note: FunctionComponent = () => {
   const { mutateAsync: editNote, isPending: editLoading } = usePatchNote({
     action() { refetchNote(); },
   });
-  const { mutateAsync: deleteNote, isPending: deleteLoading } = useDeleteNote({
+  const { mutateAsync: deleteNote } = useDeleteNote({
     action() { refetchNote(); },
   });
 

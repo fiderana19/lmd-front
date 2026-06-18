@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CreateECValidation } from "../../validation/ec.validation";
+import { CreateECValidation } from "@/validation/ec.validation";
 import { usePostEC } from "@/hooks/usePostEC";
 import { useGetAllEC } from "@/hooks/useGetAllEC";
 import { useNavigate } from "react-router-dom";

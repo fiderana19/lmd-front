@@ -199,3 +199,20 @@
 .grid-customized {
   grid-template-columns: repeat(auto-fill, minmax(310px, 320px));
 }
+
+@theme {
+  --font-lato: 'Lato', sans;
+  --font-latobold: 'LatoBold', sans;
+  --font-geist: 'Geist', sans;
+  --font-hostgrotesk: 'HostGrotesk', sans;
+  --animate-wrapper: wrapper 1s ease-in-out;
+  --grid-template-columns-customized: repeat(auto-fill, minmax(280px, 295px));
+  --grid-template-columns-customized-audience: repeat(auto-fill, minmax(310px, 320px));
+}
+
+@keyframes wrapper {
+  0% { opacity: 0; }
+  49.99% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
