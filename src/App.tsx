@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 const AdminLayout = lazy(() => import("@/components/shared/AdminLayout"));
-const Home = lazy(() => import("./Pages/Home"));
+const Dashboard = lazy(() => import("./Pages/admin/Dashboard"));
 const NoteEtudiantPdf = lazy(() => import("./Pages/NoteEtudiant/NoteEtudiantPdf"));
 const ResultatParNiveauPdf = lazy(() => import("./Pages/NoteEtudiant/ResultatParNiveauPdf"));
 const AddNoteGlobal = lazy(() => import("./Pages/Note/AddNoteGlobal"));
@@ -43,7 +43,7 @@ function App() {
       <Route path="/unauthorized" element={<S><Unauthorized /></S>} />
       <Route path="/admin/" element={<S><ProtectedRoute /></S>}>
         <Route element={<S><AdminLayout /></S>}>
-          <Route path="home" element={<S><Home /></S>} />
+          <Route path="home" element={<S><Dashboard /></S>} />
           <Route path="etudiant" element={<S><Etudiant /></S>} />
           <Route path="etudiant/create" element={<S><AddEtudiant /></S>} />
           <Route path="etudiant/edit/:id" element={<S><EditEtudiant /></S>} />

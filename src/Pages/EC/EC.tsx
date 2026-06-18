@@ -1,5 +1,5 @@
 import { useState, FunctionComponent } from "react";
-import { EditOutlined, DeleteOutlined, EyeFilled, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined,   EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { useGetAllEC } from "@/hooks/useGetAllEC";
 import { useDeleteEC } from "@/hooks/useDeleteEC";
 import {
@@ -47,7 +47,7 @@ const EC: FunctionComponent = () => {
       render: (element) => (
         <div className="flex justify-end gap-1.5">
           <Button size="icon" variant="secondary" onClick={() => navigate(`/admin/ec/view/${element.id_ec}`)}>
-            <EyeFilled />
+            <EyeOutlined />
           </Button>
           <Button size="icon" onClick={() => navigate(`/admin/ec/edit/${element.id_ec}`)}>
             <EditOutlined />
@@ -85,9 +85,7 @@ const EC: FunctionComponent = () => {
           <PlusOutlined className="mr-1" /> AJOUTER
         </Button>
       </PageHeader>
-      <div className="px-10">
-        <DataTable columns={columns} data={filtered} isLoading={ECSLoading} />
-      </div>
+      <DataTable columns={columns} data={filtered} isLoading={ECSLoading} />
     </div>
   );
 };

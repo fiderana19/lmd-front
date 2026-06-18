@@ -227,14 +227,14 @@ const AddNote: FunctionComponent = () => {
             </div>
           )}
           <div className="flex justify-center my-3">
-            <Button variant={"success"} type="submit">
+            <Button type="submit">
               {createLoading && <LoadingOutlined />}
               Ajouter
             </Button>
           </div>
         </form>
         <Link to="/admin/addnote" className="flex justify-center">
-          <Button variant={"link"} type="submit">
+          <Button variant="link" type="submit">
             Faire un ajout global
           </Button>
         </Link>

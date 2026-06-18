@@ -59,7 +59,7 @@ const AddNoteGlobal: FunctionComponent = () => {
   };
 
   return (
-    <div className="px-4 sm:px-10 py-2">
+    <div>
       <div className="text-xl sm:text-2xl font-bold font-lato text-center text-gray-800 mb-6">
         NOTE {element?.nom_ec} - {niv?.titre_niveau} - {annee}
       </div>

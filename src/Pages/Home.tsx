@@ -1,5 +1,5 @@
 import { FunctionComponent, lazy, Suspense } from "react";
-import { Button } from "antd";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 const Typewriter = lazy(() => import("../components/Typewritter"));
 import Bg from "../assets/pic/home-bg.jpg";
@@ -23,7 +23,7 @@ const Home: FunctionComponent = () => {
             </p>
             <div className="mt-6 flex justify-center sm:justify-start">
               <Link to="/admin/note">
-                <Button type="primary" size="large" className="font-semibold shadow-lg shadow-primary/20">
+                <Button size="lg" className="font-semibold shadow-lg shadow-primary/20">
                   VOIR LES NOTES
                 </Button>
               </Link>

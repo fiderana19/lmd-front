@@ -137,9 +137,7 @@ const Note: FunctionComponent = () => {
           <PlusOutlined className="mr-1" /> AJOUTER
         </Button>
       </PageHeader>
-      <div className="px-10">
-        <DataTable columns={columns} data={note} isLoading={noteLoading} />
-      </div>
+      <DataTable columns={columns} data={note} isLoading={noteLoading} />
 
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
         <DialogContent>

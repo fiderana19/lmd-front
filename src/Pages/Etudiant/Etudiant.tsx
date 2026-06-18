@@ -2,7 +2,7 @@ import { useState, FunctionComponent } from "react";
 import {
   EditOutlined,
   DeleteOutlined,
-  EyeFilled,
+  EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -76,7 +76,7 @@ const Etudiant: FunctionComponent = () => {
       render: (et) => (
         <div className="flex justify-end gap-1.5">
           <Button size="icon" variant="secondary" onClick={() => navigate(`/admin/etudiant/view/${et.id_etudiant}`)}>
-            <EyeFilled />
+            <EyeOutlined />
           </Button>
           <Button size="icon" onClick={() => navigate(`/admin/etudiant/edit/${et.id_etudiant}`)}>
             <EditOutlined />
@@ -118,9 +118,7 @@ const Etudiant: FunctionComponent = () => {
           <PlusOutlined className="mr-1" /> AJOUTER
         </Button>
       </PageHeader>
-      <div className="px-10">
-        <DataTable columns={columns} data={filtered} isLoading={isLoading} />
-      </div>
+      <DataTable columns={columns} data={filtered} isLoading={isLoading} />
     </div>
   );
 };

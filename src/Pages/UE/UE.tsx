@@ -76,9 +76,7 @@ const UE: FunctionComponent = () => {
           <PlusOutlined className="mr-1" /> AJOUTER
         </Button>
       </PageHeader>
-      <div className="px-10">
-        <DataTable columns={columns} data={filtered} isLoading={isLoading} />
-      </div>
+      <DataTable columns={columns} data={filtered} isLoading={isLoading} />
     </div>
   );
 };

@@ -32,19 +32,19 @@ const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="flex flex-col h-full px-3 py-4 space-y-1">
+    <nav className="flex flex-col h-full w-full py-4 space-y-1">
       {navLinks.map((link) => (
         <Link
           key={link.to}
           to={link.to}
           onClick={onNavigate}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
+          className={`flex items-center gap-3 px-3 py-3 w-full text-sm transition-all duration-200 ${
             isActive(link.to)
               ? "bg-primary/10 text-primary font-semibold border-l-[3px] border-primary"
               : "text-muted-foreground hover:text-foreground hover:bg-accent/50 border-l-[3px] border-transparent"
           }`}
         >
-          <span className="text-base">{link.icon}</span>
+          <span className="text-base ml-2">{link.icon}</span>
           {link.label}
         </Link>
       ))}
@@ -60,7 +60,7 @@ const Navigation: React.FC = () => {
   return (
     <>
       {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-40 bg-white/70 dark:bg-gray-900/80 backdrop-blur-lg border-b border-border/50 shadow-nav">
+      <header className="fixed top-0 left-0 right-0 h-12 z-40 bg-white/70 dark:bg-gray-900/80 backdrop-blur-lg border-b border-border/50 shadow-nav">
         <div className="h-full flex items-center justify-between px-4">
           <div className="flex items-center gap-3">
             {/* Mobile hamburger */}
@@ -107,17 +107,17 @@ const Navigation: React.FC = () => {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-gray-900 shadow-xl md:hidden transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-30 w-56 bg-white dark:bg-gray-900 shadow-xl md:hidden transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="pt-14">
+        <div className="pt-12">
           <SidebarContent onNavigate={() => setMobileOpen(false)} />
         </div>
       </div>
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex fixed left-0 top-14 bottom-0 w-64 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-r border-border/50 shadow-nav z-20">
+      <aside className="hidden md:flex fixed left-0 top-12 bottom-0 w-56 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-r border-border/50 shadow-nav z-20">
         <SidebarContent />
       </aside>
     </>

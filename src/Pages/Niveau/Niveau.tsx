@@ -1,5 +1,5 @@
 import { useState, FunctionComponent } from "react";
-import { EditOutlined, DeleteOutlined, PlusOutlined, EyeFilled } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, PlusOutlined, EyeOutlined } from "@ant-design/icons";
 import { useGetAllNiveau } from "@/hooks/useGetAllNiveau";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -47,7 +47,7 @@ const Niveau: FunctionComponent = () => {
       render: (niv) => (
         <div className="flex justify-end gap-1.5">
           <Button size="icon" variant="secondary" onClick={() => navigate(`/admin/niveau/view/${niv.id_niveau}`)}>
-            <EyeFilled />
+            <EyeOutlined />
           </Button>
           <Button size="icon" onClick={() => navigate(`/admin/niveau/edit/${niv.id_niveau}`)}>
             <EditOutlined />
@@ -85,9 +85,7 @@ const Niveau: FunctionComponent = () => {
           <PlusOutlined className="mr-1" /> AJOUTER
         </Button>
       </PageHeader>
-      <div className="px-10">
-        <DataTable columns={columns} data={filtered} isLoading={isLoading} />
-      </div>
+      <DataTable columns={columns} data={filtered} isLoading={isLoading} />
     </div>
   );
 };
