@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <AuthProvider>
             <ToastContainer />
             <App />
-            <ReactQueryDevtools />
+            {/* <ReactQueryDevtools /> */}
           </AuthProvider>
         </ThemeProvider>
       </Router>
