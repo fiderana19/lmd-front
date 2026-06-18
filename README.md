@@ -51,51 +51,35 @@ npm run build
 
 ### Login
 
-Light | Dark
-:----:|:----:
-![Login light](docs/home.png) | ![Login dark](docs/home_dark.png)
+![Login light](docs/home.png) · ![Login dark](docs/home_dark.png)
 
 ### Dashboard
 
-| ![Dashboard](docs/admin_home.png) |
-|:--:|
-| _Tableau de bord_ |
+![Dashboard](docs/admin_home.png) — _Tableau de bord_
 
 ### Student Management
 
-| List | View |
-|:----:|:----:|
-| ![Student list](docs/admin_student.png) | ![View student](docs/admin_view_student.png) |
+![Student list](docs/admin_student.png) · ![View student](docs/admin_view_student.png)
 
 ### Level Management
 
-| List | Add | Edit | View |
-|:----:|:---:|:----:|:----:|
-| ![Levels](docs/admin_niveau.png) | ![Add level](docs/admin_add_niveau.png) | ![Edit level](docs/admin_edit_niveau.png) | ![View level](docs/admin_view_niveau.png) |
+![Levels](docs/admin_niveau.png) · ![Add level](docs/admin_add_niveau.png) · ![Edit level](docs/admin_edit_niveau.png) · ![View level](docs/admin_view_niveau.png)
 
 ### UE (Teaching Unit) Management
 
-| List | Edit |
-|:----:|:----:|
-| ![UE list](docs/admin_ue.png) | ![Edit UE](docs/admin_edit_ue.png) |
+![UE list](docs/admin_ue.png) · ![Edit UE](docs/admin_edit_ue.png)
 
 ### EC (Course Element) Management
 
-| List | Add | Edit | View |
-|:----:|:---:|:----:|:----:|
-| ![EC list](docs/admin_ec.png) | ![Add EC](docs/admin_add_ec.png) | ![Edit EC](docs/admin_edit_ec.png) | ![View EC](docs/admin_view_ec.png) |
+![EC list](docs/admin_ec.png) · ![Add EC](docs/admin_add_ec.png) · ![Edit EC](docs/admin_edit_ec.png) · ![View EC](docs/admin_view_ec.png)
 
 ### Grade Management
 
-| List | Add | Edit | Global Entry |
-|:----:|:---:|:----:|:------------:|
-| ![Grades](docs/admin_note.png) | ![Add grade](docs/adin_add_note.png) | ![Edit grade](docs/admin_edit_note.png) | ![Global entry](docs/admin_add_global_note.png) |
+![Grades](docs/admin_note.png) · ![Add grade](docs/adin_add_note.png) · ![Edit grade](docs/admin_edit_note.png) · ![Global entry](docs/admin_add_global_note.png)
 
 ### Result Search
 
-| Student Result | Level Result |
-|:--------------:|:------------:|
-| ![Student search](docs/admin_note_student_search.png) | ![Level search](docs/admin_note_niveau_search.png) |
+![Student search](docs/admin_note_student_search.png) · ![Level search](docs/admin_note_niveau_search.png)
 
 ## 🧱 Tech Stack
 
