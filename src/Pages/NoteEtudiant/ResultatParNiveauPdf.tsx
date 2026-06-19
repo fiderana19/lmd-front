@@ -40,7 +40,7 @@ const ResultatParNiveauPdf: FunctionComponent = () => {
             </div>
             {resultInfo && (
               <div className="text-right mt-4">
-                ANNEE UNIVERSITAIRE : {resultInfo.id_annee}
+                ANNEE UNIVERSITAIRE : {resultInfo.libelle}
               </div>
             )}
             <div className="underline text-xl font-bold font-lato my-1">

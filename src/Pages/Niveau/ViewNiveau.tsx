@@ -41,11 +41,11 @@ const ViewNiveau: FunctionComponent = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <UnorderedListOutlined className="text-primary" />
-                  {niveau[0].titre_niveau}
+                  {niveau.titre_niveau}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{niveau[0].descri_niveau}</p>
+                <p className="text-gray-600">{niveau.descri_niveau}</p>
               </CardContent>
             </Card>
             <Card>
@@ -53,22 +53,22 @@ const ViewNiveau: FunctionComponent = () => {
               <CardContent className="space-y-3">
                 <div>
                   <p className="text-xs text-gray-500">Domaine</p>
-                  <p className="font-semibold">{niveau[0].domaine}</p>
+                  <p className="font-semibold">{niveau.domaine}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Mention</p>
-                  <p className="font-semibold">{niveau[0].mention}</p>
+                  <p className="font-semibold">{niveau.mention}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Parcours</p>
-                  <p className="font-semibold">{niveau[0].parcours}</p>
+                  <p className="font-semibold">{niveau.parcours}</p>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Actions</CardTitle></CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full" onClick={() => navigate(`/admin/niveau/edit/${niveau[0].id_niveau}`)}>Modifier</Button>
+                <Button className="w-full" onClick={() => navigate(`/admin/niveau/edit/${niveau.id_niveau}`)}>Modifier</Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" className="w-full">Supprimer</Button>
@@ -81,7 +81,7 @@ const ViewNiveau: FunctionComponent = () => {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Annuler</AlertDialogCancel>
                       <AlertDialogAction className="m-0 p-0" asChild>
-                        <Button onClick={() => NiveauDelete(niveau[0].id_niveau)} variant="destructive" disabled={deleteLoading}>
+                        <Button onClick={() => NiveauDelete(niveau.id_niveau)} variant="destructive" disabled={deleteLoading}>
                           {deleteLoading && <LoadingOutlined />} Supprimer
                         </Button>
                       </AlertDialogAction>

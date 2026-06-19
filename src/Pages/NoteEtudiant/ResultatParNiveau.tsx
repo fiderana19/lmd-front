@@ -10,7 +10,6 @@ import { ResultNiveauSearchValidation } from "@/validation/note.validation";
 import { usePostResultNiveauInfo } from "@/hooks/usePostResultNiveauInfo";
 import { usePostResultNiveauFinal } from "@/hooks/usePostResultNiveauFinal";
 import { Button } from "@/components/ui/button";
-import { transformLetter } from "@/utils/Format";
 import { Card, CardContent } from "@/components/ui/card";
 import FormField from "@/components/shared/FormField";
 import Combobox from "@/components/ui/combobox";
@@ -48,7 +47,7 @@ const ResultatParNiveau: FunctionComponent = () => {
 
   const anneeOptions = annee?.map((ann: any) => ({
     value: String(ann.id_annee),
-    label: String(ann.id_annee),
+    label: ann.libelle,
   })) || [];
 
   const critereOptions = ResultCritere?.map((c: any) => ({
@@ -57,11 +56,11 @@ const ResultatParNiveau: FunctionComponent = () => {
   })) || [];
 
   return (
-    <div className="px-4 sm:px-10">
-      <div className="text-xl font-bold font-lato text-center mb-6">
+    <div className="px-4 sm:px-10 print:px-0">
+      <div className="text-xl font-bold font-lato text-center mb-6 print:hidden">
         RECHERCHER RÉSULTAT D'UN NIVEAU
       </div>
-      <form className="flex flex-wrap justify-center gap-2 items-end" onSubmit={search(handleSubmit)}>
+      <form className="flex flex-wrap justify-center gap-2 items-end print:hidden" onSubmit={search(handleSubmit)}>
         <FormField label="Niveau" name="id_niveau" control={control} error={errors.id_niveau} className="md:w-56">
           <Combobox items={niveauOptions} placeholder="Niveau" searchPlaceholder="Rechercher..." />
         </FormField>
@@ -75,7 +74,7 @@ const ResultatParNiveau: FunctionComponent = () => {
       </form>
 
       {isView && (
-        <div className="mt-8 max-w-4xl mx-auto">
+        <div className="mt-8 max-w-4xl mx-auto print:hidden">
           <h2 className="text-lg font-bold text-center mb-4">RÉSULTAT</h2>
           {resultInfo && (
             <Card className="mb-6">
@@ -108,12 +107,56 @@ const ResultatParNiveau: FunctionComponent = () => {
             </table>
           </div>
           <div className="flex justify-end mt-6">
-            <a href={`/admin/resultat/pdf/${selectedCritere}/${selectedNiveauId}/${transformLetter(selectedAnneeId)}`} target="_blank">
-              <Button><FileOutlined className="mr-1" /> GÉNÉRER LE RÉSULTAT</Button>
-            </a>
+            <Button onClick={() => window.print()}><FileOutlined className="mr-1" /> GÉNÉRER LE RÉSULTAT</Button>
           </div>
         </div>
       )}
+      <div className="hidden print:block print:mx-0 print:px-0">
+        <div className="py-1">
+          <div className="px-4">
+            <div className="text-center">
+              <div className="text-lg font-bold font-lato">UNIVERSITE DE FIANARANTSOA</div>
+              <div className="text-lg font-bold font-lato">ECOLE NATIONALE D'INFORMATIQUE</div>
+              {resultInfo && (
+                <div className="text-right mt-4">ANNEE UNIVERSITAIRE : {resultInfo.libelle}</div>
+              )}
+              <div className="underline text-xl font-bold font-lato my-1">LISTE DES ETUDIANTS {selectedCritere}</div>
+            </div>
+            {resultInfo && (
+              <div className="font-lato">
+                <div className="flex">
+                  <div className="font-bold underline mr-2">Parcours:</div>
+                  <div>{resultInfo.parcours}</div>
+                </div>
+                <div className="flex">
+                  <div className="font-bold underline mr-2">Niveau:</div>
+                  <div>{resultInfo.descri_niveau}</div>
+                </div>
+              </div>
+            )}
+            <div className="my-2">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th className="px-6 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Matricule</th>
+                    <th className="px-6 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Nom et prenom</th>
+                    <th className="px-6 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Resultat</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {resultFinal && resultFinal.map((final: any, index: any) => (
+                    <tr key={index}>
+                      <td className="px-6 whitespace-nowrap text-sm leading-5 text-gray-900">{final.matricule}</td>
+                      <td className="px-6 whitespace-nowrap text-sm leading-5 text-gray-900">{final.nom} {final.prenom}</td>
+                      <td className="px-6 whitespace-nowrap text-sm leading-5 text-gray-900">{final.final}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

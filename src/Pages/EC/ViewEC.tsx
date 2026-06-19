@@ -69,7 +69,7 @@ const ViewEC: FunctionComponent = () => {
             <Card>
               <CardHeader><CardTitle>Unité d'enseignement</CardTitle></CardHeader>
               <CardContent>
-                <p className="font-semibold">{ec[0].id_ue}</p>
+                <p className="font-semibold">{ec[0].nom_ue}</p>
               </CardContent>
               <CardContent className="space-y-3 border-t pt-4">
                 <Button className="w-full" onClick={() => navigate(`/admin/ec/edit/${ec[0].id_ec}`)}>Modifier</Button>

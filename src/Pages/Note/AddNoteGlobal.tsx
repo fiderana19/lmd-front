@@ -1,10 +1,11 @@
-import { useState, useEffect, FunctionComponent } from "react";
+import { useState, useEffect, FunctionComponent, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import {
   CloseCircleFilled, CheckCircleFilled, WarningFilled, LoadingOutlined,
 } from "@ant-design/icons";
 import { handleFloatKeyPress } from "@/utils/handleKeyPress";
 import { invertLetter } from "@/utils/Format";
+import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
 import { useGetAllEtudiant } from "@/hooks/useGetAllEtudiant";
 import { useGetNiveauById } from "@/hooks/useGetNiveauById";
 import { useGetECById } from "@/hooks/useGetECById";
@@ -27,6 +28,12 @@ const AddNoteGlobal: FunctionComponent = () => {
   const annee = invertLetter(params.annee ? params.annee : "");
   const niveau = params.niveau ? Number(params.niveau) : 0;
   const fetchData = { id_ec: ec, id_niveau: niveau, id_annee: annee };
+  const { data: allAnnee } = useGetAllAnnee();
+  const anneeMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    allAnnee?.forEach((a: any) => { map[String(a.id_annee)] = a.libelle; });
+    return map;
+  }, [allAnnee]);
   const { data: etudiant } = useGetAllEtudiant();
   const { data: niv } = useGetNiveauById(niveau);
   const { data: element } = useGetECById(ec);
@@ -65,7 +72,7 @@ const AddNoteGlobal: FunctionComponent = () => {
   return (
     <div>
       <div className="text-xl sm:text-2xl font-bold font-lato text-center text-gray-800 mb-6">
-        NOTE {element?.nom_ec} - {niv?.titre_niveau} - {annee}
+        NOTE {element?.[0]?.nom_ec} - {niv?.titre_niveau} - {anneeMap[annee] || annee}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
         <Card>

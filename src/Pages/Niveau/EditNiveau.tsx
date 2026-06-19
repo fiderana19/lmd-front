@@ -49,7 +49,7 @@ const EditNiveau: FunctionComponent = () => {
       {niveau && (
         <form onSubmit={submit(editNiveauSubmit)} className="space-y-4">
           {fields.map(({ name, label }) => (
-            <FormField key={name} label={label} name={name} control={control} error={errors[name]} defaultValue={niveau[0][name]}>
+            <FormField key={name} label={label} name={name} control={control} error={errors[name]} defaultValue={niveau[name]}>
               <Input />
             </FormField>
           ))}

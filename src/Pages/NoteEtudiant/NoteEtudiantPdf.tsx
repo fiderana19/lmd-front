@@ -125,7 +125,7 @@ const NoteEtudiantPdf: FunctionComponent = () => {
                 </div>
                 <div className="flex justify-end text-xs">
                   <div className="mr-2"> Année universitaire:</div>
-                  <div> {resultEtudiant.id_annee}</div>
+                  <div> {resultEtudiant.libelle}</div>
                 </div>
               </div>
             )}
@@ -133,78 +133,45 @@ const NoteEtudiantPdf: FunctionComponent = () => {
             <table className="text-center min-w-full divide-y divide-gray-200">
               <thead>
                 <tr>
-                  <th className="px-6 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                    UE
-                  </th>
-                  <th className="flex justify-between px-6 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                    <div>EC</div>
-                    <div>Notes/20</div>
-                  </th>
-                  <th className="px-6 bg-gray-50  text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                    Credits
-                  </th>
-                  <th className="px-6 bg-gray-50  text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                    Validation
-                  </th>
+                  <th className="px-4 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">UE</th>
+                  <th className="px-4 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">EC</th>
+                  <th className="px-4 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Note/20</th>
+                  <th className="px-4 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Crédits</th>
+                  <th className="px-4 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Validation</th>
                 </tr>
               </thead>
-              {resultUnity &&
-                resultUnity.map((item: any, index: any) => (
-                  <tbody
-                    key={index}
-                    className="text-xs bg-white divide-y divide-gray-200"
-                  >
-                    <tr key={item.id_ue}>
-                      <td className="px-6 whitespace-nowrap leading-5 text-gray-900">
-                        {" "}
-                        {item.id_ue}
-                      </td>
-                      {item.notes.map((note: any) => (
-                        <div className="flex justify-between" key={note.nom_ec}>
-                          <td className="px-6 whitespace-nowrap leading-5 text-gray-900">
-                            {note.nom_ec}{" "}
-                          </td>
-                          <td className="mr-6 px-6 whitespace-nowrap leading-5 text-gray-900">
-                            {" "}
-                            {note.valeur}
-                          </td>
-                        </div>
-                      ))}
-                      <td className="px-6 whitespace-nowrap text-sm leading-5 text-gray-900">
-                        {item.credit_ue}
-                      </td>
-                      <td className="px-6 whitespace-nowrap text-sm leading-5 text-gray-900  flex justify-center">
-                        {item.credit_ue > 0 ? (
-                          <div className="text-green-700 mx-1 flex">
-                            <div>
-                              <CheckCircleFilled />
-                            </div>
-                            <div className="mt-1 ml-1"> VALIDE </div>{" "}
-                          </div>
-                        ) : (
-                          <div className="text-red-700 mx-1 flex">
-                            <div>
-                              <CloseCircleFilled />
-                            </div>
-                            <div className="mt-1 ml-1">NON VALIDE </div>{" "}
-                          </div>
-                        )}
-                      </td>
+              {resultUnity?.map((item: any, index: any) => (
+                <tbody key={index} className="text-xs bg-white divide-y divide-gray-200">
+                  {item.notes.map((note: any, i: number) => (
+                    <tr key={note.nom_ec}>
+                      {i === 0 && (
+                        <td className="px-4 py-2 leading-5 text-gray-900 font-semibold align-top" rowSpan={item.notes.length + 1}>
+                          {item.nom_ue}
+                        </td>
+                      )}
+                      <td className="px-4 py-1 leading-5 text-gray-900">{note.nom_ec}</td>
+                      <td className="px-4 py-1 leading-5 text-gray-900">{note.valeur}</td>
+                      {i === 0 && (
+                        <td className="px-4 py-2 leading-5 text-gray-900 align-top" rowSpan={item.notes.length + 1}>
+                          {item.credit_ue_total}
+                        </td>
+                      )}
+                      {i === 0 && (
+                        <td className="px-4 py-2 leading-5 text-gray-900 align-top" rowSpan={item.notes.length + 1}>
+                          {item.credit_ue > 0
+                            ? <span className="text-green-700"><CheckCircleFilled /> VALIDE</span>
+                            : <span className="text-red-700"><CloseCircleFilled /> NON VALIDE</span>
+                          }
+                        </td>
+                      )}
                     </tr>
-                    <tr key={item.id_ue}>
-                      <td></td>
-                      <td className="px-6 whitespace-nowrap leading-5 text-gray-900 flex justify-end mr-6 font-bold">
-                        {" "}
-                        <div>MOYENNE </div>{" "}
-                        <div className="ml-4">{item.moyenne.toFixed(2)} </div>
-                      </td>
-                      <td> </td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                ))}
-              {/* yfvbevyb */}
+                  ))}
+                  <tr className="bg-gray-50">
+                    <td className="px-4 py-1 leading-5 text-gray-900 font-bold text-right" colSpan={2}>MOYENNE</td>
+                    <td className="px-4 py-1 leading-5 text-gray-900 font-bold" colSpan={3}>{item.moyenne.toFixed(2)}</td>
+                  </tr>
+                </tbody>
+              ))}
             </table>
             <div>
               {resultMark && (
@@ -215,7 +182,7 @@ const NoteEtudiantPdf: FunctionComponent = () => {
                   </div>
                   <div className="px-6 flex justify-between whitespace-nowrap text-xs leading-5 text-gray-900 ">
                     <div className="font-bold mr-2">TOTAL CREDITS </div>
-                    <div> {resultMark.total_credits}/60 </div>
+                    <div> {resultMark.total_credits}/{resultMark.total_credits_possible} </div>
                   </div>
                 </div>
               )}

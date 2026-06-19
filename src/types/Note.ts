@@ -38,3 +38,19 @@ export type ResultNiveauSearch = {
   id_annee: string;
   obs: string;
 };
+
+export type UnityResult = {
+  id_ue: number;
+  nom_ue: string;
+  moyenne: number;
+  credit_ue: number;
+  credit_ue_total: number;
+  notes: { nom_ec: string; valeur: number }[];
+};
+
+export type MarkResult = {
+  moyenne_generale: number;
+  total_credits: number;
+  total_credits_possible: number;
+  mention: string;
+};

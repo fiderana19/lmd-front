@@ -25,22 +25,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   const login = async (data: LoginType) => {
-    const response = await userLogin(data);
+    try {
+      const response = await userLogin(data);
 
-    if (response?.status === HttpStatus.OK) {
-      await localStorage.setItem("token", response?.data?.token);
-      setToken(response?.data.token);
-      navigate("/admin/home");
-    } else if (response?.status === HttpStatus.UNAUTHORIZED) {
-      showToast({
-        type: TOAST_TYPE.ERROR,
-        message: response?.data?.message,
-      });
-    } else {
-      showToast({
-        type: TOAST_TYPE.ERROR,
-        message: "Erreur lors de conexion !",
-      });
+      if (response?.status === HttpStatus.OK) {
+        await localStorage.setItem("token", response?.data?.token);
+        setToken(response?.data.token);
+        navigate("/admin/home");
+      }
+    } catch (error: any) {
+      if (error?.response?.status === HttpStatus.UNAUTHORIZED) {
+        showToast({
+          type: TOAST_TYPE.ERROR,
+          message: `${error?.response?.data?.message} (utilisateur: ${data.username})`,
+        });
+      } else {
+        showToast({
+          type: TOAST_TYPE.ERROR,
+          message: `Erreur lors de la connexion pour "${data.username}" !`,
+        });
+      }
     }
   };
 

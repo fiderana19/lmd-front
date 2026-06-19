@@ -1,4 +1,4 @@
-import { useState, FunctionComponent, Suspense, lazy } from "react";
+import { useState, FunctionComponent, Suspense, lazy, useMemo } from "react";
 import { Dropdown, Modal } from "antd";
 import {
   UserOutlined,
@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 const AddNote = lazy(() => import("./AddNote"));
 import { handleFloatKeyPress } from "@/utils/handleKeyPress";
 import { useGetAllNote } from "@/hooks/useGetAllNote";
+import { useGetAllAnnee } from "@/hooks/useGetAllAnnee";
 import { EditNote } from "@/types/Note";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -37,6 +38,12 @@ import FormField from "@/components/shared/FormField";
 
 const Note: FunctionComponent = () => {
   const { data: note, isLoading: noteLoading, refetch: refetchNote } = useGetAllNote();
+  const { data: annee } = useGetAllAnnee();
+  const anneeMap = useMemo(() => {
+    const map: Record<number, string> = {};
+    annee?.forEach((a: any) => { map[a.id_annee] = a.libelle; });
+    return map;
+  }, [annee]);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<EditNote | null>(null);
@@ -109,10 +116,10 @@ const Note: FunctionComponent = () => {
   };
 
   const columns: Column<any>[] = [
-    { key: "id_etudiant", header: "Étudiant" },
-    { key: "id_niveau", header: "Niveau" },
-    { key: "id_ec", header: "EC" },
-    { key: "id_annee", header: "Année" },
+    { key: "matricule", header: "Étudiant" },
+    { key: "titre_niveau", header: "Niveau" },
+    { key: "nom_ec", header: "EC" },
+    { key: "id_annee", header: "Année", render: (n: any) => anneeMap[n.id_annee] || n.id_annee },
     {
       key: "valeur", header: "Note",
       render: (n: any) => (
@@ -165,10 +172,10 @@ const Note: FunctionComponent = () => {
               <FormField label="Valeur" name="valeur" control={control} error={errors.valeur}>
                 <Input onKeyPress={handleFloatKeyPress} />
               </FormField>
-              {(["id_etudiant", "id_niveau", "id_ec", "id_annee"] as const).map((field) => (
+              {(["id_etudiant", "id_niveau", "id_ec"] as const).map((field) => (
                 <div key={field}>
                   <FormField
-                    label={field === "id_etudiant" ? "Étudiant" : field === "id_niveau" ? "Niveau" : field === "id_ec" ? "EC" : "Année"}
+                    label={field === "id_etudiant" ? "Étudiant" : field === "id_niveau" ? "Niveau" : "EC"}
                     name={field}
                     control={control}
                   >
@@ -176,6 +183,9 @@ const Note: FunctionComponent = () => {
                   </FormField>
                 </div>
               ))}
+              <FormField label="Année">
+                <Input value={anneeMap[Number(editedItem?.id_annee)] || editedItem?.id_annee || ""} readOnly />
+              </FormField>
               <Button type="submit" className="w-full">
                 {editLoading && <LoadingOutlined className="mr-1" />} Modifier
               </Button>

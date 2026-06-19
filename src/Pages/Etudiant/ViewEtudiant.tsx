@@ -55,7 +55,7 @@ const ViewEtudiant: FunctionComponent = () => {
               <CardContent className="space-y-3">
                 <div>
                   <p className="text-xs text-gray-500">Nom complet</p>
-                  <p className="font-semibold text-gray-800">{etudiant[0].nom} {etudiant[0].prenom}</p>
+                  <p className="font-semibold text-gray-800">{etudiant.nom} {etudiant.prenom}</p>
                 </div>
               </CardContent>
             </Card>
@@ -66,15 +66,15 @@ const ViewEtudiant: FunctionComponent = () => {
               <CardContent className="space-y-3">
                 <div>
                   <p className="text-xs text-gray-500">Matricule</p>
-                  <p className="font-semibold text-lg">{etudiant[0].matricule}</p>
+                  <p className="font-semibold text-lg">{etudiant.matricule}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Date de naissance</p>
-                  <p className="font-semibold">{etudiant[0].date_naiss}</p>
+                  <p className="font-semibold">{etudiant.date_naiss}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Lieu de naissance</p>
-                  <p className="font-semibold">{etudiant[0].lieu_naiss}</p>
+                  <p className="font-semibold">{etudiant.lieu_naiss}</p>
                 </div>
               </CardContent>
             </Card>
@@ -83,7 +83,7 @@ const ViewEtudiant: FunctionComponent = () => {
                 <CardTitle>Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full" onClick={() => navigate(`/admin/etudiant/edit/${etudiant[0].id_etudiant}`)}>
+                <Button className="w-full" onClick={() => navigate(`/admin/etudiant/edit/${etudiant.id_etudiant}`)}>
                   Modifier
                 </Button>
                 <AlertDialog>
@@ -98,7 +98,7 @@ const ViewEtudiant: FunctionComponent = () => {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Annuler</AlertDialogCancel>
                       <AlertDialogAction className="m-0 p-0" asChild>
-                        <Button onClick={() => handleDelete(etudiant[0].id_etudiant)} variant="destructive" disabled={deleteLoading}>
+                        <Button onClick={() => handleDelete(etudiant.id_etudiant)} variant="destructive" disabled={deleteLoading}>
                           {deleteLoading && <LoadingOutlined />} Supprimer
                         </Button>
                       </AlertDialogAction>

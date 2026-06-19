@@ -32,11 +32,11 @@ const EditEtudiant: FunctionComponent = () => {
     if (etudiant) {
       reset({
         id_etudiant: req.id || "",
-        matricule: etudiant[0].matricule,
-        nom: etudiant[0].nom,
-        prenom: etudiant[0].prenom,
-        date_naiss: etudiant[0].date_naiss,
-        lieu_naiss: etudiant[0].lieu_naiss,
+        matricule: etudiant.matricule,
+        nom: etudiant.nom,
+        prenom: etudiant.prenom,
+        date_naiss: etudiant.date_naiss,
+        lieu_naiss: etudiant.lieu_naiss,
       });
     }
   }, [etudiant]);

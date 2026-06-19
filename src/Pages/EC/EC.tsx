@@ -20,6 +20,7 @@ interface ECItem {
   credit_ec: number;
   poids_ec: number;
   id_ue: number;
+  nom_ue: string;
 }
 
 const EC: FunctionComponent = () => {
@@ -41,7 +42,7 @@ const EC: FunctionComponent = () => {
     { key: "semestre", header: "Semestre" },
     { key: "credit_ec", header: "Crédit", className: "text-center" },
     { key: "poids_ec", header: "Poids", className: "text-center" },
-    { key: "id_ue", header: "Unité" },
+    { key: "nom_ue", header: "Unité" },
     {
       key: "actions", header: "",
       render: (element) => (

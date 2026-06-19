@@ -34,12 +34,12 @@ const AddNotePerso: FunctionComponent = () => {
 
   const ecOptions = ec?.map((element: any) => ({
     value: String(element.id_ec),
-    label: `${element.nom_ec} - ${element.id_ue}`,
+    label: `${element.nom_ec} - ${element.nom_ue}`,
   })) || [];
 
   const anneeOptions = annee?.map((ann: any) => ({
     value: String(ann.id_annee),
-    label: String(ann.id_annee),
+    label: ann.libelle,
   })) || [];
 
   return (

@@ -38,10 +38,10 @@ const EditUE: FunctionComponent = () => {
     <FormCard title="MODIFIER UNITE D'ENSEIGNEMENT">
       {ue && (
         <form onSubmit={submit(editUESubmit)} className="space-y-4">
-          <FormField label="Nom de l'UE" name="nom_ue" control={control} error={errors.nom_ue} defaultValue={ue[0].nom_ue}>
+          <FormField label="Nom de l'UE" name="nom_ue" control={control} error={errors.nom_ue} defaultValue={ue.nom_ue}>
             <Input />
           </FormField>
-          <FormField label="Crédit de l'UE" name="credit_ue" control={control} error={errors.credit_ue} defaultValue={ue[0].credit_ue}>
+          <FormField label="Crédit de l'UE" name="credit_ue" control={control} error={errors.credit_ue} defaultValue={ue.credit_ue}>
             <Input onKeyPress={handleNumberKeyPress} />
           </FormField>
           <div className="flex justify-between pt-2">
